@@ -1,25 +1,22 @@
-
-*{
+* {
     margin: 0;
     padding: 0;
-    font-family: Poppins;
     box-sizing: border-box;
-    
+    font-family: Poppins;
+
 }
-body
-{
-    width: 100%;
-    min-height: 100vh; 
-    padding: 5%;
-    background: url('/static/images/background.png');
-    background-position: center; 
-    background-size: cover;
+
+body {
     display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    background: url('/static/images/background.png');
+    background-position: center;
+    background-size: cover;
     align-items: center;
-    justify-content: center; 
 }
-.container
-{
+
+.container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -28,9 +25,10 @@ body
     width: 410px;
     background: #ffff;
     border-radius: 10px;
+
 }
-.container h2
-{
+
+.container h2 {
     text-align: center;
     padding: 0 0 20px 0;
     font-size: 20;
@@ -38,33 +36,21 @@ body
     position: relative;
     top: 30px;
     left: calc(20% - 76px);
-    /* border-bottom: 0px solid ; */
 }
- .container h4 /* account login */
-{
+
+.container h4
+
+/* account login */
+    {
     text-align: center;
     padding: 0 0 20px 0;
     font-size: 10;
     font-weight: 500;
     position: relative;
     top: 30px;
-    /* border-bottom: 0px solid; */
-}
-.container form
-{
-    padding: 0 40px;
-    box-sizing: border-box;
 }
 
-form .input-box
-{
-    position: absolute;
-    border-bottom: 2px solid ;
-    margin: 30px 0;
-}
-
-.container img
-{
+.container img {
     width: 70px;
     border-radius: 50%;
     position: relative;
@@ -73,42 +59,88 @@ form .input-box
     cursor: pointer;
 }
 
-.input-box input
-{
+.container .input-box {
+    position: relative;
     width: 100%;
+    height: 50px;
+    padding: 5px 0 0 0;
+    margin: 19px 30px;
+}
+
+.input-box input {
+    width: 340px;
     height: 40px;
-    font-size: 16px;
-    border: none;
     background: #E4E5EB;
+    border: none;
     outline: none;
+    border: 2px solid rgb(255, 255, 255, .2);
     border-radius: 10px;
-}
-
-.input-box label
-{
-    position: absolute;
-    top: 50%;
-    left: 5px;
-    color: #6D6B6B;
-    transform: translateY(-50%);
     font-size: 16px;
-    pointer-events: none;
-    transition: .5s;
+    color: #000000;
+    padding: 20px 45px 20px 45px;
+    justify-content: space-between;
 }
 
-.input-box span::before
-{
-    content: '';
+.input-box i {
     position: absolute;
-    top: 40px;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: #fff;
-}
-.input-box input:focus ~ label,
-.input-box input:valid ~  label
-{
-    top: -5px;
+    left: 26px;
+    top: 15px;
+    transform: translate(-50%);
+    font-size: 20px;
     color: #6D6B6B;
+}
+
+.container .remember-forget {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin: 15px 0 15px 20px;
+    padding-right: 25px;
+    color: rgb(211, 188, 142);
+    text-shadow: 0px .5px #4d4d4d;
+}
+
+.remember-forget label input {
+    accent-color: rgb(211, 188, 142);
+    margin-right: 5px;
+}
+
+.remember-forget a {
+    color: rgb(211, 188, 142);
+    text-decoration: none;
+}
+
+.remember-forget a:hover {
+    text-decoration: underline;
+}
+
+.container .btn {
+    margin-top: 10px;
+    margin-left: 30px;
+    width: 340px;
+    height: 45px;
+    background: #393B40;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgb(0, 0, 0, .5);
+    cursor: pointer;
+    font-size: 15px;
+    color: #D3BC8E;
+    font-weight: 400;
+}
+
+.container .signup {
+    font-size: 15px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.signup a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.signup a:hover {
+    text-decoration: underline;
 }
