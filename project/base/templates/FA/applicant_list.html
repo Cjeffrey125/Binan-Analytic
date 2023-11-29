@@ -3,72 +3,77 @@
 {% load static %}
 
 {% block content %}
-  {% if user.is_authenticated %}
-  <link rel="stylesheet" href="{% static 'css/table.css' %}">
+{% if user.is_authenticated %}
+<link rel="stylesheet" href="{% static 'css/table.css' %}">
 
-    <div class="d-flex">
-      <div class="sidebar">
-        {% include 'sidebar_filter.html' %}
-      </div>
+<div class="container">
+  <div class="d-flex">
+    <div class="sidebar">
+      {% include 'sidebar_filter.html' %}
+    </div>
 
-      <div class="main-content flex-grow-1">
-        <div class="d-flex justify-content-end">
-          <a href="{% url 'add_fa_applicant' %}" class="btn btn-secondary">Add Applicant</a>
+    <div class="main-content ms-auto">
 
-          <form method="post" action="{% url 'fa_filter_applicants' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-secondary">Filter Applicants</button>
-          </form>
+      <div class="container-fluid">
+        <h1>Financial Assistance</h1>
+        <div class="box">
 
-          <div class="d-flex justify-content-end">
-            <a href="{% url 'fa_passed_applicant' %}" class="btn btn-secondary">Pass List</a>
-  
-            <a href="{% url 'fa_failed_applicant' %}" class="btn btn-secondary">Fail List</a>
+          <div>
+            <a href="{% url 'add_fa_applicant' %}">
+              <img src="{% static 'images/add.png' %}" class="img-resize">
+            </a>
+
+            <a href="{% url 'import' %}">
+              <img src="{% static 'images/upload.png' %}" class="img-resize">
+            </a>
+
+            <a href="{% url 'export' %}">
+              <img src="{% static 'images/download.png' %}" class="img-resize">
+            </a>
+
           </div>
-        </div>
 
-        <div class="container-fluid custom-container">
-          <div class="box">
-            <h1>Financial Assistance</h1>
-              {% if records %}
-              <div class="table-container">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th class="table-header">Control Number</th>
-                      <th class="table-header">Name</th>
-                      <th class="table-header">School</th>
-                      <th class="table-header">Course</th>
-                      <th class="table-header">Requirements</th>
-                    </tr>
-                  </thead>
-            
-            <tbody>
-              {% for applicant_record, requirement_record in records %}
-              <tr onclick="window.location='{% url 'fa_applicant_info' applicant_record.id %}';" style="cursor: pointer;">
+          {% if records %}
+          <div class="table-container">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="table-header">Requirements</th>
+                  <th class="table-header">Control Number</th>
+                  <th class="table-header">Name</th>
+                  <th class="table-header">School</th>
+                  <th class="table-header">Course</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for applicant_record, requirement_record in records %}
+                <tr onclick="window.location='{% url 'fa_applicant_info' applicant_record.id %}';"
+                  style="cursor: pointer;">
+                  <td>{% if requirement_record.requirement == 8 %}
+                    Complete
+                    {% else %}
+                    {{requirement_record.requirement}}/8
+                    {% endif %}
+                  </td>
                   <td>{{ applicant_record.control_number }}</td>
                   <td>{{ applicant_record }}</td>
                   <td>{{ applicant_record.school }}</td>
                   <td>{{ applicant_record.course }}</td>
-                  <td>{% if requirement_record.requirement == 8 %}
-                            Complete
-                        {% else %}
-                            {{requirement_record.requirement}}/8
-                        {% endif %}
-                  </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        {% else %}
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
           <div class="d-flex justify-content-center">
             <h1>There are no applicants.</h1>
           </div>
-        {% endif %}
-        
-     
+          {% endif %}
+        </div>
       </div>
     </div>
-  {% endif %}
-
+  </div>
+</div>
+{% endif %}
 {% endblock %}
