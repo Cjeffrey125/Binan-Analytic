@@ -1,0 +1,114 @@
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: Poppins;
+    box-sizing: border-box;
+    
+}
+body
+{
+    width: 100%;
+    min-height: 100vh; 
+    padding: 5%;
+    background: url('/static/images/background.png');
+    background-position: center; 
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+}
+.container
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 530px;
+    width: 410px;
+    background: #ffff;
+    border-radius: 10px;
+}
+.container h2
+{
+    text-align: center;
+    padding: 0 0 20px 0;
+    font-size: 20;
+    font-weight: 600;
+    position: relative;
+    top: 30px;
+    left: calc(20% - 76px);
+    /* border-bottom: 0px solid ; */
+}
+ .container h4 /* account login */
+{
+    text-align: center;
+    padding: 0 0 20px 0;
+    font-size: 10;
+    font-weight: 500;
+    position: relative;
+    top: 30px;
+    /* border-bottom: 0px solid; */
+}
+.container form
+{
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+form .input-box
+{
+    position: absolute;
+    border-bottom: 2px solid ;
+    margin: 30px 0;
+}
+
+.container img
+{
+    width: 70px;
+    border-radius: 50%;
+    position: relative;
+    top: 30px;
+    left: calc(50% - 35px);
+    cursor: pointer;
+}
+
+.input-box input
+{
+    width: 100%;
+    height: 40px;
+    font-size: 16px;
+    border: none;
+    background: #E4E5EB;
+    outline: none;
+    border-radius: 10px;
+}
+
+.input-box label
+{
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    color: #6D6B6B;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-box span::before
+{
+    content: '';
+    position: absolute;
+    top: 40px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+}
+.input-box input:focus ~ label,
+.input-box input:valid ~  label
+{
+    top: -5px;
+    color: #6D6B6B;
+}

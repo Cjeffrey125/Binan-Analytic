@@ -1,0 +1,46 @@
+<!-- dashboard -->
+{% extends 'base.html' %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<h1>Not the Final Dashboard (Charts)</h1>
+
+<a href="{% url 'inb_applicant_list' %}" class="btn btn-secondary">View Table</a>
+
+<div style="margin-bottom: 20px;">
+  <p>
+  <h1> {{ count }} </h1>
+  <h2> Total Scholars </h2>
+  </p>
+</div>
+
+<div class="position" style="text-align: left;">
+
+  <div class="row">
+    <div class="col-6">
+      <div class="card mt-3" style=" width: 640px; height: 500px">
+
+        <div class="card-body">
+          {% include 'Graphs/linegraph.html' %}
+        </div>
+      </div>
+    </div>
+    <div class="col-6">
+      <div class="card mt-3" style=" width: 640px; height: 500px">
+
+        <div class="card-body">
+          {% include 'Graphs/stackhorizontal.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-3" style=" width: 640px; height: 450px">
+    <div class="card-body">
+      {% include 'Graphs/bargraph.html' %}
+    </div>
+  </div>
+</div>
+
+{% endif %}
+{% endblock %}
