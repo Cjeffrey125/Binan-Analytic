@@ -1,33 +1,63 @@
-{% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
+<!DOCTYPE html>
+<html lang="en">
 
-<div class = "col-md-6 offset-md-3">
-<h1>Sign Up</h1>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static 'css/signup.css' %}">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<title>Sign-up Form</title>
+</head>
+
+<body>
+	<form method="POST" action="">
+		{% csrf_token %}
+
+		<div class="container">
+			<img src="{% static 'images/Logo.png' %}">
+			<h2>BIÑAN ANALYTICS</h2>
+			<h4>Account Registration</h4>
+			<form method="POST" action="">
+				{% csrf_token %}
+				<div class="input-username">
+					{{ form.username }}
+					<p>Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.</p>
+				</div>
+				<div class="input-box">
+					{{ form.first_name }}
+				</div>
+				<div class="input-box">
+					{{ form.last_name }}
+				</div>
+				<div class="input-box">
+					{{ form.email }}
+				</div>
+				<div class="input-box">
+					{{ form.password1 }}
+					<p>&#x2022; Your password can't be too similar to your other personal information.</p>
+					<p>&#x2022; Your password must contain at least 8 characters.</p>
+					<p>&#x2022; Your password can't be a commonly used password.</p>
+					<p>&#x2022; Your password can't be entirely numeric.</p>
+				</div>
+				<div class="input-pass">
+					{{ form.password2 }}
+				</div>
+				<button type="submit" class="btn" name="signup">Sign Up</button>
+				<div class="remember-forget">
+					<label><input type="checkbox">Remember Me</label>
+					<a href="#">Forgot Password</a>
+				</div>
+				<div class="signup">━━━━━━━━━━ <a href="{% url 'login' %}">Log In</a> ━━━━━━━━━━</div>
+			</form>
+		</div>
+
+</body>
 <br>
 
-<form method = "POST" action = "">
-    {% csrf_token %}
-
-    {% if form.errors %}
-			<div class="alert alert-warning alert-dismissible fade show" role="alert">
-			  Your Form Has Errors
-			  {% for field in form %}
-			  	{% if field.errors %}
-			  		{{ field.errors }}
-			  	{% endif %}
-			  {% endfor %}
-			  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-			</div>
-		{% endif %}
-
-    {{ form.as_p }}
-
-    <div class = "text-center">
-        <button type = "submit" class = "btn btn-secondary">Sign Up</button>
-    </div>
-
-</form>
-</div>
 
 {% endblock %}

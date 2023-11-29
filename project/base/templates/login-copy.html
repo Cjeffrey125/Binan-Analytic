@@ -1,52 +1,31 @@
-{% load static %}
+{% extends 'base.html' %}
 {% block content %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="{% static 'css/login.css' %}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-  <title>Login Form</title>
-</head>
+<div class="col-md-6 offset-md-3">
+  <h1>Login</h1>
 
-<body>
-  <div class="container">
-    <img src="{% static 'images/Logo.png' %}">
-    <h2>BIÑAN ANALYTICS</h2>
-    <h4>Account Login</h4>
-    <form action="">
-      <div class="input-box">
-        <input type="text" required>
-        <label>Username</label>
+  <br />
+  <form method="POST" action="{% url 'login' %}">
+    {% csrf_token %}
 
-        <i class='bx bxs-user'></i>
-      </div>
-      <div class="input-box">
-        <input type="password" required>
-        <label>Password</label>
-
-        <i class='bx bxs-lock-alt'></i>
-      </div>
-      <div class="remember-forget">
-        <label><input type="checkbox">Remeber Me</label>
-        <a href="#">Forgot Password</a>
+    <form>
+      <div class="mb-3">
+        <input type="text" class="form-control" name="user_name" placeholder="Username" required>
       </div>
 
-      <button type="submit" class="btn">Login</button>
-      <div class="signup"><a href="#">Sign Up</a></div>
+      <div class="mb-3">
+        <input type="password" class="form-control" name="user_password" placeholder="Password" required>
+      </div>
 
+
+      <br />
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-secondary">Login</button>
+      </div>
     </form>
-  </div>
 
-
-</body>
-
-</html>
-
+  </form>
+</div>
 
 {% endblock %}
