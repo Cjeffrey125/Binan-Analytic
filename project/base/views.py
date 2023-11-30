@@ -9,6 +9,7 @@ import csv
 import pandas as pd
 from import_export import resources
 from django.db.models import Q
+import json
 
 
 class CollegeStudentApplicationResource(resources.ModelResource):
@@ -707,12 +708,11 @@ def add_requirement(request, form_type):
 
 
 
-def school_couse_list(request):
-      
+def school_course_list(request):
+    schools_with_courses = INBSchool.objects.prefetch_related('inbcourse_set').all()
     schools = INBSchool.objects.all()
-
-    return render(request, 'Admin/list_course_school.html', {'schools': schools})
-  
+    
+    return render(request, 'Admin/list_course_school.html', {'schools_with_courses': schools_with_courses, 'schools': schools, })
 
 def create_school(request):
     if request.method == 'POST':
@@ -724,20 +724,39 @@ def create_school(request):
     else:
         form = INBSchoolForm()
 
-    return render(request, 'Admin/list-school-course.html', {'form': form})
+    return render(request, 'Admin/list-school-course.html', {'school_form': form})
+
 
 def add_course(request):
     if request.method == 'POST':
         form = INBCourseForm(request.POST)
         if form.is_valid():
-            form.save()
-            return messages.success(request, "Course Successfully Added")
+            course_instance = form.save(commit=False)
+
+            selected_schools = request.POST.getlist('schools')
+
+            print("Selected Schools:", selected_schools)  
+
+            associated_schools = []
+
+            for school_id in selected_schools:
+                school = get_object_or_404(INBSchool, pk=school_id)
+                associated_schools.append(school)
+
+            course_instance.save()
+            course_instance.school.set(associated_schools)
+
+            if selected_schools:
+                course_instance.school_id = selected_schools[0]
+                course_instance.save()
+
+            messages.success(request, "Course Successfully Added")
+            return redirect('sc_list')  
     else:
         form = INBCourseForm()
 
-    return render(request, 'Admin/list-school-course.html', {'form': form})
-
-
+    schools = INBSchool.objects.all()
+    return render(request, 'Admin/list_course_school.html', {'course_form': form, 'schools': schools})
 
 def test1(request):
     return render(request, 'cms-forms.html')

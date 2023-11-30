@@ -45,7 +45,7 @@
         let list = this.nextElementSibling;
         list.classList.toggle("open");
         if (list.classList.contains("open")) {
-            list.style.maxHeight = "200px"; // Set your desired standard height here
+            list.style.maxHeight = "150px"; 
             list.style.boxShadow =
                 "0 1px 2px 0 rgba(0, 0, 0, 0.15),0 1px 3px 1px rgba(0, 0, 0, 0.1)";
         } else {
@@ -105,4 +105,17 @@
         });
     }
 
+
+    function addSelectedSchools() {
+    var selectedSchools = document.querySelectorAll('input[name="schools"]:checked');
+    var schoolIds = [];
+
+    selectedSchools.forEach(function(school) {
+        schoolIds.push(school.value);
+    });
+
+    // Add the array of school_ids to a hidden input field
+    var schoolIdsInput = document.getElementById('id_school_ids');
+    schoolIdsInput.value = JSON.stringify(schoolIds);
+}
   

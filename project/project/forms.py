@@ -16,10 +16,9 @@ class INBSchoolForm(forms.ModelForm):
         fields = ['school']
 
 class INBCourseForm(forms.ModelForm):
-    course = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Add New Requirements", "class":"form-control"}), label="")
     class Meta:
-        model = INBCourse
-        fields = ['course', 'school']
+            model = INBCourse
+            fields = ['course', 'acronym', 'school_id']
 
 
 class INBRequirementList(forms.Form):

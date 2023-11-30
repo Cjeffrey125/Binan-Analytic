@@ -9,18 +9,20 @@
     <button class="modal-button" id="openCourseForm">Add Course</button>
 
     <div class="center-container">
-        {% for school in schools %}
-            {% if forloop.counter0|divisibleby:4 %}
-                </div>  
-                <div class="inline-flex-container">
-            {% endif %}
-            <div class="container-box">
-                <div class="header-container">
-                    <h1>{{ school.school }}</h1>
-                </div>
-                <p>course</p>
+        {% for school in schools_with_courses %}
+        {% if forloop.counter0|divisibleby:4 %}
             </div>
-        {% endfor %}
+            <div class="inline-flex-container">
+        {% endif %}
+        <div class="container-box">
+            <div class="header-container">
+                <h1>{{ school.school }}</h1>
+            </div>
+            {% for course in school.inbcourse_set.all %}
+                <p>{{ course.course }}</p>
+            {% endfor %}
+        </div>
+    {% endfor %}
     </div>  
 
     <div id="schoolFormContainer" class="modal-container">
@@ -37,23 +39,29 @@
     <div id="courseFormContainer" class="modal-container">
         <div class="modal-course">
             <div class="center-course">
-                <div class="dropdown">
-                    <div class="title">Schools</div>
-                    <div class="input-box"></div>
-                    <div class="list">
-                        {% for school in schools %}
-                            <input type="checkbox" name="option1" id="id{{ school.id }}" class="checkbox" />
-                            <label for="id{{ school.id }}">
-                                <span class="name">{{ school.school }}</span>
-                            </label>
-                        {% endfor %}
+                <h1>Add Course</h1>
+                <form method="post" action="{% url 'create_course' %}">
+                    {% csrf_token %}
+                    <div class="dropdown">
+                        <div class="title">Schools</div>
+                        <div class="input-box"></div>
+                        <div class="list">
+                            {% for school in schools %}
+                                <input type="checkbox" name="schools" id="id{{ school.id }}" class="checkbox" value="{{ school.id }}" />
+                                <label for="id{{ school.id }}">
+                                    <span class="name">{{ school.school }}</span>
+                                </label>
+                            {% endfor %}
+                        </div>
                     </div>
-                </div>
-                <input type="text" name="school" id="id_course" placeholder="Add Course" class="form-control" required>
+                    <input type="text" name="course" id="id_course" placeholder="Add Course" class="form-control" required>
+                    <input type="text" name="acronym" id="id_acronym" placeholder="Course Acronym" class="form-control" required>
+                    <button type="submit" class="modals-button">Submit</button>
+                </form>
             </div>
         </div>
     </div>
-
+    
  
 
     <script src="{% static 'js/list-course-school.js' %}"></script>

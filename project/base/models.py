@@ -331,16 +331,11 @@ class INBSchool(models.Model):
     def __str__(self):
         return self.school
 
-    def save(self, *args, **kwargs):
-        created = not self.pk
-        super().save(*args, **kwargs)
-
-        if created:
-            INBCourse.objects.create(school=self)
-
 class INBCourse(models.Model):
     course = models.CharField(max_length=100)
-    school = models.ForeignKey(INBSchool, on_delete=models.CASCADE)
+    acronym = models.CharField(max_length=100, default='')
+    school = models.ManyToManyField(INBSchool)
+    school_id = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return self.course
