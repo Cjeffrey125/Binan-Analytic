@@ -299,3 +299,44 @@
     margin-top: 10px;
 }
 
+.text-course {
+  font-size: 14px;
+  margin-right: 6px;
+  color: #000000;
+}
+.head-school {
+  font-size: 20px;
+  margin-left: 24px;
+  color: #000000;
+}
+
+.scrollable-container {
+  max-height: 400px;
+  padding: 1rem;
+  overflow-y: auto;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.scrollable-container::-webkit-scrollbar {
+  width: 18px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border: 5px solid transparent;
+  background-clip: content-box;
+}
+
+.scrollable-container:hover {
+  scrollbar-color: rgb(99, 178, 242) transparent;
+}
+
+.scrollable-container:hover::-webkit-scrollbar-thumb {
+  background-color: rgb(99, 178, 242);
+}
