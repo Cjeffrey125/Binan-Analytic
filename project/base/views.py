@@ -735,8 +735,6 @@ def add_course(request):
 
             selected_schools = request.POST.getlist('schools')
 
-            print("Selected Schools:", selected_schools)  
-
             associated_schools = []
 
             for school_id in selected_schools:
@@ -758,10 +756,11 @@ def add_course(request):
     schools = INBSchool.objects.all()
     return render(request, 'Admin/list_course_school.html', {'course_form': form, 'schools': schools})
 
+
+
+
+
+
 def test1(request):
     return render(request, 'cms-forms.html')
 
-def test2 (request):
-    schools = INBSchool.objects.all()
-
-    return render(request, 'test-template.html', {'schools': schools})

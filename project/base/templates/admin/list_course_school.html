@@ -5,8 +5,12 @@
     <link rel="stylesheet" href="{% static 'css/list_course_school.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css">
 
+    <div class="school-course-body">
     <button class="modal-button" id="openSchoolForm">Add School</button>
     <button class="modal-button" id="openCourseForm">Add Course</button>
+    <a class="modal-button" href="{% url 'update_school_list' %}">Update</a>
+
+
 
     <div class="center-container">
         {% for school in schools_with_courses %}
@@ -16,7 +20,7 @@
         {% endif %}
         <div class="container-box">
             <div class="header-container">
-                <h1 class="head-school">{{ school.school }}</h1>
+                <h1 class="head-school">{{ school.school }}</h1> 
             </div>
             <div class="scrollable-container">
                 {% for course in school.inbcourse_set.all %}
@@ -63,6 +67,7 @@
             </div>
         </div>
     </div>
+</div>
     
  
 

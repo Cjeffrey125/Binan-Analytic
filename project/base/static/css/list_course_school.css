@@ -1,18 +1,24 @@
+.school-course-body {
+  margin-top: 50px;
+}
+
 .center-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
 }
 
 .container-box {
-    border: 1px solid #000000;
-    padding: 12px;
-    margin-bottom: 20px;
-    margin-top: 30px;
-    width:320px;
-    height: 500px;
-    
+  border: 1px solid #000000;
+  padding: 12px;
+  margin-bottom: 20px;
+  margin-top: 30px;
+  width: 320px;
+  height: 500px;
+  flex: 0 0 auto;
+
 }
 
 .empty-container-box {
@@ -34,6 +40,8 @@
     margin-bottom: 10px;
     margin-right: -12px;
     margin-left: -12px;
+    display: flex;
+    align-items: center;
     
 }
 
@@ -308,6 +316,8 @@
   font-size: 20px;
   margin-left: 24px;
   color: #000000;
+  display: inline-block;
+  margin-right: 5px; 
 }
 
 .scrollable-container {
@@ -339,4 +349,23 @@
 
 .scrollable-container:hover::-webkit-scrollbar-thumb {
   background-color: rgb(99, 178, 242);
+}
+
+.fa-pencil {
+  color: black;
+  margin-right: 5px;
+}
+
+.fa-trash {
+  margin-left: 10px; 
+}
+
+.fa-solid.fa-ellipsis-vertical {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.icon-position {
+  margin-left: auto; 
+  margin-right: 15px;
 }
