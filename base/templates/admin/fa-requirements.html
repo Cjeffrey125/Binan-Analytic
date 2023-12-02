@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% load static %} 
+
+{% block content %}
+
+<form method="POST" action="{% url 'add_fa_requirement' %}">
+    {% csrf_token %}
+
+    <h1>Add Requirement</h1>
+    {{form.requirement}}
+
+    <div class = "text-center">
+        <button type="submit" class="btn btn-secondary">Save</button>
+    </div>
+</form>
+
+<p>A. Recent 2x2 ID Photo (2 copies)</p>
+                       
+<p>B. PSA Certified Birth Certificate (2 copies)</p>
+
+<p>C. Photocopy of Latest Grade 10 Report Card (2 copies)</p>
+
+<p>D. Certificate of Academic Standing (2 copies)</p>
+
+<p>E. Voter's Certification Parents / Guardians (2 copies)</p>
+
+<p>F. Letter of Recommendation (if applicable)</p>
+
+<p>G. Certificate of Employment of Parent /  Guardians (if possible)</p>
+
+<p>H. Certificate of Indigency</p>
+
+
+{% endblock %}
+
+                      

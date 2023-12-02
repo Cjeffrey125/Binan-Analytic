@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/admin-req.css' %}">
+
+<h1>Requirement</h1>
+<form action="{% url 'update_req' %}" method="get">
+    <div class="text-container">
+        <input type="radio" id="inb" name="group" value="inb" />
+        <label for="inb">Iskolar ng Bayan</label>
+    </div>
+
+    <div class="text-container">
+        <input type="radio" id="fa" name="group" value="fa" />
+        <label for="fa">Financial Assistance</label>
+    </div>
+
+    <div class="rendered-html">
+        {% if selected_radio == 'inb' %}
+            {% include 'Admin/inb-requirements.html' %}
+        {% elif selected_radio == 'fa' %}
+            {% include 'Admin/fa-requirements.html' %}
+        {% else %}
+            <p>No selection made.</p>
+        {% endif %}
+    </div>
+
+   
+</form>
+{% endblock %}

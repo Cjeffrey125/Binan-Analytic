@@ -1,0 +1,44 @@
+.item {
+    position: absolute;
+}
+
+.form-field {
+    width: 100%;
+    box-sizing: border-box;
+    height: 100%;
+    position: relative; 
+}
+
+.resizer {
+    position: absolute;
+    width: 3px; 
+    height: 3px; 
+    border-radius: 50%; 
+    background-color: rgb(255, 255, 255);
+    border: 1px solid black;
+    z-index: 2;
+}
+
+.resizer.nw {
+    top: -1px;
+    left: -1px;
+    cursor: nw-resize;
+}
+
+.resizer.ne {
+    top: -1px;
+    right: -1px;
+    cursor: ne-resize;
+}
+
+.resizer.sw {
+    bottom: -1px;
+    left: -1px;
+    cursor: sw-resize;
+}
+
+.resizer.se {
+    bottom: -1px;
+    right: -1px;
+    cursor: se-resize;
+}

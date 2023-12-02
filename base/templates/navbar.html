@@ -1,0 +1,106 @@
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/navigation-bar.css' %}">
+<link rel="stylesheet" href="{% static 'css/hamburger.css' %}">
+
+<div class="nav">
+  <nav>
+    <div class="logo-container">
+      <a href="{% url 'home' %}" style="display: flex;">
+        <img src="{% static 'images/Logo.png' %}" class="logo-img">
+        <img src="{% static 'images/Textlogo.png' %}" class="textlogo-img">
+      </a>
+    </div>
+
+    <div id="menuToggle">
+
+          <input type="checkbox" />
+          <span></span>
+          <span></span>
+          <span></span>
+      
+      <ul id="menu">
+        <a href="#">
+          <li>Dashboard</li>
+        </a>
+        <a href="#">
+          <li>Iskolar ng Binan</li>
+        </a>
+        <a href="#">
+          <li>Financial Assistance</li>
+        </a>
+       
+      </ul>
+    </div>
+
+    <ul class="container-fluid">
+      {% if user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'dashboard' %}" style="color: rgb(255, 255, 255);">Dashboard</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'inb_applicant_list' %}" style="color: rgb(255, 255, 255);">College</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'fa_applicant_list' %}" style="color: rgb(255, 255, 255);">Financial
+          Assistance</a>
+      </li>
+
+      <img src="{% static 'images/profile.png' %}" class="user-pic" onclick="toggleMenu()">
+
+      <div class="sub-menu-wrap" id="subMenu">
+          <div class="sub-menu">
+            <div class="user-info">
+              <img src="{% static 'images/profile.png' %}" class="user-pic">
+              <h4>{{ user.first_name }}, {{ user.last_name }}</h4>
+            </div>
+            <hr>
+          
+            <a href="#" class="sub-menu-link">
+              <img src="{% static 'images/profile.png' %}">
+              <p>Edit Profile</p>
+            </a>
+          
+            <a href="#" class="sub-menu-link">
+              <img src="{% static 'images/help.png' %}">
+              <p>Help</p>
+            </a>
+          
+            <a href="#" class="sub-menu-link">
+              <img src="{% static 'images/setting.png' %}">
+              <p>Settings</p>
+            </a>
+          
+            <a class="sub-menu-link" href="{% url 'logout' %}">
+              <img src="{% static 'images/logout.png' %}">
+              <p>Logout</p>
+            </a>
+          
+          </div>
+      </div>
+
+      {% else %}
+      <!-- Your non-authenticated user navigation items -->
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'signup' %}" style="color: black;">Create an Account?</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'login' %}" style="color: black;">Login</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+
+<script>
+  function toggleMenu() {
+    var subMenu = document.getElementById("subMenu");
+    subMenu.classList.toggle("open-menu");
+  }
+</script>
+
+{% endblock %}

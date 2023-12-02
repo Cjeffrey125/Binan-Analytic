@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/list_course_school.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css">
+
+    <div class="school-course-body">
+        <a class="modal-button" href="{% url 'sc_list' %}">Go Back</a>
+            {% csrf_token %}
+            
+         
+
+            <div class="center-container">
+                {% for school_with_courses in schools_with_courses %}
+                    {% if forloop.counter0|divisibleby:4 %}
+                        </div>
+                        <div class="inline-flex-container">
+                    {% endif %}
+                    <div class="container-box">
+                        <div class="header-container">
+                            <h1 class="head-school">
+                                <span class="school-text" data-school-id="{{ school_with_courses.school.id }}">{{ school_with_courses.school.school }}</span>
+                                <input type="text" name="school_{{ school_with_courses.school.id }}" value="{{ school_with_courses.school.school }}" class="school-input" style="display: none;" />
+                            </h1>
+                        
+                            <div class="icon-position">
+                                <button type="button" class="edit-button" data-school-id="{{ school_with_courses.school.id }}">
+                                    <i class="fa-solid fa-pencil"></i>  
+                                </button>
+                                
+                                <button type="button" class="delete-button" data-school-id="{{ school_with_courses.school.id }}" data-url="{% url 'delete_school_list' school_with_courses.school.id %}">
+                                    <i class="fa-solid fa-trash" id="openDeleteModal"></i>
+                                </button>
+                            </div>                                           
+                        </div>
+                        <div class="scrollable-container">
+                            {% for course in school_with_courses.courses %}
+                                <p class="text-course">
+                                    <i class="fa-solid fa-ellipsis-vertical"></i> {{ course.course }} {{ course.school_id }}
+                                </p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    <div id="deleteConfirmationContainer" class="delete-modal-container">
+        <div class="modal-course">
+            <div class="center-course">
+                <h1 class="school-text" data-school-id="{{ school.id }}">Are you sure you want to delete {{ school.school }}?</h1>
+                    <div class="inline-flex-container">
+                        <button class="modal-button" id="deleteYesButton">Yes</button>
+                        <button class="modal-button" id="deleteNoButton">No</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="updateConfirmationContainer" class="update-modal-container">
+        <div class="update-modal">
+            <div class="update-center">
+                <h1>Edit the School Name</h1>
+    
+                <input type="text" class="school-input" id="schoolInput" />
+                
+                <div class="inline-flex-container">
+                    <button class="modal-button" id="updateYesButton">Yes</button>
+                    <button class="modal-button" id="updateNoButton">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="{% static 'js/update-delete-s-c.js' %}"></script>
+{% endblock %}

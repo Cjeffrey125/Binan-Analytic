@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %} 
+
+{% block content %}
+
+<form method="POST" action="{% url 'add_inb_requirement' %}">
+    {% csrf_token %}
+
+    <h1>Add Requirement</h1>
+
+    {{form.requirement}}
+
+    <div class = "text-center">
+        <button type="submit" class="btn btn-secondary">Save</button>
+    </div>
+</form>
+
+
+    <p>A. Duly accomplished Application Form; (ORIGINAL)</p>
+                        
+    <p>B. Cerificate of Academic Standing with General Weighted Average and Rank issued by DepEd Senior High School in the City of Biñan; (ORIGINAL)</p>
+                
+    <p>C. Certificate of Good Moral Character issued by DepEd Senior High School; (PHOTOCOPY)</p>
+        
+    <p>D. Certificate of Completion (Moving-Up) issued by DepEd Junior High School in the City of Biñan; (PHOTOCOPY)</p>
+
+    <p>E. Certificate of Indigency issued by the Barangay Chairman with attached Actual Photo of Residence; (PHOTOCOPY)</p>
+
+    <p>F. Recent 2x2 1.D. picture attached in the INB Application Forn; (1 COPY)</p>
+
+    <p>G. PSA Birth Certificate; (PHOTOCOPY)</p>
+
+    <p>H. Voter's Certification of BOTH PARENTS/GUARDIANS & GRANTEE who are at the voting age requirement; (PHOTOCOPY)</p>
+
+    <p>I. Latest Report Card / Form 138; (PHOTOCOPY)</p>
+
+    <p>J. Income Tax Return (ifemployed) or Certificate of No Fix Income of Parents/Guardians issued by BIR; (PHOTOCOPY)</p>
+
+    <p>K. Grade 6 Diploma / Certificate of Graduation (for under guardianship); (PHOTOCOPY)</p>
+
+    <p>L. Death Certificate (for deceased parent/s); (PHOTOCOPY)</p>
+
+    <p>M. Solo Parent ID (for solo parent); (PHOTOCOPY)</p>
+                        
+{% endblock %}

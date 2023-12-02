@@ -1,0 +1,25 @@
+.text-container {
+    display: inline-block;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    padding: 5px;
+    cursor: pointer;
+    margin-right: 10px; /* Optional: Add margin for spacing between radio buttons */
+}
+
+input[type="radio"] {
+    display: none;
+}
+
+label {
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    padding: 8px;
+    display: block;
+}
+
+input[type="radio"]:checked + label {
+    background-color: rgb(204, 102, 119);
+    border-radius: 5px;
+}

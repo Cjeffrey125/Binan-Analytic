@@ -1,0 +1,244 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+body {
+    background: #EEF1FA !important;
+    min-height: 100vh;
+    width: 100%;
+    color: #fff;
+    position: relative;
+}
+
+nav {
+    background-color: #1C469A;
+    color: #D3BD8F;
+    display: flex;
+    align-items: center;
+    padding: 20px 8%;
+    width: 100%;
+    height: 7%;
+    top: 0;
+    left: 0;
+    position: fixed;
+
+}
+
+nav a .logo-img {
+    width: 40px;
+    margin-right: 20 px;
+    cursor: pointer;
+}
+
+nav a .textlogo-img {
+    padding: 10px;
+    width: 170px;
+    cursor: pointer;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    margin-left: 120px;
+    width: 100%;
+    height: 36px;
+    max-width: 400px;
+    background: #ECECEC;
+    border-radius: 15px;
+    padding: 10px 20px;
+}
+
+.search-bar input {
+    background: transparent;
+    flex: 1;
+    border: 0;
+    outline: none;
+    padding: 30px 5px;
+    font-size: 15px;
+    margin-right: 10px;
+    color: black;
+    font-family: 'Poppins';
+}
+
+::placeholder {
+    font-family: 'Poppins';
+    color: #424346;
+}
+
+.search-bar img {
+    height: 20px;
+    width: 20px;
+}
+
+.search-bar button {
+    background: transparent;
+}
+
+.search-bar:hover {
+    background: #ffffff;
+}
+
+.search-bar input:hover {
+    color: #000000;
+}
+
+.search-bar button:hover {
+    filter: brightness(90%);
+}
+
+nav ul li {
+    display: inline-block;
+    list-style: none;
+    margin: 0 20px;
+    margin-top: 15px;
+}
+
+nav ul li a {
+    font-family: 'Poppins';
+    text-decoration: none;
+    position: relative;
+    color: #BBBBBB;
+}
+
+nav ul li a:hover,
+nav ul li a:focus,
+nav ul li a:is(:link, :active, :visited).active {
+    color: #ffffff;
+}
+
+nav ul li a::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: #ffffff;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    transition: width 0.3s;
+
+}
+
+nav ul li a:hover::after,
+nav ul li a:focus::after,
+nav ul li a.active::after {
+    opacity: 1;
+}
+
+button {
+    background: transparent;
+    height: 30px;
+    width: 30px;
+    border-radius: 20px;
+    border: 0;
+    outline: 0;
+
+    margin-left: 30px;
+}
+
+button .profile-img {
+    display: block;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    border: 0;
+    outline: 0;
+    margin-left: 25px;
+}
+
+
+/* -------------------- */
+.sub-menu-wrap {
+    position: absolute;
+    top: 100%;
+    right: 5%;
+    width: 320px;
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.5s;
+}
+
+.sub-menu-wrap.open-menu {
+    max-height: 400px;
+}
+
+.sub-menu {
+    background: #fff;
+    padding: 20px;
+    margin: 10px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info h3 {
+    font-weight: 500;
+}
+
+.user-info img {
+    width: 60px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+.sub-menu hr {
+    border: 0;
+    height: 1px;
+    width: 100%;
+    background: #545353;
+    margin: 15px 0 10px;
+}
+
+.sub-menu-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #525252;
+    margin: 12px 0;
+}
+
+.sub-menu-link img {
+    width: 30px;
+    background: #e5e5e5;
+    border-radius: 50%;
+    padding: 8px;
+    margin-right: 10px;
+}
+
+.sub-menu-link:hover p {
+    font-weight: 600;
+}
+
+.sub-menu-link p {
+    margin: 0;
+}
+
+/* ----------- */
+.offcanvas-header button {
+    background-color: #1C469A;
+    color: #D3BD8F;
+}
+
+
+.offcanvas-body {
+    background-color: #1C469A;
+    color: #D3BD8F;
+    padding: 20px 10px 0;
+    font-size: 30px;
+}
+
+.navbar-toggler i {
+    position: absolute;
+    left: 80px;
+    top: 6px;
+    transform: translate(-50%);
+    font-size: 40px;
+    color: #D3BD8F;
+}
+
+/* --------- */

@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+    <h1 style="display: inline-block;">Student Records</h1>
+    <form action="{% url 'inb_requirements_list' control_number=records.control_number %}" method="get">
+        <button class="btn btn-primary">View INB Requirements</button>
+      </form>
+
+</div>
+
+<div class="card">
+    <div class="card-header text-center align-middle">
+        Personal Data
+    </div>
+    <div class = "card-body">
+        <p class ="card-text">
+        {{ records.control_number }}<br/>
+        <!-- personal data -->
+        <p>Name : {{ records }} </p>
+    
+        <p>Address : {{ records.address }} </p>
+
+        <p>Gender : {{ records.gender }}</p>
+        <p>Date of Birth : {{ records.date_of_birth }}</p>
+        <p>Place of Birth : {{ records.place_of_birth }}</p>
+        <p>Contact No : {{ records.contact_no }}</p>
+        
+        <p>Email Address : {{ records.email_address }}</p>
+        <p>School : {{ records.school }}</p>
+
+        <p>Course : {{ records.course }}</p>
+        <p>General Weighted Average : {{ records.gwa }}</p>
+        <p>Rank : {{ records.rank }}</p>
+
+        <p>Junior High School : {{ records.jhs }}</p>
+        <p>Junior High School Address : {{ records.jhs_address }}</p>
+        <p>Educational Provider : {{ records.jhs_educational_provider }}</p>
+
+        <p>Senior High School : {{ records.shs }}<br/>
+        <p>Senior High School Address: {{ records.shs_address }}<br/>
+        <p>Educational Provider : {{ records.shs_educational_provider }}<br/>
+
+        </p>
+    </div>
+
+    <div class="card-header text-center align-middle">
+        Family Data
+    </div>
+
+    <div class = "card-body">
+        <p>
+        
+            <p>Voter Status : {{ records.father_voter_status }}</p>
+            <p>Father Name : {{ records.father_name }}</p>
+            <p>Educational Attainment : {{ records.father_educational_attainment }}</p>
+            <p>Occupation : {{ records.father_occupation }}</p>
+            <p>Employer Name : {{ records.father_employer }}</p>
+
+            <p>Voter Status : {{ records.mother_voter_status }}</p>
+            <p>Mother Name : {{ records.mother_name }}</p>
+            <p>Educational Attainment : {{ records.mother_educational_attainment }}</p>
+            <p>Occupation : {{ records.mother_occupation }}</p>
+            <p>Employer Name : {{ records.mother_employer }}</p>
+
+            <p>Voter Status : {{ records.guardian_voter_status }}</p>
+            <p>Guardian Name : {{ records.guardian_name }}</p>
+            <p>Educational Attainment : {{ records.guardian_educational_attainment }}</p>
+            <p>Occupation : {{ records.guardian_occupation }}</p>
+            <p>Employer Name : {{ records.guardian_employer }}</p>
+        </p>
+    </div>
+
+  </div>
+
+<br/> <br/>
+<a href = "{% url 'inb_applicant_list' %}" class="btn btn-secondary">Back</a>
+<a href = "{% url 'update_inb_record' records.id  %}" class="btn btn-secondary">Update Record</a>
+<a href="{% url 'delete_applicant_id' records.id 'application' %}" class="btn btn-danger">Delete Application</a>
+
+
+
+
+
+
+
+
+
+{% endblock %}
