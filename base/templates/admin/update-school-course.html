@@ -58,21 +58,55 @@
         </div>
     </div>
 
-    <div id="updateConfirmationContainer" class="update-modal-container">
-        <div class="update-modal">
-            <div class="update-center">
-                <h1>Edit the School Name</h1>
-    
-                <input type="text" class="school-input" id="schoolInput" />
-                
+   <!-- update-school-list.html -->
+
+<div id="updateConfirmationContainer" class="update-modal-container">
+    <div class="update-modal">
+        <div class="update-center">
+            <h1>Edit <span id="editSchoolName"></span> (ID: <span id="editSchoolId"></span>)</h1>
+            <form method="POST" action="" id="updateForm">
+                {% csrf_token %}
+                <input type="text" name="school" id="editSchoolInput" class="form-control">
                 <div class="inline-flex-container">
-                    <button class="modal-button" id="updateYesButton">Yes</button>
+                    <button class="modal-button" type="submit">Yes</button>
                     <button class="modal-button" id="updateNoButton">No</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
+</div>
+
     
 
     <script src="{% static 'js/update-delete-s-c.js' %}"></script>
+
+    
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const editButtons = document.querySelectorAll('.edit-button');
+        const updateForm = document.getElementById('updateForm');
+        const editSchoolName = document.getElementById('editSchoolName');
+        const editSchoolId = document.getElementById('editSchoolId');
+        const editSchoolInput = document.getElementById('editSchoolInput');
+
+        editButtons.forEach(editButton => {
+            editButton.addEventListener('click', function() {
+                const schoolId = this.getAttribute('data-school-id');
+                const schoolName = this.parentNode.parentNode.querySelector('.school-text').innerText;
+
+           
+                updateForm.action = `/Update_School_List/${schoolId}/`;
+
+                editSchoolName.innerText = schoolName;
+                editSchoolId.innerText = schoolId;
+                editSchoolInput.value = schoolName;
+
+           
+                const modalContainer = document.getElementById('updateConfirmationContainer');
+           
+            });
+        });
+    });
+</script>
+
 {% endblock %}

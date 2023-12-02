@@ -755,31 +755,36 @@ def add_course(request):
     schools = INBSchool.objects.all()
     return render(request, 'Admin/list_course_school.html', {'course_form': form, 'schools': schools})
 
-def update_school_list(request):
+
+
+def update_list(request):
     schools = INBSchool.objects.all()
     schools_with_courses = []
-
-    if request.method == 'POST':
-        # Handle form submission
-        form = INBSchoolForm(request.POST)
-        if form.is_valid():
-            school_id = form.cleaned_data['school_id']
-            new_school_name = form.cleaned_data['school']
-            school = get_object_or_404(INBSchool, id=school_id)
-            school.school = new_school_name
-            school.save()
-    else:
-        form = INBSchoolForm()
 
     for school in schools:
         courses = INBCourse.objects.filter(school_id=school.id)
         schools_with_courses.append({
             'school': school,
             'courses': courses,
-            'form': form,  # Include the form in the context
+            'form': INBSchoolForm(),  
         })
 
-    return render(request, 'Admin/update-school-course.html', {'schools_with_courses': schools_with_courses, 'schools': schools})
+    return render(request, 'Admin/update-school-course.html', {'schools_with_courses': schools_with_courses})
+
+def update_school_list(request, school_id):
+    school = get_object_or_404(INBSchool, id=school_id)
+
+    if request.method == 'POST':
+        form = INBSchoolForm(request.POST, instance=school)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Updated the Data Successfully')
+            return redirect('sc_list')  # Replace 'your_redirect_url_name' with the appropriate URL name
+    else:
+        form = INBSchoolForm(instance=school)
+
+    return render(request, 'Admin/update-school-course.html', {'school': school, 'form': form})
+
 
 def delete_school_list(request, school_id):
     if request.method == 'GET':
