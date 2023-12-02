@@ -14,7 +14,7 @@ body {
 }
 
 nav {
-    background-color: #1C469A;
+    background-color: #1C469A !important;
     color: #D3BD8F;
     display: flex;
     align-items: center;
