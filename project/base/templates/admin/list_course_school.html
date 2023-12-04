@@ -8,28 +8,32 @@
     <div class="school-course-body">
     <button class="modal-button" id="openSchoolForm">Add School</button>
     <button class="modal-button" id="openCourseForm">Add Course</button>
-    <a class="modal-button" href="{% url 'update_school_list' %}">Update</a>
+    <a class="modal-button" href="{% url 'update_list' %}">Update</a>
 
 
 
     <div class="center-container">
-        {% for school in schools_with_courses %}
-        {% if forloop.counter0|divisibleby:4 %}
+        {% for school_with_courses in schools_with_courses %}
+            {% if forloop.counter0|divisibleby:4 %}
+                </div>
+                <div class="inline-flex-container">
+            {% endif %}
+            <div class="container-box">
+                <div class="header-container">
+                    <h1 class="head-school">{{ school_with_courses.school }}</h1> 
+                </div>
+                <div class="scrollable-container">
+                    {% for course in school_with_courses.courses %}
+                        {% if course.school_id == school_with_courses.school.id %}
+                            <p class="text-course">
+                                {{ course.course }} {{ course.school_id }}
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </div>
-            <div class="inline-flex-container">
-        {% endif %}
-        <div class="container-box">
-            <div class="header-container">
-                <h1 class="head-school">{{ school.school }}</h1> 
-            </div>
-            <div class="scrollable-container">
-                {% for course in school.inbcourse_set.all %}
-                    <p class="text-course">{{ course.course }}</p>
-                {% endfor %}
-            </div>
-        </div>
-    {% endfor %}
-    </div>  
+        {% endfor %}
+    </div>
 
     <div id="schoolFormContainer" class="modal-container">
         <div class="modal-content">

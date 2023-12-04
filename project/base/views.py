@@ -34,7 +34,7 @@ import csv
 import pandas as pd
 from import_export import resources
 from django.db.models import Q
-import json
+
 
 
 class CollegeStudentApplicationResource(resources.ModelResource):
@@ -61,11 +61,11 @@ def import_excel(request):
             file = request.FILES["file"]
             df = pd.read_excel(file, na_values=["N/A", "-", "Not Available"])
 
-            # Replace NaN values with "N/A"
+          
             df = df.fillna("N/A")
 
-            # Convert date columns to the correct format
-            date_columns = ["Date of Birth"]  # Add other date columns if needed
+        
+            date_columns = ["Date of Birth"]  
             for col in date_columns:
                 df[col] = pd.to_datetime(df[col], errors="coerce").dt.strftime(
                     "%Y-%m-%d"
@@ -123,7 +123,7 @@ def import_excel(request):
                             guardian_occupation=row["Guardian Occupation"],
                         )
                     else:
-                        # Check if sibling_count is 0 or 'N/A' before creating FinancialAssistanceApplication
+                      
                         sibling_count = row["Sibling Count"]
                         if pd.isna(sibling_count) or sibling_count == 0:
                             messages.warning(
@@ -179,7 +179,7 @@ def import_excel(request):
                 request, f"{applicant_count} applicant(s) imported successfully."
             )
 
-            # Check if "Desired Course" is not in columns
+           
             if "Desired Course" not in df.columns:
                 return redirect("fa_applicant_list")
 
@@ -953,65 +953,94 @@ def add_requirement(request, form_type):
 
 
 def school_course_list(request):
-    schools_with_courses = INBSchool.objects.prefetch_related("inbcourse_set").all()
     schools = INBSchool.objects.all()
 
-    return render(
-        request,
-        "Admin/list_course_school.html",
-        {
-            "schools_with_courses": schools_with_courses,
-            "schools": schools,
-        },
-    )
+    schools_with_courses = []
+    for school in schools:
+        courses = INBCourse.objects.filter(school_id=school.id)
+        schools_with_courses.append({
+            'school': school,
+            'courses': courses,
+        })
+
+    return render(request, 'Admin/list_course_school.html', {'schools_with_courses': schools_with_courses, 'schools': schools})
 
 
 def create_school(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = INBSchoolForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "School Successfully Added")
-            return redirect("sc_list")
+            return redirect('sc_list')  
     else:
         form = INBSchoolForm()
 
-    return render(request, "Admin/list-school-course.html", {"school_form": form})
-
+    return render(request, 'Admin/list-school-course.html', {'school_form': form})
 
 def add_course(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = INBCourseForm(request.POST)
         if form.is_valid():
-            course_instance = form.save(commit=False)
-
-            selected_schools = request.POST.getlist("schools")
-
-            associated_schools = []
+            selected_schools = request.POST.getlist('schools')
+            course_data = form.cleaned_data
 
             for school_id in selected_schools:
-                school = get_object_or_404(INBSchool, pk=school_id)
-                associated_schools.append(school)
-
-            course_instance.save()
-            course_instance.school.set(associated_schools)
-
-            if selected_schools:
-                course_instance.school_id = selected_schools[0]
+                course_instance = INBCourse(
+                    course=course_data['course'],
+                    acronym=course_data['acronym'],
+                    school_id=int(school_id)
+                )
                 course_instance.save()
 
-            messages.success(request, "Course Successfully Added")
-            return redirect("sc_list")
+            messages.success(request, "Course(s) Successfully Added")
+            return redirect('sc_list')
     else:
         form = INBCourseForm()
 
     schools = INBSchool.objects.all()
-    return render(
-        request,
-        "Admin/list_course_school.html",
-        {"course_form": form, "schools": schools},
-    )
+    return render(request, 'Admin/list_course_school.html', {'course_form': form, 'schools': schools})
 
+
+
+def update_list(request):
+    schools = INBSchool.objects.all()
+    schools_with_courses = []
+
+    for school in schools:
+        courses = INBCourse.objects.filter(school_id=school.id)
+        schools_with_courses.append({
+            'school': school,
+            'courses': courses,
+            'form': INBSchoolForm(),  
+        })
+
+    return render(request, 'Admin/update-school-course.html', {'schools_with_courses': schools_with_courses})
+
+def update_school_list(request, school_id):
+    school = get_object_or_404(INBSchool, id=school_id)
+
+    if request.method == 'POST':
+        form = INBSchoolForm(request.POST, instance=school)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Updated the Data Successfully')
+            return redirect('sc_list')  
+    else:
+        form = INBSchoolForm(instance=school)
+
+    return render(request, 'Admin/update-school-course.html', {'school': school, 'form': form})
+
+
+def delete_school_list(request, school_id):
+    if request.method == 'GET':
+        school = get_object_or_404(INBSchool, pk=school_id)
+        school.inbcourse_set.all().delete()
+        school.delete()
+        messages.success(request, 'Data Deleted Successfully')
+        return redirect('sc_list')
+
+    return redirect('sc_list')
 
 def test1(request):
     return render(request, "cms-forms.html")
