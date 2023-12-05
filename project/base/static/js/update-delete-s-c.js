@@ -21,7 +21,7 @@ document.getElementById('deleteYesButton').addEventListener('click', async funct
     const schoolId = document.getElementById('deleteConfirmationContainer').dataset.schoolId;
 
     try {
-        const response = await fetch(`/Delete_School_List/${schoolId}/`, {
+        const response = await fetch(`/Delete_List/${schoolId}/`, {
             method: 'GET',
         });
 
@@ -87,6 +87,9 @@ document.getElementById('updateNoButton').addEventListener('click', function (ev
     document.getElementById('updateConfirmationContainer').style.display = 'none';
     return false;
 });
+
+
+
 
 
 document.getElementById('goBackButton').addEventListener('click', function () {

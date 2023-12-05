@@ -34,11 +34,21 @@
                                 </button>
                             </div>                                           
                         </div>
+
                         <div class="scrollable-container">
                             {% for course in school_with_courses.courses %}
-                                <p class="text-course">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i> {{ course.course }} {{ course.school_id }}
-                                </p>
+                                <div class="course-container">
+                                    <div class="text-course">
+                                        <i class="fas fa-ellipsis-vertical update-course-button"></i>
+                                        <span class="course-data">{{ course.course }} {{ course.school_id }}</span>
+                                    </div>
+                                    <div class="dropdown-container">
+                                        <div class="dropdown-content">
+                                            <a class="dropdown-test" href="#">Update</a>
+                                            <a class="dropdown-test" href="#">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
                             {% endfor %}
                         </div>
                     </div>
@@ -74,7 +84,6 @@
             </div>
         </div>
     </div>
-    
 
 <script src="{% static 'js/update-delete-s-c.js' %}"></script>
 
@@ -102,6 +111,15 @@
     });
 
     const scListUrl = "{% url 'sc_list' %}";
+
+    var buttons = document.querySelectorAll('.update-course-button');
+  
+buttons.forEach(function(button) {
+    button.addEventListener('click', function() {
+        var dropdown = this.closest('.course-container').querySelector('.dropdown-content');
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+    });
+});
 
 
 </script>
