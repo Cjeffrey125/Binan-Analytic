@@ -1032,12 +1032,19 @@ def update_school_list(request, school_id):
     return render(request, 'Admin/update-school-course.html', {'school': school, 'form': form})
 
 
-def delete_school_list(request, school_id):
-    if request.method == 'GET':
+def delete_school_list(request, school_id, delete_type='school', course_id=None):
+    if request.method == 'POST':
         school = get_object_or_404(INBSchool, pk=school_id)
-        school.inbcourse_set.all().delete()
-        school.delete()
-        messages.success(request, 'Data Deleted Successfully')
+
+        if delete_type == 'course' and course_id is not None:
+            course = get_object_or_404(INBCourse, pk=course_id, school=school)
+            course.delete()
+            messages.success(request, 'Course Deleted Successfully')
+        elif delete_type == 'school':
+            school.inbcourse_set.all().delete()
+            school.delete()
+            messages.success(request, 'School and Courses Deleted Successfully')
+
         return redirect('sc_list')
 
     return redirect('sc_list')

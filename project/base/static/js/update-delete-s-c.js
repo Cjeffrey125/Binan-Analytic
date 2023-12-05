@@ -4,10 +4,16 @@ document.querySelectorAll('.delete-button').forEach(function(button) {
         const schoolId = container.querySelector('.school-text').dataset.schoolId;
         const schoolName = container.querySelector('.school-text').innerText;
 
-        document.getElementById('deleteConfirmationContainer').style.display = 'flex';
-        document.querySelector('#deleteConfirmationContainer .school-text').innerText = `Are you sure you want to delete ${schoolName}?`;
+        const modalContainer = document.getElementById('deleteConfirmationContainer');
+        modalContainer.style.display = 'flex';
 
-        document.getElementById('deleteConfirmationContainer').dataset.schoolId = schoolId;
+        const modalText = modalContainer.querySelector('.school-text');
+        modalText.innerText = `Are you sure you want to delete ${schoolName}?`;
+
+        const deleteForm = document.getElementById('deleteForm');
+        deleteForm.action = `/Delete_List/${schoolId}/`;
+        deleteForm.querySelector('[name="delete_type"]').value = 'school';
+        deleteForm.dataset.schoolId = schoolId;
 
         initializeInputBox();
     });
@@ -17,25 +23,11 @@ document.getElementById('deleteNoButton').addEventListener('click', function () 
     document.getElementById('deleteConfirmationContainer').style.display = 'none';
 });
 
-document.getElementById('deleteYesButton').addEventListener('click', async function () {
-    const schoolId = document.getElementById('deleteConfirmationContainer').dataset.schoolId;
-
-    try {
-        const response = await fetch(`/Delete_List/${schoolId}/`, {
-            method: 'GET',
-        });
-
-        if (response.ok) {
-            window.location.href = scListUrl;
-        } else {
-            console.error(`Failed to delete school with ID ${schoolId}`);
-        }
-    } catch (error) {
-        console.error('Network error:', error);
-    } finally {
-        document.getElementById('deleteConfirmationContainer').style.display = 'none';
-    }
+document.getElementById('deleteYesButton').addEventListener('click', function () {
+    const deleteForm = document.getElementById('deleteForm');
+    deleteForm.submit();
 });
+
 
 
 document.querySelector('.edit-button').addEventListener('click', function () {

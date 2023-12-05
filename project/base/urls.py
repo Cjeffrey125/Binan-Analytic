@@ -57,7 +57,10 @@ urlpatterns = [
     path("Add_Course/", views.add_course, name="create_course" ),
     path("Update_School_List/<int:school_id>/", views.update_school_list, name="update_school_list"),
     path("Update_List/", views.update_list, name="update_list"),
+    
+    # urls.py
     path('Delete_List/<int:school_id>/', views.delete_school_list, name='delete_school_list'),
+
    
 
     path("Update_Requirements/", views.update_requirement, name="update_req"),

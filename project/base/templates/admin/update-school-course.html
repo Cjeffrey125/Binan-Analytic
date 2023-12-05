@@ -60,10 +60,13 @@
         <div class="modal-course">
             <div class="center-course">
                 <h1 class="school-text" data-school-id="{{ school.id }}">Are you sure you want to delete {{ school.school }}?</h1>
+                <form method="post" id="deleteForm" action="{% if school_with_courses.school.id %}{% url 'delete_school_list' school_with_courses.school.id %}{% endif %}">
+                    {% csrf_token %}
                     <div class="inline-flex-container">
-                        <button class="modal-button" id="deleteYesButton">Yes</button>
-                        <button class="modal-button" id="deleteNoButton">No</button>
+                        <button type="submit" class="modal-button" id="deleteYesButton">Yes</button>
+                        <button type="button" class="modal-button" id="deleteNoButton">No</button>
                     </div>
+                </form>
             </div>
         </div>
     </div>
@@ -88,40 +91,41 @@
 <script src="{% static 'js/update-delete-s-c.js' %}"></script>
 
     
+
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
-        const editButtons = document.querySelectorAll('.edit-button');
-        const updateForm = document.getElementById('updateForm');
-        const editSchoolName = document.getElementById('editSchoolName');
-        const editSchoolId = document.getElementById('editSchoolId');
-        const editSchoolInput = document.getElementById('editSchoolInput');
-
-        editButtons.forEach(editButton => {
-            editButton.addEventListener('click', function() {
-                const schoolId = this.getAttribute('data-school-id');
-                const schoolName = this.parentNode.parentNode.querySelector('.school-text').innerText;
-
-                updateForm.action = `/Update_School_List/${schoolId}/`;
-
-                editSchoolName.innerText = schoolName;
-                editSchoolId.innerText = schoolId;
-                editSchoolInput.value = schoolName;
-            });
-        });
-    });
-
+    document.addEventListener("DOMContentLoaded", function() {
+          const editButtons = document.querySelectorAll('.edit-button');
+          const updateForm = document.getElementById('updateForm');
+          const editSchoolName = document.getElementById('editSchoolName');
+          const editSchoolId = document.getElementById('editSchoolId');
+          const editSchoolInput = document.getElementById('editSchoolInput');
+  
+          editButtons.forEach(editButton => {
+              editButton.addEventListener('click', function() {
+                  const schoolId = this.getAttribute('data-school-id');
+                  const schoolName = this.parentNode.parentNode.querySelector('.school-text').innerText;
+  
+                  updateForm.action = `/Update_School_List/${schoolId}/`;
+  
+                  editSchoolName.innerText = schoolName;
+                  editSchoolId.innerText = schoolId;
+                  editSchoolInput.value = schoolName;
+              });
+          });
+      });
+  
     const scListUrl = "{% url 'sc_list' %}";
 
     var buttons = document.querySelectorAll('.update-course-button');
-  
-buttons.forEach(function(button) {
-    button.addEventListener('click', function() {
-        var dropdown = this.closest('.course-container').querySelector('.dropdown-content');
-        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+    
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            var dropdown = this.closest('.course-container').querySelector('.dropdown-content');
+            dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+        });
     });
-});
-
-
-</script>
+  
+  
+  </script>
 
 {% endblock %}
