@@ -18,13 +18,14 @@ body {
 
 #menuToggle a {
     text-decoration: none;
-    color: #232323;
+    color: white;
+    font-size: 20px;
 
     transition: color 0.3s ease;
 }
 
 #menuToggle a:hover {
-    color: pink;
+    color: #d3bd8f;
 }
 
 #menuToggle input {
@@ -47,18 +48,16 @@ body {
     margin-bottom: 5px;
     position: relative;
 
-    background: #cdcdcd;
+    background: #d3bd8f;
     border-radius: 3px;
 
     z-index: 1;
 
     transform-origin: 4px 0px;
 
-    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
-        background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0),
-        opacity 0.55s ease;
+    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1),
+        background 0.5s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.55s ease;
 }
-
 
 #menuToggle span:first-child {
     transform-origin: 0% 0%;
@@ -71,7 +70,7 @@ body {
 #menuToggle input:checked~span {
     opacity: 1;
     transform: rotate(45deg) translate(-2px, -1px);
-    background: #232323;
+    background: #d3bd8f;
 }
 
 #menuToggle input:checked~span:nth-last-child(3) {
@@ -83,29 +82,56 @@ body {
     transform: rotate(-45deg) translate(0, -1px);
 }
 
+#menuToggle input:checked~ul {
+    transform: none;
+}
 
+/*design ng hamburg modifications*/
 #menu {
     position: absolute;
-    width: 350px;
+    width: 400px;
     height: 850px;
     margin: -100px 0 0 -50px;
     padding: 50px;
     padding-top: 125px;
-    background: transparent;
+    background-color: rgba(28, 70, 154, 0.7);
+
     list-style-type: none;
-    -webkit-font-smoothing: antialiased;
+
     transform-origin: 0% 0%;
     transform: translate(-100%, 0);
-    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1.0);
+    transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1);
     text-align: left;
 }
 
-#menu li {
-    padding: 10px 0;
-    font-size: 22px;
-    text-align: left;
+/*experiment start*/
+
+/* On mouse-over */
+.dropdown-btn:hover {
+    color: #f1f1f1;
 }
 
-#menuToggle input:checked~ul {
-    transform: none;
+/* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
+.dropdown-container {
+    display: none;
+    background-color: transparent;
+    padding-left: 8px;
+    width: 250px;
+
+    margin-left: 30px;
+    margin-top: 10px;
+}
+
+.dropdown-container a {
+    margin-bottom: 10px;
+}
+
+#menu li img {
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+
+.dropdown-btn {
+    display: block;
+    cursor: pointer;
 }
