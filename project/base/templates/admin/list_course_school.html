@@ -26,7 +26,7 @@
                     {% for course in school_with_courses.courses %}
                         {% if course.school_id == school_with_courses.school.id %}
                             <p class="text-course">
-                                {{ course.course }} {{ course.school_id }}
+                                {{ course.course }} - {{ course.acronym }}
                             </p>
                         {% endif %}
                     {% endfor %}

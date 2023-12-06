@@ -55,18 +55,18 @@ urlpatterns = [
     path("School_List/", views.school_course_list, name="sc_list",),
     path("Add_School/", views.create_school, name="create_school"),
     path("Add_Course/", views.add_course, name="create_course" ),
-    path("Update_School_List/<int:school_id>/", views.update_school_list, name="update_school_list"),
     path("Update_List/", views.update_list, name="update_list"),
-    
-    path('Delete_List/<int:school_id>/', views.delete_school_list, name='delete_school_list'),
+    path('delete_item/<str:item_type>/<int:item_id>/', views.delete_item, name='delete_item'),
 
-    path('Delete_Course/<int:course_id>/', views.delete_course, name='delete_course'),
-
+    path("Update_School_List/<int:school_id>/", views.update_school_list, name="update_school_list"),
+    path("Update_Course_List/<int:course_id>/", views.update_course_list, name="update_course_list"),
 
    
 
     path("Update_Requirements/", views.update_requirement, name="update_req"),
     path("Add_IskolarngBayan_Requirement/",views.add_requirement, {"form_type": "inb"}, name="add_inb_requirement",),
     path("Add_FinancialAssistance_Requirement/",views.add_requirement, {"form_type": "fa"}, name="add_fa_requirement",),
+
+    path("Filter/", views.filter, name="filter"),
 
 ]

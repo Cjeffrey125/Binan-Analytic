@@ -28,7 +28,7 @@ class INBSchoolForm(forms.ModelForm):
 class INBCourseForm(forms.ModelForm):
     class Meta:
         model = INBCourse
-        fields = ["course", "acronym", "school_id"]
+        fields = ["course", "acronym"]
 
 
 class INBRequirementList(forms.Form):
@@ -158,31 +158,6 @@ class AddINBForm(forms.ModelForm):
         ("0", "Choose Educational Provider"),
         ("Deped", "DepEd"),
         ("Non-Deped", "Non-DepEd"),
-    ]
-
-    SCHOOL_CHOICES = [
-        ("0", "Preferred School"),
-        ("Colegio San Agustin", "Colegio San Agustin"),
-        ("Citi Global College", "Citi Global College"),
-        (
-            "Guardians Bonafide For Hope Foundation Philippines",
-            "Guardians Bonafide For Hope Foundation Philippines",
-        ),
-        ("La Consolacion College", "La Consolacion College"),
-        (
-            "Polytechnic University of the Philippines - Biñan Campus",
-            "Polytechnic University of the Philippines - Biñan Campus",
-        ),
-        ("Trimex Colleges", "Trimex Colleges"),
-        ("Saint Michaels College of Laguna", "Saint Michaels College of Laguna"),
-        (
-            "UPH-DR. Jose G. Tamayo Medical University",
-            "UPH-DR. Jose G. Tamayo Medical University",
-        ),
-        (
-            "University of Perpetual Help System Laguna",
-            "University of Perpetual Help System Laguna",
-        ),
     ]
 
     COURSES_OFFERED = [
@@ -336,16 +311,17 @@ class AddINBForm(forms.ModelForm):
         ),
         label="",
     )
+
     school = forms.ChoiceField(
         required=True,
-        choices=SCHOOL_CHOICES,
+        choices=[('0', 'Choose School')],
         widget=forms.Select(attrs={"class": "form-control"}),
         label="",
     )
 
     course = forms.ChoiceField(
         required=True,
-        choices=COURSES_OFFERED,
+        choices=[('0', 'Choose Course')],
         widget=forms.Select(attrs={"class": "form-control"}),
         label="",
     )
@@ -516,6 +492,17 @@ class AddINBForm(forms.ModelForm):
         model = CollegeStudentApplication
 
         exclude = ("user",)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        distinct_courses = INBCourse.objects.values_list('course', flat=True).distinct()
+        course_choices = [(course, course) for course in distinct_courses]
+        self.fields['course'].choices = [("", "Select a course")] + course_choices
+
+        schools = INBSchool.objects.all()
+        school_choices = [(str(school.school), school.school) for school in schools]
+        self.fields['school'].choices = [('0', 'Choose School')] + school_choices
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
