@@ -29,24 +29,20 @@
                                     <i class="fa-solid fa-pencil"></i>  
                                 </button>
                                 
-                                <button type="button" class="delete-button" data-school-id="{{ school_with_courses.school.id }}" data-url="{% url 'delete_school_list' school_with_courses.school.id %}">
+                                <button type="button" class="delete-button" data-school-id="{{ school_with_courses.school.id }}">
                                     <i class="fa-solid fa-trash" id="openDeleteModal"></i>
                                 </button>
                             </div>                                           
                         </div>
-
                         <div class="scrollable-container">
                             {% for course in school_with_courses.courses %}
                                 <div class="course-container">
                                     <div class="text-course">
                                         <i class="fas fa-ellipsis-vertical update-course-button"></i>
-                                        <span class="course-data">{{ course.course }} {{ course.school_id }}</span>
+                                        <span class="course-data" data-course-id="{{ course.id }}">{{ course.course }} {{ course.id }}</span>
                                     </div>
-                                    <div class="dropdown-container">
-                                        <div class="dropdown-content">
-                                            <a class="dropdown-test" href="#">Update</a>
-                                            <a class="dropdown-test" href="#">Delete</a>
-                                        </div>
+                                    <div class="dropdown-content">
+                                        <a class="dropdown-test delete-course-button" data-course-id="{{ course.id }}">Delete</a>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -56,23 +52,41 @@
             </div>
         </div>
 
-    <div id="deleteConfirmationContainer" class="delete-modal-container">
+
+        <div id="deleteSchoolConfirmationContainer" class="delete-modal-container">
+            <div class="modal-course">
+                <div class="center-course">
+                    <h1 class="school-text" data-school-id="{{ school_with_courses.school.id }}">
+                        Are you sure you want to delete {{ school_with_courses.school }}?
+                    </h1>
+                    <form method="post" id="deleteForm">
+                        {% csrf_token %}
+                        <div class="inline-flex-container">
+                            <button type="submit" class="modal-button" id="deleteYesButton">Yes</button>
+                            <button type="button" class="modal-button" id="deleteNoButton">No</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    <div id="deleteCourseConfirmationContainer" class="delete-modal-container">
         <div class="modal-course">
             <div class="center-course">
-                <h1 class="school-text" data-school-id="{{ school.id }}">Are you sure you want to delete {{ school.school }}?</h1>
-                <form method="post" id="deleteForm" action="{% if school_with_courses.school.id %}{% url 'delete_school_list' school_with_courses.school.id %}{% endif %}">
+                <h1 class="school-text" data-course-id="">Are you sure you want to delete this course?</h1>
+                <form method="post" id="deleteCourseForm" action="{% url 'delete_course' course_id=0 %}">
                     {% csrf_token %}
+                    <input type="hidden" id="courseIdInput" name="course_id" value="">
                     <div class="inline-flex-container">
                         <button type="submit" class="modal-button" id="deleteYesButton">Yes</button>
-                        <button type="button" class="modal-button" id="deleteNoButton">No</button>
+                        <button type="button" class="modal-button" id="deleteCourseNoButton">No</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-
-
-    <div id="updateConfirmationContainer" class="update-modal-container">
+    
+    <div id="updateSchoolConfirmationContainer" class="update-modal-container">
         <div class="update-modal">
             <div class="update-center">
                 <h1>Edit <span id="editSchoolName"></span> (ID: <span id="editSchoolId"></span>)</h1>
@@ -87,6 +101,9 @@
             </div>
         </div>
     </div>
+
+
+
 
 <script src="{% static 'js/update-delete-s-c.js' %}"></script>
 
@@ -124,8 +141,29 @@
             dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
         });
     });
-  
-  
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var deleteButtons = document.querySelectorAll('.delete-course-button');
+        var courseIdInput = document.getElementById('courseIdInput');
+        var deleteCourseForm = document.getElementById('deleteCourseForm');
+
+        deleteButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var courseId = button.getAttribute('data-course-id');
+                courseIdInput.value = courseId;
+
+                deleteCourseForm.action = '{% url "delete_course" course_id=0 %}'.replace('0', courseId);
+             
+                document.getElementById('deleteCourseConfirmationContainer').style.display = 'block';
+            });
+        });
+
+        document.getElementById('deleteCourseNoButton').addEventListener('click', function () {
+       
+            document.getElementById('deleteCourseConfirmationContainer').style.display = 'none';
+        });
+    });
+
   </script>
 
 {% endblock %}

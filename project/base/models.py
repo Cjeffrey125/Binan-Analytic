@@ -373,6 +373,10 @@ class INBSchool(models.Model):
 
     def __str__(self):
         return self.school
+    
+    def delete(self, *args, **kwargs):
+        INBCourse.objects.filter(school_id=self.id).delete()
+        super().delete(*args, **kwargs)
 
 
 class INBCourse(models.Model):
