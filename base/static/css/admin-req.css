@@ -1,25 +1,121 @@
-.text-container {
-    display: inline-block;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    padding: 5px;
-    cursor: pointer;
-    margin-right: 10px; /* Optional: Add margin for spacing between radio buttons */
+/* admin-req.css */
+
+.container {
+    margin: 20px auto; 
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-input[type="radio"] {
-    display: none;
-}
-
-label {
-    font-weight: 500;
+h1 {
+    text-align: center;
     color: #333;
-    cursor: pointer;
-    padding: 8px;
-    display: block;
 }
 
-input[type="radio"]:checked + label {
-    background-color: rgb(204, 102, 119);
+.button-container {
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
     border-radius: 5px;
+}
+
+form {
+    margin-top: 20px;
+}
+
+form h1 {
+    color: #000000;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+    background: #fff;
+    height: 250px;
+    width: 450px;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    align-items: center;
+
+}
+
+.modal-button {
+    background-color: #fff;
+    border: 1px solid #d5d9d9;
+    border-radius: 8px;
+    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+    box-sizing: border-box;
+    color: #0f1111;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Amazon Ember", sans-serif;
+    font-size: 13px;
+    line-height: 15px;
+    padding: 0 10px 0 11px;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: middle;
+    width: 100px;
+    height: 50px;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.modals-button {
+  background-color: #fff;
+    border: 1px solid #d5d9d9;
+    border-radius: 8px;
+    box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+    box-sizing: border-box;
+    color: #0f1111;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Amazon Ember", sans-serif;
+    font-size: 13px;
+    line-height: 29px;
+    padding: 0 10px 0 11px;
+    width: 100px;
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal-button:hover, 
+.modals-button:hover {
+  background-color: #f7fafa;
+}
+
+.modal-button:focus, 
+.modals-button:focus {
+  border-color: #008296;
+  box-shadow: rgba(213, 217, 217, .5) 0 2px 5px 0;
+  outline: 0;
 }

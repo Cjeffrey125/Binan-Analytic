@@ -148,6 +148,9 @@ def login_user(request):
             return redirect('dashboard')
         else:
             messages.error(request, "Incorrect username or password.")
+            print("test")
+            return redirect('login')
+        
     return render(request, 'login.html')
   
 
@@ -672,40 +675,6 @@ def navbar_user(request):
     return render(request, 'navbar.html', active_user)
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-def update_requirement(request):
-    return render(request, 'Admin/update-requirement.html')
-                  
-def add_requirement(request, form_type):
-    if request.user.is_authenticated:
-        if form_type == 'inb':
-            form = INBRequirementList(request.POST or None)
-            template = 'Admin/inb-requirements.html'
-            model_class = INBRequirementRepository
-            
-        elif form_type == 'fa':
-            form = FARequirementList(request.POST or None)
-            template = 'Admin/fa-requirements.html'
-            model_class = FARequirementRepository
-            
-            
-        else:
-            messages.error(request, "Invalid form type.")
-            return redirect('home')
-
-        if request.method == "POST":
-            if form.is_valid():
-                requirement_data = form.cleaned_data
-                requirement_instance = model_class.objects.create(**requirement_data)
-                messages.success(request, "Requirements Successfully Added")
-                return redirect('update_req')  
-
-        return render(request, template, {'form': form})
-    else:
-        messages.error(request, "You need to be logged in for this process.")
-        return redirect('home')
-
-
 def school_course_list(request):
     schools = INBSchool.objects.all()
 
@@ -779,7 +748,7 @@ def update_school_list(request, school_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Updated the Data Successfully')
-            return redirect('sc_list')  # Replace 'your_redirect_url_name' with the appropriate URL name
+            return redirect('sc_list')
     else:
         form = INBSchoolForm(instance=school)
 
@@ -794,6 +763,40 @@ def delete_school_list(request, school_id):
         return redirect('update_school_list')
 
     return redirect('sc_list')
+
+
+def update_requirement(request):
+    return render(request, 'Admin/update-requirement.html')
+                  
+def add_requirement(request, form_type):
+    if request.user.is_authenticated:
+        if form_type == 'inb':
+            form = INBRequirementList(request.POST or None)
+            template = 'Admin/update-requirement.html'
+            model_class = INBRequirementRepository
+            
+        elif form_type == 'fa':
+            form = FARequirementList(request.POST or None)
+            template = 'Admin/update-requirement.html'
+            model_class = FARequirementRepository
+        else:
+            messages.error(request, "Invalid form type.")
+            return redirect('home')
+
+        if request.method == "POST":
+            if form.is_valid():
+                requirement_data = form.cleaned_data
+                requirement_instance = model_class.objects.create(**requirement_data)
+                messages.success(request, "Requirements Successfully Added")
+                return redirect('update_req')  
+
+        return render(request, template, {'form': form})
+    else:
+        messages.error(request, "You need to be logged in for this process.")
+        return redirect('home')
+
+
+
 
 
 def test1(request):

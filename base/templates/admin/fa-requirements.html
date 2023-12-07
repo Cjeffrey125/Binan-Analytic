@@ -1,37 +1,390 @@
 {% extends 'base.html' %}
 
-{% load static %} 
+{% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/admin-req.css' %}">
 
-<form method="POST" action="{% url 'add_fa_requirement' %}">
-    {% csrf_token %}
+<h1>Requirement</h1>
 
-    <h1>Add Requirement</h1>
-    {{form.requirement}}
+<div class="container">
 
-    <div class = "text-center">
-        <button type="submit" class="btn btn-secondary">Save</button>
+    <div>
+        <button onclick="toggle('INB')" class="modal-button">Iskolar ng Bayan</button>
+        <button onclick="toggle('FA')" class="modal-button">Financial Assistance</button>
     </div>
-</form>
 
-<p>A. Recent 2x2 ID Photo (2 copies)</p>
-                       
-<p>B. PSA Certified Birth Certificate (2 copies)</p>
+    <div id="INB" style="display: none;">
+        <p>A. Duly accomplished Application Form; (ORIGINAL)</p>
+        <p>B. Certificate of Academic Standing with General Weighted Average and Rank issued by DepEd Senior High School in the City of Biñan; (ORIGINAL)</p>
+        <p>C. Certificate of Good Moral Character issued by DepEd Senior High School; (PHOTOCOPY)</p>
+        <div>
+            <button onclick="openModal('INBFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
 
-<p>C. Photocopy of Latest Grade 10 Report Card (2 copies)</p>
+    <div id="FA" style="display: none;">
+        <p>A. Recent 2x2 ID Photo (2 copies)</p>
+        <p>B. PSA Certified Birth Certificate (2 copies)</p>
+        <div>
+            <button onclick="openModal('FAFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
 
-<p>D. Certificate of Academic Standing (2 copies)</p>
+</div>
 
-<p>E. Voter's Certification Parents / Guardians (2 copies)</p>
+<div id="INBFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New INB Requirement</h1>
+        <form method="post" action="{% url 'add_inb_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="inb" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
 
-<p>F. Letter of Recommendation (if applicable)</p>
+<div id="FAFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New FA Requirement</h1>
+        <form method="post" action="{% url 'add_fa_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="fa" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
 
-<p>G. Certificate of Employment of Parent /  Guardians (if possible)</p>
+<script>
+    function toggle(divId) {
+        var divToToggle = document.getElementById(divId);
+        var otherDivId = divId === 'INB' ? 'FA' : 'INB';
+        var otherDiv = document.getElementById(otherDivId);
 
-<p>H. Certificate of Indigency</p>
+        if (divToToggle.style.display === "none") {
+            otherDiv.style.display = "none";
+            divToToggle.style.display = "block";
+        } else {
+            divToToggle.style.display = "none";
+        }
+    }
 
+    function openModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+    }
+</script>
 
 {% endblock %}
+{% extends 'base.html' %}
 
-                      
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/admin-req.css' %}">
+
+<h1>Requirement</h1>
+
+<div class="container">
+
+    <div>
+        <button onclick="toggle('INB')" class="modal-button">Iskolar ng Bayan</button>
+        <button onclick="toggle('FA')" class="modal-button">Financial Assistance</button>
+    </div>
+
+    <div id="INB" style="display: none;">
+        <p>A. Duly accomplished Application Form; (ORIGINAL)</p>
+        <p>B. Certificate of Academic Standing with General Weighted Average and Rank issued by DepEd Senior High School in the City of Biñan; (ORIGINAL)</p>
+        <p>C. Certificate of Good Moral Character issued by DepEd Senior High School; (PHOTOCOPY)</p>
+        <div>
+            <button onclick="openModal('INBFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
+
+    <div id="FA" style="display: none;">
+        <p>A. Recent 2x2 ID Photo (2 copies)</p>
+        <p>B. PSA Certified Birth Certificate (2 copies)</p>
+        <div>
+            <button onclick="openModal('FAFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
+
+</div>
+
+<div id="INBFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New INB Requirement</h1>
+        <form method="post" action="{% url 'add_inb_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="inb" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div id="FAFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New FA Requirement</h1>
+        <form method="post" action="{% url 'add_fa_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="fa" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggle(divId) {
+        var divToToggle = document.getElementById(divId);
+        var otherDivId = divId === 'INB' ? 'FA' : 'INB';
+        var otherDiv = document.getElementById(otherDivId);
+
+        if (divToToggle.style.display === "none") {
+            otherDiv.style.display = "none";
+            divToToggle.style.display = "block";
+        } else {
+            divToToggle.style.display = "none";
+        }
+    }
+
+    function openModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+    }
+</script>
+
+{% endblock %}
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/admin-req.css' %}">
+
+<h1>Requirement</h1>
+
+<div class="container">
+
+    <div>
+        <button onclick="toggle('INB')" class="modal-button">Iskolar ng Bayan</button>
+        <button onclick="toggle('FA')" class="modal-button">Financial Assistance</button>
+    </div>
+
+    <div id="INB" style="display: none;">
+        <p>A. Duly accomplished Application Form; (ORIGINAL)</p>
+        <p>B. Certificate of Academic Standing with General Weighted Average and Rank issued by DepEd Senior High School in the City of Biñan; (ORIGINAL)</p>
+        <p>C. Certificate of Good Moral Character issued by DepEd Senior High School; (PHOTOCOPY)</p>
+        <div>
+            <button onclick="openModal('INBFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
+
+    <div id="FA" style="display: none;">
+        <p>A. Recent 2x2 ID Photo (2 copies)</p>
+        <p>B. PSA Certified Birth Certificate (2 copies)</p>
+        <div>
+            <button onclick="openModal('FAFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
+
+</div>
+
+<div id="INBFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New INB Requirement</h1>
+        <form method="post" action="{% url 'add_inb_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="inb" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div id="FAFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New FA Requirement</h1>
+        <form method="post" action="{% url 'add_fa_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="fa" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggle(divId) {
+        var divToToggle = document.getElementById(divId);
+        var otherDivId = divId === 'INB' ? 'FA' : 'INB';
+        var otherDiv = document.getElementById(otherDivId);
+
+        if (divToToggle.style.display === "none") {
+            otherDiv.style.display = "none";
+            divToToggle.style.display = "block";
+        } else {
+            divToToggle.style.display = "none";
+        }
+    }
+
+    function openModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+    }
+</script>
+
+{% endblock %}
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/admin-req.css' %}">
+
+<h1>Requirement</h1>
+
+<div class="container">
+
+    <div>
+        <button onclick="toggle('INB')" class="modal-button">Iskolar ng Bayan</button>
+        <button onclick="toggle('FA')" class="modal-button">Financial Assistance</button>
+    </div>
+
+    <div id="INB" style="display: none;">
+        <p>A. Duly accomplished Application Form; (ORIGINAL)</p>
+        <p>B. Certificate of Academic Standing with General Weighted Average and Rank issued by DepEd Senior High School in the City of Biñan; (ORIGINAL)</p>
+        <p>C. Certificate of Good Moral Character issued by DepEd Senior High School; (PHOTOCOPY)</p>
+        <div>
+            <button onclick="openModal('INBFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
+
+    <div id="FA" style="display: none;">
+        <p>A. Recent 2x2 ID Photo (2 copies)</p>
+        <p>B. PSA Certified Birth Certificate (2 copies)</p>
+        <div>
+            <button onclick="openModal('FAFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
+
+</div>
+
+<div id="INBFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New INB Requirement</h1>
+        <form method="post" action="{% url 'add_inb_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="inb" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div id="FAFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New FA Requirement</h1>
+        <form method="post" action="{% url 'add_fa_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="fa" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggle(divId) {
+        var divToToggle = document.getElementById(divId);
+        var otherDivId = divId === 'INB' ? 'FA' : 'INB';
+        var otherDiv = document.getElementById(otherDivId);
+
+        if (divToToggle.style.display === "none") {
+            otherDiv.style.display = "none";
+            divToToggle.style.display = "block";
+        } else {
+            divToToggle.style.display = "none";
+        }
+    }
+
+    function openModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+    }
+</script>
+
+{% endblock %}
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/admin-req.css' %}">
+
+<h1>Requirement</h1>
+
+<div class="container">
+
+    <div>
+        <button onclick="toggle('INB')" class="modal-button">Iskolar ng Bayan</button>
+        <button onclick="toggle('FA')" class="modal-button">Financial Assistance</button>
+    </div>
+
+    <div id="INB" style="display: none;">
+        <p>A. Duly accomplished Application Form; (ORIGINAL)</p>
+        <p>B. Certificate of Academic Standing with General Weighted Average and Rank issued by DepEd Senior High School in the City of Biñan; (ORIGINAL)</p>
+        <p>C. Certificate of Good Moral Character issued by DepEd Senior High School; (PHOTOCOPY)</p>
+        <div>
+            <button onclick="openModal('INBFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
+
+    <div id="FA" style="display: none;">
+        <p>A. Recent 2x2 ID Photo (2 copies)</p>
+        <p>B. PSA Certified Birth Certificate (2 copies)</p>
+        <div>
+            <button onclick="openModal('FAFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
+
+</div>
+
+<div id="INBFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New INB Requirement</h1>
+        <form method="post" action="{% url 'add_inb_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="inb" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div id="FAFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New FA Requirement</h1>
+        <form method="post" action="{% url 'add_fa_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="fa" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggle(divId) {
+        var divToToggle = document.getElementById(divId);
+        var otherDivId = divId === 'INB' ? 'FA' : 'INB';
+        var otherDiv = document.getElementById(otherDivId);
+
+        if (divToToggle.style.display === "none") {
+            otherDiv.style.display = "none";
+            divToToggle.style.display = "block";
+        } else {
+            divToToggle.style.display = "none";
+        }
+    }
+
+    function openModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+    }
+</script>
+
+{% endblock %}

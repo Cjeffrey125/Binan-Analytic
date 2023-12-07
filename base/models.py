@@ -317,12 +317,10 @@ class FinancialAssistanceInfoRepository(models.Model):
 #admin 
 
 class INBRequirementRepository(models.Model):
-    id = models.AutoField(primary_key=True)
-    requirement = models.CharField(max_length=500, default='')  
+    requirement = models.CharField(max_length=800, default='')  
 
 class FARequirementRepository(models.Model):
-    id = models.AutoField(primary_key=True)
-    requirement = models.CharField(max_length=500, default='')  
+    requirement = models.CharField(max_length=800, default='')  
 
 
 class INBSchool(models.Model):

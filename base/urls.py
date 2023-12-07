@@ -59,7 +59,6 @@ urlpatterns = [
     path("Update_List/", views.update_list, name="update_list"),
     path('Delete_School_List/<int:school_id>/', views.delete_school_list, name='delete_school_list'),
 
-   
     path("Update_Requirements/", views.update_requirement, name="update_req"),
     path("Add_IskolarngBayan_Requirement/",views.add_requirement, {"form_type": "inb"}, name="add_inb_requirement",),
     path("Add_FinancialAssistance_Requirement/",views.add_requirement, {"form_type": "fa"}, name="add_fa_requirement",),

@@ -1,46 +1,78 @@
 {% extends 'base.html' %}
 
-{% load static %} 
+{% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/admin-req.css' %}">
 
-<form method="POST" action="{% url 'add_inb_requirement' %}">
-    {% csrf_token %}
+<h1>Requirement</h1>
 
-    <h1>Add Requirement</h1>
+<div class="container">
 
-    {{form.requirement}}
-
-    <div class = "text-center">
-        <button type="submit" class="btn btn-secondary">Save</button>
+    <div>
+        <button onclick="toggle('INB')" class="modal-button">Iskolar ng Bayan</button>
+        <button onclick="toggle('FA')" class="modal-button">Financial Assistance</button>
     </div>
-</form>
 
+    <div id="INB" style="display: none;">
+        <p>A. Duly accomplished Application Form; (ORIGINAL)</p>
+        <p>B. Certificate of Academic Standing with General Weighted Average and Rank issued by DepEd Senior High School in the City of Biñan; (ORIGINAL)</p>
+        <p>C. Certificate of Good Moral Character issued by DepEd Senior High School; (PHOTOCOPY)</p>
+        <div>
+            <button onclick="openModal('INBFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
 
-    <p>A. Duly accomplished Application Form; (ORIGINAL)</p>
-                        
-    <p>B. Cerificate of Academic Standing with General Weighted Average and Rank issued by DepEd Senior High School in the City of Biñan; (ORIGINAL)</p>
-                
-    <p>C. Certificate of Good Moral Character issued by DepEd Senior High School; (PHOTOCOPY)</p>
-        
-    <p>D. Certificate of Completion (Moving-Up) issued by DepEd Junior High School in the City of Biñan; (PHOTOCOPY)</p>
+    <div id="FA" style="display: none;">
+        <p>A. Recent 2x2 ID Photo (2 copies)</p>
+        <p>B. PSA Certified Birth Certificate (2 copies)</p>
+        <div>
+            <button onclick="openModal('FAFormContainer')" class="modal-button">Add New Requirement</button>
+        </div>
+    </div>
 
-    <p>E. Certificate of Indigency issued by the Barangay Chairman with attached Actual Photo of Residence; (PHOTOCOPY)</p>
+</div>
 
-    <p>F. Recent 2x2 1.D. picture attached in the INB Application Forn; (1 COPY)</p>
+<div id="INBFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New INB Requirement</h1>
+        <form method="post" action="{% url 'add_inb_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="inb" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
 
-    <p>G. PSA Birth Certificate; (PHOTOCOPY)</p>
+<div id="FAFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add New FA Requirement</h1>
+        <form method="post" action="{% url 'add_fa_requirement' %}">
+            {% csrf_token %}
+            <input type="text" name="fa" id="req_id" placeholder="Input Here" class="form-control" required>
+            <button type="submit" class="modal-button">Submit</button>
+        </form>
+    </div>
+</div>
 
-    <p>H. Voter's Certification of BOTH PARENTS/GUARDIANS & GRANTEE who are at the voting age requirement; (PHOTOCOPY)</p>
+<script>
+    function toggle(divId) {
+        var divToToggle = document.getElementById(divId);
+        var otherDivId = divId === 'INB' ? 'FA' : 'INB';
+        var otherDiv = document.getElementById(otherDivId);
 
-    <p>I. Latest Report Card / Form 138; (PHOTOCOPY)</p>
+        if (divToToggle.style.display === "none") {
+            otherDiv.style.display = "none";
+            divToToggle.style.display = "block";
+        } else {
+            divToToggle.style.display = "none";
+        }
+    }
 
-    <p>J. Income Tax Return (ifemployed) or Certificate of No Fix Income of Parents/Guardians issued by BIR; (PHOTOCOPY)</p>
+    function openModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+    }
+</script>
 
-    <p>K. Grade 6 Diploma / Certificate of Graduation (for under guardianship); (PHOTOCOPY)</p>
-
-    <p>L. Death Certificate (for deceased parent/s); (PHOTOCOPY)</p>
-
-    <p>M. Solo Parent ID (for solo parent); (PHOTOCOPY)</p>
-                        
 {% endblock %}
