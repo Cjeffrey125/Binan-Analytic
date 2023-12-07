@@ -179,7 +179,6 @@ def import_excel(request):
                 request, f"{applicant_count} applicant(s) imported successfully."
             )
 
-           
             if "Desired Course" not in df.columns:
                 return redirect("fa_applicant_list")
 
@@ -187,7 +186,7 @@ def import_excel(request):
 
     else:
         form = ApplicantUploadForm()
-    return render(request, "INB/import.html", {"form": form})
+    return render(request, "INB/applicant_list.html", {"form": form})
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------

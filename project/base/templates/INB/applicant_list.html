@@ -24,9 +24,9 @@
               <img src="{% static 'images/add.png' %}" class="img-resize">
             </a>
 
-            <a href="{% url 'import' %}">
+          <button type="button" id="importButton">
               <img src="{% static 'images/upload.png' %}" class="img-resize">
-            </a>
+          </button>
 
             <a href="{% url 'export' %}">
               <img src="{% static 'images/download.png' %}" class="img-resize">
@@ -76,5 +76,53 @@
     </div>
   </div>
 </div>
+
+
+<div id="ImportFormContainer" class="modal-container">
+  <div class="modal-course">
+    <div class="center-course">
+      <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <label for="id_file">Choose File:</label>
+          <input type="file" name="file" id="id_file">
+          <button type="submit" class="modal-button">Import</button>
+      </form>
+      <button type="button" id="closeButton" class="modals-button">Close</button>
+      </div>
+  </div>
+</div>
+
+
+<script>
+ document.addEventListener('DOMContentLoaded', function () {
+    var modalContainer = document.getElementById('ImportFormContainer');
+    var importButton = document.getElementById('importButton');
+    var closeButton = document.getElementById('closeButton');
+    var form = document.querySelector('#ImportFormContainer form');
+
+    importButton.addEventListener('click', function () {
+      modalContainer.style.display = 'block';
+    });
+
+    closeButton.addEventListener('click', function () {
+      modalContainer.style.display = 'none';
+    });
+
+    form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+     
+      console.log('Form submitted!');
+
+    });
+
+    window.addEventListener('click', function (event) {
+      if (event.target === modalContainer) {
+        modalContainer.style.display = 'none';
+      }
+    });
+  });
+</script>
+
 {% endif %}
 {% endblock %}
