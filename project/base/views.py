@@ -1033,39 +1033,65 @@ def update_school_list(request, school_id):
 
     return render(request, 'Admin/update-school-course.html', {'school': school, 'form': form})
 
+def update_course_list(request, course_id):
+    course = get_object_or_404(INBCourse, id=course_id)
 
-def delete_school_list(request, school_id, delete_type='school'):
-    school = get_object_or_404(INBSchool, pk=school_id)
-
-    if delete_type == 'school':
-        school.inbcourse_set.all().delete()
-        school.delete()
-        messages.success(request, 'School and Courses Deleted Successfully')
-        
-    elif delete_type == 'course':
-        courses_to_delete = INBCourse.objects.filter(school=school)
-        courses_to_delete.delete()
-        school.delete()
-        messages.success(request, 'Course Deleted Successfully')
-
-    return redirect('sc_list')
-
-def delete_school_list(request, school_id):
     if request.method == 'POST':
-        school = get_object_or_404(INBSchool, pk=school_id)
-        school.inbcourse_set.all().delete()
-        school.delete()
-        messages.success(request, 'School and Courses Deleted Successfully')
+        print(request.method)  
+        print(request.POST) 
+        form = INBCourseForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Updated the Data Successfully')
+            return redirect('sc_list')
+    else:
+        form = INBCourseForm(instance=course)
+
+    return render(request, 'Admin/update-school-course.html', {'course': course, 'form': form})
+
+
+def delete_item(request, item_type, item_id):
+    if item_type == 'school':
+        model_class = INBSchool
+        success_message = 'School and Courses Deleted Successfully'
+    elif item_type == 'course':
+        model_class = INBCourse
+        success_message = 'Course Deleted Successfully'
+    else:
+        return redirect('sc_list')
+
+    if request.method == 'POST':
+        item = get_object_or_404(model_class, pk=item_id)
+        if item_type == 'school':
+            item.inbcourse_set.all().delete()
+        item.delete()
+        messages.success(request, success_message)
         return redirect('sc_list')
 
     return redirect('sc_list')
 
+def filter(request):
+    schools = INBSchool.objects.all()
+    courses = INBCourse.objects.all()
 
-def delete_course(request, course_id):
-    course = get_object_or_404(INBCourse, pk=course_id)
-    course.delete()
-    messages.success(request, 'Course Deleted Successfully')
-    return redirect('sc_list')
+    selected_schools = request.GET.getlist('school')
+    selected_courses = request.GET.getlist('course')
+
+    filtered_applicants = CollegeStudentApplication.objects.all()
+
+    if selected_schools:
+        filtered_applicants = filtered_applicants.filter(school__id__in=selected_schools)
+
+    if selected_courses:
+        filtered_applicants = filtered_applicants.filter(course__id__in=selected_courses)
+
+    context = {
+        'schools': schools,
+        'courses': courses,
+        'filtered_applicants': filtered_applicants,
+    }
+    return render(request, "sidebar_filter.html", context)
+
 
 def test1(request):
     return render(request, "cms-forms.html")

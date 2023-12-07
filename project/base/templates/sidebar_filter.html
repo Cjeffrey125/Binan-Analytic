@@ -1,4 +1,4 @@
-{% load static %} 
+{% load static %}
 
 <!DOCTYPE html>
 <html>
@@ -8,6 +8,7 @@
 <body>
     <div class="sidebar">
         <h1>Filter</h1>
+        
         <div class="xfilter-container">
             <div class="filter_status xbox">
                 <h5>Status</h5>
@@ -21,15 +22,34 @@
         <div class="yfilter-container">
             <div class="filter_school xbox">
                 <h5>School</h5>
+                <div class="scrollable-container">
+                    <ul>
+                        {% for school in schools %}
+                            <li>
+                                <input type="radio" name="school" value="{{ school.id }}">
+                                {{ school.school }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
 
         <div class="zfilter-container">
             <div class="filter_course xbox">
                 <h5>Course</h5>
+                <div class="scrollable-container">
+                    <ul>
+                        {% for course in courses %}
+                            <li>
+                                <input type="radio" name="course" value="{{ course.id }}">
+                                {{ course.course}}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
-
     </div>
 </body>
 </html>
