@@ -5,6 +5,15 @@
 <link rel="stylesheet" href="{% static 'css/navigation-bar.css' %}">
 <link rel="stylesheet" href="{% static 'css/hamburger.css' %}">
 
+
+
+
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+
 <div class="nav">
   <nav>
     <div class="logo-container">
@@ -16,24 +25,53 @@
 
     <div id="menuToggle">
 
-          <input type="checkbox" />
-          <span></span>
-          <span></span>
-          <span></span>
-      
+      <input type="checkbox" />
+      <span></span>
+      <span></span>
+      <span></span>
+
       <ul id="menu">
-        <a href="#">
-          <li>Dashboard</li>
-        </a>
-        <a href="#">
-          <li>Iskolar ng Binan</li>
-        </a>
-        <a href="#">
-          <li>Financial Assistance</li>
-        </a>
-       
+
+
+        <li>
+          <img src="{% static 'images/home-icon.png' %}" height="20" width="20">
+          <a href="#">Dashboard</a>
+        </li>
+
+        <!--dropdown mechanic-->
+        <li>
+          <a href="#" class="dropdown-btn"><img src="{% static 'images/arrowdown-icon.png' %}" height="10" width="15">
+            Iskolar ng
+            Biñan</a>
+
+          <div class="dropdown-container">
+            <a href="#"><img src="{% static 'images/applicants-icon.png' %}" height="20" width="20">Applicants</a>
+            <a href="#"><img src="{% static 'images/passed-icon.png' %}" height="20" width="20">Passed List</a>
+            <a href="#"><img src="{% static 'images/failed-icon.png' %}" height="20" width="20">Failed List</a>
+            <a href="#"><img src="{% static 'images/grades-icon.png' %}" height="20" width="20">Grades List</a>
+          </div>
+        </li>
+
+
+
+        <li>
+          <a href="#" class="dropdown-btn"><img src="{% static 'images/arrowdown-icon.png' %}" height="10" width="15">
+            Financial
+            Assistance</a>
+          <div class="dropdown-container">
+            <a href="#"><img src="{% static 'images/applicants-icon.png' %}" height="20" width="20">Applicants</a>
+            <a href="#"><img src="{% static 'images/passed-icon.png' %}" height="20" width="20">Passed List</a>
+            <a href="#"><img src="{% static 'images/failed-icon.png' %}" height="20" width="20">Failed List</a>
+          </div>
+        </li>
+
+
+
       </ul>
+
     </div>
+
+
 
     <ul class="container-fluid">
       {% if user.is_authenticated %}
@@ -53,34 +91,34 @@
       <img src="{% static 'images/profile.png' %}" class="user-pic" onclick="toggleMenu()">
 
       <div class="sub-menu-wrap" id="subMenu">
-          <div class="sub-menu">
-            <div class="user-info">
-              <img src="{% static 'images/profile.png' %}" class="user-pic">
-              <h4>{{ user.first_name }}, {{ user.last_name }}</h4>
-            </div>
-            <hr>
-          
-            <a href="#" class="sub-menu-link">
-              <img src="{% static 'images/profile.png' %}">
-              <p>Edit Profile</p>
-            </a>
-          
-            <a href="#" class="sub-menu-link">
-              <img src="{% static 'images/help.png' %}">
-              <p>Help</p>
-            </a>
-          
-            <a href="#" class="sub-menu-link">
-              <img src="{% static 'images/setting.png' %}">
-              <p>Settings</p>
-            </a>
-          
-            <a class="sub-menu-link" href="{% url 'logout' %}">
-              <img src="{% static 'images/logout.png' %}">
-              <p>Logout</p>
-            </a>
-          
+        <div class="sub-menu">
+          <div class="user-info">
+            <img src="{% static 'images/profile.png' %}" class="user-pic">
+            <h4>{{ user.first_name }}, {{ user.last_name }}</h4>
           </div>
+          <hr>
+
+          <a href="#" class="sub-menu-link">
+            <img src="{% static 'images/profile.png' %}">
+            <p>Edit Profile</p>
+          </a>
+
+          <a href="#" class="sub-menu-link">
+            <img src="{% static 'images/help.png' %}">
+            <p>Help</p>
+          </a>
+
+          <a href="#" class="sub-menu-link">
+            <img src="{% static 'images/setting.png' %}">
+            <p>Settings</p>
+          </a>
+
+          <a class="sub-menu-link" href="{% url 'logout' %}">
+            <img src="{% static 'images/logout.png' %}">
+            <p>Logout</p>
+          </a>
+
+        </div>
       </div>
 
       {% else %}
@@ -101,6 +139,9 @@
     var subMenu = document.getElementById("subMenu");
     subMenu.classList.toggle("open-menu");
   }
+
 </script>
+
+<script src="{% static 'js/ui_dropdown.js' %}"></script>
 
 {% endblock %}
