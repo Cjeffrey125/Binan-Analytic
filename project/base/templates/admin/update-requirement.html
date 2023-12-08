@@ -1,32 +1,83 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/admin-req.css' %}">
 
-<h1>Requirement</h1>
-<form action="{% url 'update_req' %}" method="get">
-    <div class="text-container">
-        <input type="radio" id="inb" name="group" value="inb" />
-        <label for="inb">Iskolar ng Bayan</label>
+<h1>Requirements</h1>
+
+<div class="container">
+
+    <div>
+        <button onclick="toggle('INB')" class="modal-button">Iskolar ng Bayan</button>
+        <button onclick="toggle('FA')" class="modal-button">Financial Assistance</button>
     </div>
 
-    <div class="text-container">
-        <input type="radio" id="fa" name="group" value="fa" />
-        <label for="fa">Financial Assistance</label>
+    <div id="INB" style="display: none;">
+        <ul>
+            {% for requirement in inb_requirements %}
+                <li>{{ requirement.requirement }}</li>
+            {% endfor %}
+        </ul>
+        <button class="edit-button" onclick="openModal('INBAddFormContainer')">Add</button>
+        <button class="edit-button" onclick="window.location.href='{% url 'inb_requirement' %}'">Edit</button>
+        
     </div>
 
-    <div class="rendered-html">
-        {% if selected_radio == 'inb' %}
-            {% include 'Admin/inb-requirements.html' %}
-        {% elif selected_radio == 'fa' %}
-            {% include 'Admin/fa-requirements.html' %}
-        {% else %}
-            <p>No selection made.</p>
-        {% endif %}
+    <div id="FA" style="display: none;">
+        <ul>
+            {% for requirement in fa_requirements %}
+                <li>{{ requirement.requirement }}</li>
+            {% endfor %}
+        </ul>
+        <button class="edit-button" onclick="openModal('FAAddFormContainer')">Add</button>
+        <button class="edit-button" onclick="window.location.href='{% url 'fa_requirement' %}'">Edit</button>
     </div>
 
-   
-</form>
+</div>
+
+<div id="INBAddFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add INB Requirement</h1>
+        <form method="post" action="{% url 'add_requirement' form_type='inb' %}">
+            {% csrf_token %}
+            <label for="inb_requirement">Requirement:</label>
+            <input type="text" id="inb_requirement" name="requirement" required>
+            <button type="submit" class="edit-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<div id="FAAddFormContainer" class="modal-container" style="display: none;">
+    <div class="modal-content">
+        <h1>Add FA Requirement</h1>
+        <form method="post" action="{% url 'add_requirement' form_type='fa' %}">
+            {% csrf_token %}
+            <label for="fa_requirement">Requirement:</label>
+            <input type="text" id="fa_requirement" name="requirement" required>
+            <button type="submit" class="edit-button">Submit</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggle(divId) {
+        var divToToggle = document.getElementById(divId);
+        var otherDivId = divId === 'INB' ? 'FA' : 'INB';
+        var otherDiv = document.getElementById(otherDivId);
+
+        if (divToToggle.style.display === "none") {
+            otherDiv.style.display = "none";
+            divToToggle.style.display = "block";
+        } else {
+            divToToggle.style.display = "none";
+        }
+    }
+
+    function openModal(modalId) {
+        var modal = document.getElementById(modalId);
+        modal.style.display = "flex";
+    }
+</script>
+
 {% endblock %}

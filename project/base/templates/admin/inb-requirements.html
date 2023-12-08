@@ -1,46 +1,79 @@
 {% extends 'base.html' %}
-
-{% load static %} 
+{% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/req.css' %}">
 
-<form method="POST" action="{% url 'add_inb_requirement' %}">
-    {% csrf_token %}
+<h1>Iskolar ng Bayan Requirements</h1>
 
-    <h1>Add Requirement</h1>
+<div>
+    <button class="edit-button" onclick="window.location.href='{% url 'update_req' %}'">Go Back</button>
+</div>
 
-    {{form.requirement}}
+<ul>
+    {% if requirements %}
+        {% for requirement in requirements %}
+            <p class="req-text">
+                <button class="edit-button update-requirement-link" data-requirement-id="{{ requirement.id }}">
+                    <i class="fa-solid fa-pencil"></i>
+                </button>
 
-    <div class = "text-center">
-        <button type="submit" class="btn btn-secondary">Save</button>
+                <i class="fa-solid fa-trash" id="openDeleteModal"></i>
+                {{ requirement.requirement }}
+            </p>
+        {% endfor %}
+    {% else %}
+        <li>No requirements found</li>
+    {% endif %}
+</ul>
+
+<div id="updateRequirementConfirmationContainer" class="update-modal-container">
+    <div class="update-modal">
+        <h1>Edit <span id="editRequirementName"></span> (ID: <span id="editRequirementId"></span>)</h1>
+        <form method="POST" id="updateRequirementForm">
+            {% csrf_token %}
+            <input type="text" name="requirement" id="editRequirementInput" class="form-control">
+            <input type="hidden" name="requirement_id" id="editRequirementIdInput" value="">
+            <div class="inline-flex-container">
+                <button class="modal-button" type="submit">Yes</button>
+                <button class="modal-button" id="updateRequirementNoButton">No</button>
+            </div>
+        </form>
     </div>
-</form>
+</div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var updateRequirementLinks = document.querySelectorAll('.update-requirement-link');
+        var editRequirementInput = document.getElementById('editRequirementInput');
+        var editRequirementIdInput = document.getElementById('editRequirementIdInput');
+        var updateRequirementForm = document.getElementById('updateRequirementForm');
+        var updateRequirementConfirmationContainer = document.getElementById('updateRequirementConfirmationContainer');
+    
+        updateRequirementLinks.forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+    
+                var requirementId = link.getAttribute('data-requirement-id');
+                var requirementName = link.closest('.req-text').textContent.trim();
+    
+                updateRequirementForm.action = `/Update_IskolarngBayan_Requirement/${requirementId}/`;
+                editRequirementIdInput.value = requirementId;
 
-    <p>A. Duly accomplished Application Form; (ORIGINAL)</p>
-                        
-    <p>B. Cerificate of Academic Standing with General Weighted Average and Rank issued by DepEd Senior High School in the City of Biñan; (ORIGINAL)</p>
-                
-    <p>C. Certificate of Good Moral Character issued by DepEd Senior High School; (PHOTOCOPY)</p>
-        
-    <p>D. Certificate of Completion (Moving-Up) issued by DepEd Junior High School in the City of Biñan; (PHOTOCOPY)</p>
+                editRequirementInput.value = requirementName;
+    
+                updateRequirementConfirmationContainer.style.display = 'flex';
+                updateRequirementConfirmationContainer.style.position = 'fixed';
+                updateRequirementConfirmationContainer.style.top = '50%';
+                updateRequirementConfirmationContainer.style.left = '50%';
+                updateRequirementConfirmationContainer.style.transform = 'translate(-50%, -50%)';
+            });
+        });
+    
+        document.getElementById('updateRequirementNoButton').addEventListener('click', function () {
+            updateRequirementConfirmationContainer.style.display = 'none';
+        });
+    });
+</script>
 
-    <p>E. Certificate of Indigency issued by the Barangay Chairman with attached Actual Photo of Residence; (PHOTOCOPY)</p>
-
-    <p>F. Recent 2x2 1.D. picture attached in the INB Application Forn; (1 COPY)</p>
-
-    <p>G. PSA Birth Certificate; (PHOTOCOPY)</p>
-
-    <p>H. Voter's Certification of BOTH PARENTS/GUARDIANS & GRANTEE who are at the voting age requirement; (PHOTOCOPY)</p>
-
-    <p>I. Latest Report Card / Form 138; (PHOTOCOPY)</p>
-
-    <p>J. Income Tax Return (ifemployed) or Certificate of No Fix Income of Parents/Guardians issued by BIR; (PHOTOCOPY)</p>
-
-    <p>K. Grade 6 Diploma / Certificate of Graduation (for under guardianship); (PHOTOCOPY)</p>
-
-    <p>L. Death Certificate (for deceased parent/s); (PHOTOCOPY)</p>
-
-    <p>M. Solo Parent ID (for solo parent); (PHOTOCOPY)</p>
-                        
 {% endblock %}

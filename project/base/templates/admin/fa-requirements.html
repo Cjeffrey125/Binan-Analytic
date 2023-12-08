@@ -1,37 +1,81 @@
 {% extends 'base.html' %}
-
-{% load static %} 
+{% load static %}
 
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/req.css' %}">
 
-<form method="POST" action="{% url 'add_fa_requirement' %}">
-    {% csrf_token %}
+<h1>Iskolar ng Bayan Requirements</h1>
 
-    <h1>Add Requirement</h1>
-    {{form.requirement}}
+<div>
+    <button class="edit-button" onclick="window.location.href='{% url 'update_req' %}'">Go Back</button>
+</div>
 
-    <div class = "text-center">
-        <button type="submit" class="btn btn-secondary">Save</button>
+<ul>
+    {% if requirements %}
+        {% for requirement in requirements %}
+            <p class="req-text">
+                <button class="edit-button update-requirement-link" data-requirement-id="{{ requirement.id }}">
+                    <i class="fa-solid fa-pencil"></i>
+                </button>
+
+                
+                <i class="fa-solid fa-trash" id="openDeleteModal"></i>
+                {{ requirement.requirement }}
+            </p>
+        {% endfor %}
+    {% else %}
+        <li>No requirements found</li>
+    {% endif %}
+</ul>
+
+<div id="updateRequirementConfirmationContainer" class="update-modal-container">
+    <div class="update-modal">
+        <h1>Edit <span id="editRequirementName"></span> (ID: <span id="editRequirementId"></span>)</h1>
+        <form method="POST" id="updateRequirementForm">
+            {% csrf_token %}
+            <input type="text" name="requirement" id="editRequirementInput" class="form-control">
+            <input type="hidden" name="requirement_id" id="editRequirementIdInput" value="">
+            <div class="inline-flex-container">
+                <button class="modal-button" type="submit">Yes</button>
+                <button class="modal-button" id="updateRequirementNoButton">No</button>
+            </div>
+        </form>
     </div>
-</form>
+</div>
 
-<p>A. Recent 2x2 ID Photo (2 copies)</p>
-                       
-<p>B. PSA Certified Birth Certificate (2 copies)</p>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+        var updateRequirementLinks = document.querySelectorAll('.update-requirement-link');
+        var editRequirementInput = document.getElementById('editRequirementInput');
+        var editRequirementIdInput = document.getElementById('editRequirementIdInput');
+        var updateRequirementForm = document.getElementById('updateRequirementForm');
+        var updateRequirementConfirmationContainer = document.getElementById('updateRequirementConfirmationContainer');
+    
+        updateRequirementLinks.forEach(function (link) {
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+    
+                var requirementId = link.getAttribute('data-requirement-id');
+                
+                var requirementName = link.closest('.req-text').textContent.trim();
+    
+                updateRequirementForm.action = `/Update_FinancialAssistance_Requirement/${requirementId}/`;
+                editRequirementIdInput.value = requirementId;
 
-<p>C. Photocopy of Latest Grade 10 Report Card (2 copies)</p>
-
-<p>D. Certificate of Academic Standing (2 copies)</p>
-
-<p>E. Voter's Certification Parents / Guardians (2 copies)</p>
-
-<p>F. Letter of Recommendation (if applicable)</p>
-
-<p>G. Certificate of Employment of Parent /  Guardians (if possible)</p>
-
-<p>H. Certificate of Indigency</p>
-
+                editRequirementInput.value = requirementName;
+    
+                updateRequirementConfirmationContainer.style.display = 'flex';
+                updateRequirementConfirmationContainer.style.position = 'fixed';
+                updateRequirementConfirmationContainer.style.top = '50%';
+                updateRequirementConfirmationContainer.style.left = '50%';
+                updateRequirementConfirmationContainer.style.transform = 'translate(-50%, -50%)';
+            });
+        });
+    
+        document.getElementById('updateRequirementNoButton').addEventListener('click', function () {
+            updateRequirementConfirmationContainer.style.display = 'none';
+        });
+    });
+</script>
 
 {% endblock %}
-
-                      

@@ -57,15 +57,24 @@ urlpatterns = [
     path("Add_Course/", views.add_course, name="create_course" ),
     path("Update_List/", views.update_list, name="update_list"),
     path('delete_item/<str:item_type>/<int:item_id>/', views.delete_item, name='delete_item'),
-
     path("Update_School_List/<int:school_id>/", views.update_school_list, name="update_school_list"),
     path("Update_Course_List/<int:course_id>/", views.update_course_list, name="update_course_list"),
 
    
 
-    path("Update_Requirements/", views.update_requirement, name="update_req"),
-    path("Add_IskolarngBayan_Requirement/",views.add_requirement, {"form_type": "inb"}, name="add_inb_requirement",),
-    path("Add_FinancialAssistance_Requirement/",views.add_requirement, {"form_type": "fa"}, name="add_fa_requirement",),
+    path("View_Requirements/", views.update_requirement, name="update_req"),
+    path("add_requirement/<str:form_type>/", views.add_requirement, name="add_requirement"),
+
+
+    path("Iskolar_ng_Bayan_Requirement/", views.render_requirement, {"form_type": "inb"}, name="inb_requirement"),
+    path("Update_IskolarngBayan_Requirement/<int:requirement_id>/", views.update_inb_requirement, name="update_inb_requirement"),
+
+    path("Financial_Assistance_Requirement/",views.render_requirement, {"form_type": "fa"}, name="fa_requirement",),
+    path("Update_FinancialAssistance_Requirement/<int:requirement_id>/", views.update_fa_requirement, name="update_fa_requirement"),
+
+    
+
+
 
     path("Filter/", views.filter, name="filter"),
 
