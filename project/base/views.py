@@ -345,7 +345,10 @@ def fa_filter_applicants(request):
                 place_of_birth=applicant.place_of_birth,
                 gender=applicant.gender,
                 religion=applicant.religion,
-                address=applicant.address,
+                blkstr=applicant.blkstr,
+                barangay=applicant.barangay,
+                city=applicant.city,
+                province=applicant.province,
                 email_address=applicant.email_address,
                 contact_no=applicant.contact_no,
                 general_average=applicant.general_average,
@@ -419,7 +422,10 @@ def inb_filter_applicants(request):
             ApplicantInfoRepositoryINB.objects.get_or_create(
                 control_number=applicant.control_number,
                 fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                address=applicant.address,
+                blkstr=applicant.blkstr,
+                barangay=applicant.barangay,
+                province=applicant.province,
+                city=applicant.city,
                 gender=applicant.gender,
                 date_of_birth=applicant.date_of_birth,
                 place_of_birth=applicant.place_of_birth,
@@ -456,6 +462,7 @@ def inb_filter_applicants(request):
             collegerequirements__requirement=13
         ).distinct()
 
+
         rejected_applicants = CollegeStudentApplication.objects.exclude(
             collegerequirements__requirement=13
         ).distinct()
@@ -474,11 +481,24 @@ def inb_filter_applicants(request):
         for applicant in rejected_applicants:
             ApplicantInfoRepositoryINB.objects.filter(
                 control_number=applicant.control_number
+            ).update(status="For Assesment")
+            CollegeStudentAssesment.objects.create(
+                control_number=applicant.control_number,
+                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+            )
+
+        for applicant in rejected_applicants:
+            ApplicantInfoRepositoryINB.objects.filter(
+                control_number=applicant.control_number
             ).update(status="Rejected")
             CollegeStudentRejected.objects.create(
                 control_number=applicant.control_number,
                 fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
             )
+
+            # create an assesment function for pending applicant
+
+# 
 
         CollegeStudentApplication.objects.filter(
             Q(control_number__in=accepted_applicants.values("control_number"))
@@ -492,12 +512,12 @@ def inb_filter_applicants(request):
     return redirect("inb_applicant_list")
 
 
-# PENDING---------------------------------------------
+# ---------------------------------------------
 
 
 def inb_pending_assesment(request):
     pending_applicant = ApplicantInfoRepositoryINB.objects.all()
-    return render(request, "inb_pending_list.html", {"pending": pending_applicant})
+    return render(request, "INB/inb_pending_list.html", {"pending": pending_applicant})
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -529,7 +549,7 @@ def iskolar_ng_bayan_list(request):
     return render(
         request,
         "INB/applicant_list.html",
-        {"records": zip(filtered_applicants, requirement_records), 'form': form},
+        {"records": zip(filtered_applicants, requirement_records), "form": form},
     )
 
 
@@ -558,7 +578,7 @@ def financial_assistance_list(request):
     return render(
         request,
         "FA/applicant_list.html",
-        {"records": zip(filtered_applicants, requirement_records), 'form': form},
+        {"records": zip(filtered_applicants, requirement_records), "form": form},
     )
 
 

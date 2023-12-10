@@ -75,9 +75,6 @@ urlpatterns = [
     path("Update_FinancialAssistance_Requirement/<int:requirement_id>/", views.update_fa_requirement, name="update_fa_requirement"),
 
     
-
-
-
     path("Filter/", views.filter, name="filter"),
     path("Pending/", views.inb_pending_assesment, name="inb_pending"),
 ]

@@ -17,6 +17,7 @@
     <div class="main-content ms-auto">
 
       <div class="container-fluid">
+        
         <h1>Iskolar ng Bayan</h1>
         <div class="box">
 
@@ -32,11 +33,16 @@
             <a href="{% url 'export' %}">
               <img src="{% static 'images/download.png' %}" class="img-resize">
             </a>
+            
+            <form method="post" action="{% url 'inb_filter_applicants' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondary">Filter Applicants</button>
+            </form>
 
           </div>
 
-          {% if records %}
           <div class="table-container">
+            {% if records %}
             <table class="table">
               <thead>
                 <tr>

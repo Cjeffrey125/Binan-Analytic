@@ -314,6 +314,7 @@ class CollegeStudentAssesment(models.Model):
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
     remarks = models.CharField(max_length=200, default="")
+    status = models.CharField(max_length=50, default="")
 
 
 class FinancialAssistanceInfoRepository(models.Model):
