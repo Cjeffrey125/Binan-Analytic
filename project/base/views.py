@@ -37,6 +37,8 @@ import csv
 import pandas as pd
 from import_export import resources
 from django.db.models import Q
+import datetime
+from django.utils import timezone
 
 
 class CollegeStudentApplicationResource(resources.ModelResource):
@@ -290,10 +292,12 @@ def register_user(request):
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+def current_datetime(request):
+    now = timezone.now()
+    return render(request, 'dashboard.html', {'now': now})
 
-
-# render data in dashboard
 def data_visualization(request):
+    course_list = INBCourse.objects.all()
     school_counts = (
         CollegeStudentApplication.objects.values("school")
         .exclude(school="0")
@@ -328,6 +332,7 @@ def data_visualization(request):
             "data": data,
             "count": total_students,
             "students_per_school": students_per_school,
+            "course_list": course_list,
         },
     )
 

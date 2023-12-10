@@ -1,46 +1,64 @@
-<!-- dashboard -->
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-{% if user.is_authenticated %}
-<h1>Not the Final Dashboard (Charts)</h1>
+  {% if user.is_authenticated %}
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 
-<a href="{% url 'inb_applicant_list' %}" class="btn btn-secondary">View Table</a>
-
-<div style="margin-bottom: 20px;">
-  <p>
-  <h1> {{ count }} </h1>
-  <h2> Total Scholars </h2>
-  </p>
-</div>
-
-<div class="position" style="text-align: left;">
-
-  <div class="row">
-    <div class="col-6">
-      <div class="card mt-3" style=" width: 640px; height: 500px">
-
-        <div class="card-body">
-          {% include 'Graphs/linegraph.html' %}
-        </div>
+    <div class="dash-container">
+      <div class="dash-header">
+          <div class="title">
+              <p class="large">Dashboard:</p>
+              <p class="medium">Iskolar ng Biñan</p>
+          </div>
+          <div class="time">
+              <p>{% now "F j, Y " %}</p>
+          </div>
       </div>
     </div>
-    <div class="col-6">
-      <div class="card mt-3" style=" width: 640px; height: 500px">
-
-        <div class="card-body">
-          {% include 'Graphs/stackhorizontal.html' %}
-        </div>
+    
+    <div class="first-table">
+      <div class="scholar-count-container">
+          <p>
+              <img src="{% static 'images/profile.png' %}" class="resized-image">
+              <p class="large-2">{{ count }}</p>
+              <p class="medium-2">Total Scholars</p>
+          </p>
       </div>
     </div>
-  </div>
-
-  <div class="card mt-3" style=" width: 640px; height: 450px">
-    <div class="card-body">
-      {% include 'Graphs/bargraph.html' %}
+    
+    <div class="admitted-applied"> 
+      <div class="aa-table">
+        {% include 'Graphs/linegraph.html' %}
+      </div>
     </div>
-  </div>
-</div>
 
-{% endif %}
+    <div class="course-per-year">
+      <div class="course-table">
+          <h1>Summary of Course per Year Level</h1>
+          <div class="course-dropdown">
+              <select>
+                  <option value="option1">Choose Course</option>
+                  {% for course in course_list %}
+                      <option value="{{ course.id }}">{{ course.course }}</option>
+                  {% endfor %}
+              </select>
+
+              <div class="course-selection">
+                <div class="scrollable-container">
+                  {% for course in course_list %}
+                    <div class="indiv-course">
+                        <p><img src="{% static 'images/profile.png' %}" style="width: 20px; height: 25px;">
+                        {{ course.course }}</p>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    
+  
+  {% endif %}
 {% endblock %}
