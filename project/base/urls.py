@@ -68,5 +68,5 @@ urlpatterns = [
     path("Add_FinancialAssistance_Requirement/",views.add_requirement, {"form_type": "fa"}, name="add_fa_requirement",),
 
     path("Filter/", views.filter, name="filter"),
-
+    path("Pending/", views.inb_pending_assesment, name="inb_pending"),
 ]

@@ -5,7 +5,8 @@
 {% block content %}
 {% if user.is_authenticated %}
 <link rel="stylesheet" href="{% static 'css/table.css' %}">
-
+<link rel="stylesheet" href="{% static 'css/import_modal.css' %}">
+<link rel="stylesheet" href="{% static 'css/modals.css' %}">
 
 <div class="container">
   <div class="d-flex">
@@ -24,9 +25,13 @@
               <img src="{% static 'images/add.png' %}" class="img-resize">
             </a>
 
-          <button type="button" id="importButton">
-              <img src="{% static 'images/upload.png' %}" class="img-resize">
-          </button>
+            <button type="button" id="openSchoolForm" class="modal-button">
+              <img src="{% static 'images/add.png' %}" alt="Add" class="img-resize">
+            </button>
+
+            <button type="button" id="importButton" class="image-button">
+              <img src="{% static 'images/upload.png' %}" alt="Upload" class="img-resize">
+            </button>
 
             <a href="{% url 'export' %}">
               <img src="{% static 'images/download.png' %}" class="img-resize">
@@ -48,6 +53,7 @@
               </thead>
 
               <tbody>
+                <div class="scrollable-container">
                 {% for applicant_record, requirement_record in records %}
                 <tr onclick="window.location='{% url 'inb_applicant_info' applicant_record.id %}';"
                   style="cursor: pointer;">
@@ -63,6 +69,7 @@
                   <td>{{ applicant_record.course }}</td>
                 </tr>
                 {% endfor %}
+                </div>
               </tbody>
             </table>
           </div>
@@ -77,52 +84,36 @@
   </div>
 </div>
 
-
 <div id="ImportFormContainer" class="modal-container">
   <div class="modal-course">
     <div class="center-course">
       <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <label for="id_file">Choose File:</label>
-          <input type="file" name="file" id="id_file">
-          <button type="submit" class="modal-button">Import</button>
+        {% csrf_token %}
+        <label for="id_file">Choose File:</label>
+        <input type="file" name="file" id="id_file">
+        <button type="submit" class="modal-button">Import</button>
       </form>
       <button type="button" id="closeButton" class="modals-button">Close</button>
-      </div>
+    </div>
   </div>
 </div>
 
-
-<script>
- document.addEventListener('DOMContentLoaded', function () {
-    var modalContainer = document.getElementById('ImportFormContainer');
-    var importButton = document.getElementById('importButton');
-    var closeButton = document.getElementById('closeButton');
-    var form = document.querySelector('#ImportFormContainer form');
-
-    importButton.addEventListener('click', function () {
-      modalContainer.style.display = 'block';
-    });
-
-    closeButton.addEventListener('click', function () {
-      modalContainer.style.display = 'none';
-    });
-
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-
-     
-      console.log('Form submitted!');
-
-    });
-
-    window.addEventListener('click', function (event) {
-      if (event.target === modalContainer) {
-        modalContainer.style.display = 'none';
-      }
-    });
-  });
-</script>
+<script src="{% static 'js/import-modal.js' %}"></script>
 
 {% endif %}
+
+<div id="schoolFormContainer" class="modal-container">
+
+  <div class="modal-box">
+
+    {% include 'INB/add_record.html' %}
+
+  </div>
+
+</div>
+
+
+
+
+<script src="{% static 'js/modals.js' %}"></script>
 {% endblock %}

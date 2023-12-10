@@ -7,6 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  <link rel="stylesheet" href="{% static 'css/error-msg.css' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
@@ -40,11 +41,25 @@
 
         <div class="signup">━━━━━━━━━━ <a href="{% url 'signup' %}">Sign Up</a> ━━━━━━━━━━</div>
 
-      </form>
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      {% if message.tags == 'error' %}
+      {% with message=message %}
+      {% include 'login-failed.html' %}
+      {% endwith %}
+      {% elif message.tags == 'success' %}
+      {% with message=message %}
+      {% include 'success_message.html' %}
+      {% endwith %}
+      {% endif %}
+      {% endfor %}
     </div>
-
-
-</body>
+    {% endif %}
+    
+    {% include 'login-failed.html' %}
+    </form>
+    </body>
 
 </html>
 

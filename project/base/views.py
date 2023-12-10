@@ -16,11 +16,13 @@ from .models import (
     CollegeStudentApplication,
     CollegeRequirements,
     CollegeStudentAccepted,
+    CollegeStudentAssesment,
     CollegeStudentRejected,
     ApplicantInfoRepositoryINB,
     FinancialAssistanceApplication,
     FinancialAssistanceRequirement,
     FinancialAssistanceAccepted,
+    FinancialAssistanceAssesment,
     FinancialAssistanceRejected,
     FinancialAssistanceInfoRepository,
     INBRequirementRepository,
@@ -34,7 +36,6 @@ import csv
 import pandas as pd
 from import_export import resources
 from django.db.models import Q
-
 
 
 class CollegeStudentApplicationResource(resources.ModelResource):
@@ -61,11 +62,9 @@ def import_excel(request):
             file = request.FILES["file"]
             df = pd.read_excel(file, na_values=["N/A", "-", "Not Available"])
 
-          
             df = df.fillna("N/A")
 
-        
-            date_columns = ["Date of Birth"]  
+            date_columns = ["Date of Birth"]
             for col in date_columns:
                 df[col] = pd.to_datetime(df[col], errors="coerce").dt.strftime(
                     "%Y-%m-%d"
@@ -123,7 +122,6 @@ def import_excel(request):
                             guardian_occupation=row["Guardian Occupation"],
                         )
                     else:
-                      
                         sibling_count = row["Sibling Count"]
                         if pd.isna(sibling_count) or sibling_count == 0:
                             messages.warning(
@@ -488,6 +486,14 @@ def inb_filter_applicants(request):
     return redirect("inb_applicant_list")
 
 
+# PENDING---------------------------------------------
+
+
+def inb_pending_assesment(request):
+    pending_applicant = ApplicantInfoRepositoryINB.objects.all()
+    return render(request, "inb_pending_list.html", {"pending": pending_applicant})
+
+
 # ------------------------------------------------------------------------------------------------------------------------
 
 
@@ -499,7 +505,7 @@ def view_applicant_table(request):
         accepted_applicants = CollegeStudentAccepted.objects.values_list(
             "control_number", flat=True
         )
-        rejected_applicants = CollegeStudentRejected.objects.values_list(
+        rejected_applicants = CollegeStudentAssesment.objects.values_list(
             "control_number", flat=True
         )
 
@@ -762,7 +768,7 @@ def add_information(request, form_type):
     if request.user.is_authenticated:
         if form_type == "applicant":
             form = AddINBForm(request.POST or None)
-            template = "INB/add_record.html"
+            template = "INB/applicant_list.html"
             success_url = "inb_applicant_list"
         elif form_type == "financial_assistance":
             form = AddFinancialAssistanceForm(request.POST or None)
@@ -957,49 +963,59 @@ def school_course_list(request):
     schools_with_courses = []
     for school in schools:
         courses = INBCourse.objects.filter(school_id=school.id)
-        schools_with_courses.append({
-            'school': school,
-            'courses': courses,
-        })
+        schools_with_courses.append(
+            {
+                "school": school,
+                "courses": courses,
+            }
+        )
 
-    return render(request, 'Admin/list_course_school.html', {'schools_with_courses': schools_with_courses, 'schools': schools})
+    return render(
+        request,
+        "Admin/list_course_school.html",
+        {"schools_with_courses": schools_with_courses, "schools": schools},
+    )
 
 
 def create_school(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = INBSchoolForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "School Successfully Added")
-            return redirect('sc_list')  
+            return redirect("sc_list")
     else:
         form = INBSchoolForm()
 
-    return render(request, 'Admin/list-school-course.html', {'school_form': form})
+    return render(request, "Admin/list-school-course.html", {"school_form": form})
+
 
 def add_course(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = INBCourseForm(request.POST)
         if form.is_valid():
-            selected_schools = request.POST.getlist('schools')
+            selected_schools = request.POST.getlist("schools")
             course_data = form.cleaned_data
 
             for school_id in selected_schools:
                 course_instance = INBCourse(
-                    course=course_data['course'],
-                    acronym=course_data['acronym'],
-                    school_id=int(school_id)
+                    course=course_data["course"],
+                    acronym=course_data["acronym"],
+                    school_id=int(school_id),
                 )
                 course_instance.save()
 
             messages.success(request, "Course(s) Successfully Added")
-            return redirect('sc_list')
+            return redirect("sc_list")
     else:
         form = INBCourseForm()
 
     schools = INBSchool.objects.all()
-    return render(request, 'Admin/list_course_school.html', {'course_form': form, 'schools': schools})
-
+    return render(
+        request,
+        "Admin/list_course_school.html",
+        {"course_form": form, "schools": schools},
+    )
 
 
 def update_list(request):
@@ -1009,89 +1025,104 @@ def update_list(request):
 
     for school in schools:
         school_courses = INBCourse.objects.filter(school_id=school.id)
-        schools_with_courses.append({
-            'school': school,
-            'courses': school_courses,
-            'form': INBSchoolForm(),  
-        })
+        schools_with_courses.append(
+            {
+                "school": school,
+                "courses": school_courses,
+                "form": INBSchoolForm(),
+            }
+        )
 
-    return render(request, 'Admin/update-school-course.html', {'schools_with_courses': schools_with_courses, 'all_courses': courses})
+    return render(
+        request,
+        "Admin/update-school-course.html",
+        {"schools_with_courses": schools_with_courses, "all_courses": courses},
+    )
 
 
 def update_school_list(request, school_id):
     school = get_object_or_404(INBSchool, id=school_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = INBSchoolForm(request.POST, instance=school)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Updated the Data Successfully')
-            return redirect('sc_list')  
+            messages.success(request, "Updated the Data Successfully")
+            return redirect("sc_list")
     else:
         form = INBSchoolForm(instance=school)
 
-    return render(request, 'Admin/update-school-course.html', {'school': school, 'form': form})
+    return render(
+        request, "Admin/update-school-course.html", {"school": school, "form": form}
+    )
+
 
 def update_course_list(request, course_id):
     course = get_object_or_404(INBCourse, id=course_id)
 
-    if request.method == 'POST':
-        print(request.method)  
-        print(request.POST) 
+    if request.method == "POST":
+        print(request.method)
+        print(request.POST)
         form = INBCourseForm(request.POST, instance=course)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Updated the Data Successfully')
-            return redirect('sc_list')
+            messages.success(request, "Updated the Data Successfully")
+            return redirect("sc_list")
     else:
         form = INBCourseForm(instance=course)
 
-    return render(request, 'Admin/update-school-course.html', {'course': course, 'form': form})
+    return render(
+        request, "Admin/update-school-course.html", {"course": course, "form": form}
+    )
 
 
 def delete_item(request, item_type, item_id):
-    if item_type == 'school':
+    if item_type == "school":
         model_class = INBSchool
-        success_message = 'School and Courses Deleted Successfully'
-    elif item_type == 'course':
+        success_message = "School and Courses Deleted Successfully"
+    elif item_type == "course":
         model_class = INBCourse
-        success_message = 'Course Deleted Successfully'
+        success_message = "Course Deleted Successfully"
     else:
-        return redirect('sc_list')
+        return redirect("sc_list")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         item = get_object_or_404(model_class, pk=item_id)
-        if item_type == 'school':
+        if item_type == "school":
             item.inbcourse_set.all().delete()
         item.delete()
         messages.success(request, success_message)
-        return redirect('sc_list')
+        return redirect("sc_list")
 
-    return redirect('sc_list')
+    return redirect("sc_list")
+
 
 def filter(request):
     schools = INBSchool.objects.all()
     courses = INBCourse.objects.all()
 
-    selected_schools = request.GET.getlist('school')
-    selected_courses = request.GET.getlist('course')
+    selected_schools = request.GET.getlist("school")
+    selected_courses = request.GET.getlist("course")
 
     filtered_applicants = CollegeStudentApplication.objects.all()
 
     if selected_schools:
-        filtered_applicants = filtered_applicants.filter(school__id__in=selected_schools)
+        filtered_applicants = filtered_applicants.filter(
+            school__id__in=selected_schools
+        )
 
     if selected_courses:
-        filtered_applicants = filtered_applicants.filter(course__id__in=selected_courses)
+        filtered_applicants = filtered_applicants.filter(
+            course__id__in=selected_courses
+        )
 
     context = {
-        'schools': schools,
-        'courses': courses,
-        'filtered_applicants': filtered_applicants,
+        "schools": schools,
+        "courses": courses,
+        "filtered_applicants": filtered_applicants,
     }
     return render(request, "sidebar_filter.html", context)
 
 
 def test1(request):
     return render(request, "cms-forms.html")
-
