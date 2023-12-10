@@ -1,0 +1,454 @@
+* {
+  margin-top: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Poppins;
+}
+
+.form-overall {
+  margin: 30px;
+}
+
+.text-headers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 30px; /* Remove default margin */
+  background-color: #f4f4f4; /* Soft background color */
+
+  border-top: 2px solid #333; /* Heavy border on top */
+  border-bottom: 2px solid #333; /* Heavy border on bottom */
+}
+
+.text-headers p {
+  text-align: center;
+  padding: 10px 50px 0 50px; /* Add padding for better visibility */
+}
+
+/*---------------------------------------------------*/
+
+.ctrlno-field {
+  width: 100%;
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+}
+
+.ctrlno-field .field-container {
+  text-align: center; /* Center the text and label within the container */
+}
+
+.ctrlno-field .txt-field {
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px; /* Adjust the width of the text field */
+}
+
+.ctrlno-field .field-label {
+  margin-top: 5px; /* Adjust the spacing between text field and label */
+  font-size: 14px; /* Adjust label font size */
+  color: #666; /* Set label color */
+}
+
+/*---------------------------------------------------*/
+
+/*name fields*/
+.name-field {
+  width: 100%;
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+}
+
+.name-field .field-container {
+  text-align: center; /* Center the text and label within the container */
+}
+
+.name-field .txt-field {
+  margin-top: 30px;
+  margin-left: 20px; /* Adjust the spacing between text fields */
+}
+
+.name-field .field-label {
+  margin-top: 5px; /* Adjust the spacing between text field and label */
+  font-size: 14px; /* Adjust label font size */
+  color: #666; /* Set label color */
+}
+
+/*---------------------------------------------------*/
+
+/*address fields*/
+.address-field {
+  width: 100%;
+  display: flex;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+
+  margin-top: 30px;
+}
+
+.address-field .field-container {
+  text-align: center; /* Center the text and label within the container */
+}
+
+.address-field .txt-field {
+  margin-left: 20px; /* Adjust the spacing between text fields */
+  border: solid red;
+}
+
+.address-field .field-label {
+  margin-top: 5px; /* Adjust the spacing between text field and label */
+  font-size: 14px; /* Adjust label font size */
+  color: #666; /* Set label color */
+}
+
+/*---------------------------------------------------*/
+
+/*custom fields*/
+.custom-fields1 {
+  width: 100%;
+  display: flex;
+  align-items: flex-start; /* Align items at the top */
+  justify-content: center;
+  margin-top: 30px; /* Adjust spacing from the previous section */
+}
+
+.custom-fields1 .field-container {
+  text-align: center;
+  margin: 0 20px; /* Adjust spacing between field containers */
+}
+
+.custom-fields1 .field-container input[type="date"] {
+  margin-top: 5px;
+}
+
+.custom-fields1 .field-container .txt-field {
+  margin-left: -20px;
+}
+
+.custom-fields1 .radio-buttons {
+  display: flex; /* Align radio buttons in a row */
+  justify-content: center; /* Center radio buttons horizontally */
+  margin-top: 10px;
+}
+
+.custom-fields1 .radio-buttons label {
+  margin-top: 0;
+
+  margin-right: -20px;
+  margin-left: 5px;
+}
+
+.custom-fields1 .radio-buttons label:first-of-type {
+  margin-top: 0;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+.custom-fields1 label {
+  display: block; /* Ensure labels are on a new line */
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+/*---------------------------------------------------*/
+
+/*dropdown fields + other txt fields*/
+.dropdown-fields {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.dropdown-fields .field-container {
+  text-align: center;
+  margin: 0 20px;
+}
+
+.dropdown-fields label {
+  display: block;
+
+  font-size: 14px;
+  color: #666;
+}
+
+.dropdown-fields input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.dropdown-fields select {
+  width: 200px;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+/*---------------------------------------------------*/
+
+/*dropdown fields 2 + other txt fields*/
+.dropdown-fields2 {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.dropdown-fields2 .field-container {
+  text-align: center;
+  margin: 0 10px;
+}
+
+.dropdown-fields2 label {
+  display: block;
+
+  font-size: 14px;
+  color: #666;
+}
+
+.dropdown-fields2 input {
+  width: 100px;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.dropdown-fields2 select {
+  width: 200px;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+/*---------------------------------------------------*/
+
+/*custom fields 2*/
+.custom-fields2 {
+  width: 100%;
+  display: flex;
+  align-items: flex-start; /* Align items at the top */
+  justify-content: center;
+  margin-top: 30px; /* Adjust spacing from the previous section */
+}
+
+.custom-fields2 .field-container {
+  text-align: center;
+  margin: 0 10px; /* Adjust spacing between field containers */
+}
+
+.custom-fields2 .txt-field {
+  margin-top: 5px;
+}
+
+.custom-fields2 .radio-buttons {
+  display: flex; /* Align radio buttons in a row */
+  justify-content: center; /* Center radio buttons horizontally */
+
+  margin-top: 10px;
+}
+
+.custom-fields2 .radio-buttons label {
+  margin-top: 0;
+
+  margin-right: -20px;
+  margin-left: 5px;
+}
+
+.custom-fields2 .radio-buttons label:first-of-type {
+  margin-top: 0;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
+.custom-fields2 label {
+  display: block; /* Ensure labels are on a new line */
+  margin-top: 5px;
+  font-size: 14px;
+  color: #666;
+}
+
+.custom-fields2 select {
+  width: 200px;
+  padding: 8px;
+
+  box-sizing: border-box;
+}
+
+/*---------------------------------------------------*/
+
+/*custom fields 3*/
+.custom-fields3 {
+  width: 100%;
+  display: flex;
+  align-items: flex-start; /* Align items at the top */
+  justify-content: center;
+  margin-top: 30px; /* Adjust spacing from the previous section */
+}
+
+.custom-fields3 .field-container {
+  text-align: center;
+  margin: 0 10px; /* Adjust spacing between field containers */
+}
+
+.custom-fields3 .txt-field {
+  margin-top: 5px;
+}
+
+.custom-fields3 .radio-buttons {
+  display: flex; /* Align radio buttons in a row */
+  justify-content: center; /* Center radio buttons horizontally */
+
+  margin-top: 10px;
+}
+
+.custom-fields3 .radio-buttons label {
+  margin-top: 0;
+
+  margin-right: -20px;
+  margin-left: 5px;
+}
+
+.custom-fields3 .radio-buttons label:first-of-type {
+  margin-top: 0;
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
+.custom-fields3 label {
+  display: block; /* Ensure labels are on a new line */
+  margin-top: 5px;
+  font-size: 14px;
+  color: #666;
+}
+
+.custom-fields3 select {
+  width: 200px;
+  padding: 8px;
+
+  box-sizing: border-box;
+}
+
+/*---------------------------------------------------*/
+
+/*custom fields 4*/
+.custom-fields4 {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.custom-fields4 .field-container {
+  text-align: center;
+  margin: 10px 20px; /* Add margin to separate the field containers */
+  display: block; /* Set display to block for each field */
+  width: 100%; /* Ensure each field takes up the full width */
+}
+
+.custom-fields4 label {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.custom-fields4 input,
+.custom-fields4 select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.custom-fields4 select {
+  margin-top: 5px;
+}
+
+/*---------------------------------------------------*/
+
+/*radio set*/
+.radio-set {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.radio-set .field-container {
+  text-align: center;
+  margin: 0 20px;
+}
+
+.radio-set .radio-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.radio-set .radio-buttons input {
+  margin: 0 5px;
+}
+
+.radio-set label {
+  display: block;
+
+  font-size: 14px;
+  color: #666;
+}
+
+/*---------------------------------------------------*/
+
+/*submit cancel button*/
+
+.custom-fields5 {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  margin-top: 30px;
+}
+
+.button-container {
+  display: flex; /* Change to flex to align items */
+}
+
+.button-container button {
+  margin-right: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.button-container button.cancel {
+  background-color: #ccc;
+  border: 1px solid #999;
+  color: #333;
+  padding: 10px 50px;
+  display: flex; /* Add this line to center text */
+  align-items: center;
+  justify-content: center;
+}
+
+.button-container button.submit {
+  background-color: #ccc;
+  border: 1px solid #999;
+  color: #333;
+  padding: 10px 50px;
+  display: flex; /* Add this line to center text */
+  align-items: center;
+  justify-content: center;
+}

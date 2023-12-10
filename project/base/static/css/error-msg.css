@@ -1,0 +1,14 @@
+/* styles.css */
+.success-message {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.error-message {
+    background-color: #f44336;
+    color: white;
+    padding: 10px;
+    margin: 10px 0;
+}
