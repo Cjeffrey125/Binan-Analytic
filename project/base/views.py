@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from project.forms import (
@@ -248,14 +249,19 @@ def csv_record(request):
 # Login  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def login_user(request):
     if request.method == "POST":
-        username = request.POST["user_name"]
-        password = request.POST["user_password"]
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect("dashboard")
-        else:
-            messages.error(request, "Incorrect username or password.")
+        try:
+            username = request.POST["username"]
+            password = request.POST["user_password"]
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("dashboard")
+            else:
+                messages.error(request, "Incorrect username or password.")
+        except MultiValueDictKeyError:
+            # Handle the error, perhaps redirect to the login page with an error message.
+            messages.error(request, "Please provide a username.")
+            return render(request, "login.html")
     return render(request, "login.html")
 
 
@@ -1094,95 +1100,100 @@ def filter(request):
 def update_requirement(request):
     inb_requirement_list = INBRequirementRepository.objects.all()
     fa_requirement_list = FARequirementRepository.objects.all()
-    return render(request, 'Admin/update-requirement.html', {'inb_requirements': inb_requirement_list, 'fa_requirements': fa_requirement_list})
+    return render(
+        request,
+        "Admin/update-requirement.html",
+        {
+            "inb_requirements": inb_requirement_list,
+            "fa_requirements": fa_requirement_list,
+        },
+    )
+
 
 def render_requirement(request, form_type):
     if request.user.is_authenticated:
-        template = 'Admin/update-requirement.html'
+        template = "Admin/update-requirement.html"
         requirements = None
 
-        if form_type == 'inb':
-            template = 'Admin/inb-requirements.html'
+        if form_type == "inb":
+            template = "Admin/inb-requirements.html"
             requirements = INBRequirementRepository.objects.all()
-        elif form_type == 'fa':
-            template = 'Admin/fa-requirements.html'
+        elif form_type == "fa":
+            template = "Admin/fa-requirements.html"
             requirements = FARequirementRepository.objects.all()
         else:
             messages.error(request, "Invalid form type.")
-            return redirect('home')
+            return redirect("home")
 
-        return render(request, template, {'requirements': requirements, 'form_type': form_type})
+        return render(
+            request, template, {"requirements": requirements, "form_type": form_type}
+        )
     else:
         messages.error(request, "You need to be logged in for this process.")
-        return redirect('home')
-                  
+        return redirect("home")
+
+
 def add_requirement(request, form_type):
     if request.user.is_authenticated:
-        if form_type == 'inb':
+        if form_type == "inb":
             form = INBRequirementList(request.POST or None)
             model_class = INBRequirementRepository
-        elif form_type == 'fa':
+        elif form_type == "fa":
             form = FARequirementList(request.POST or None)
             model_class = FARequirementRepository
         else:
             messages.error(request, "Invalid form type.")
-            return redirect('home')
+            return redirect("home")
 
         if request.method == "POST":
             if form.is_valid():
                 requirement_data = form.cleaned_data
                 requirement_instance = model_class.objects.create(**requirement_data)
                 messages.success(request, "Requirements Successfully Added")
-                return redirect('update_req')
+                return redirect("update_req")
 
-        return render(request, 'Admin/update-requirement.html', {'form': form})
+        return render(request, "Admin/update-requirement.html", {"form": form})
     else:
         messages.error(request, "You need to be logged in for this process.")
-        return redirect('home')
-    
-def delete_requirements(request, item_type, item_id):
-    if item_type == "inb":
-        model_class = INBRequirementRepository
-    elif item_type == "fa":
-        model_class = FARequirementRepository
-    else:
-        return redirect("sc_list")
+        return redirect("home")
 
-    if request.method == "POST":
-        item = get_object_or_404(model_class, pk=item_id)
-        item.delete()
-        messages.success(request, "Requirement Deleted Successfully")
-        return redirect("update_req")
-
-    return redirect("update_req")
 
 def update_inb_requirement(request, requirement_id):
     requirement = get_object_or_404(INBRequirementRepository, id=requirement_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = INBRequirementList(request.POST, instance=requirement)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Updated the Requirement Successfully')
-            return redirect('inb_requirement')  
+            messages.success(request, "Updated the Requirement Successfully")
+            return redirect("inb_requirement")
     else:
         form = INBRequirementList(instance=requirement)
 
-    return render(request, 'Admin/inb-requirements.html', {'requirement': requirement, 'form': form})
+    return render(
+        request,
+        "Admin/inb-requirements.html",
+        {"requirement": requirement, "form": form},
+    )
+
 
 def update_fa_requirement(request, requirement_id):
     requirement = get_object_or_404(FARequirementRepository, id=requirement_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = FARequirementList(request.POST, instance=requirement)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Updated the Requirement Successfully')
-            return redirect('fa_requirement')  
+            messages.success(request, "Updated the Requirement Successfully")
+            return redirect("fa_requirement")
     else:
         form = FARequirementList(instance=requirement)
 
-    return render(request, 'Admin/fa-requirements.html', {'requirement': requirement, 'form': form})
+    return render(
+        request,
+        "Admin/fa-requirements.html",
+        {"requirement": requirement, "form": form},
+    )
 
 
 def test1(request):

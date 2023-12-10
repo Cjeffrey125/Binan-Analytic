@@ -67,15 +67,17 @@ urlpatterns = [
     path("View_Requirements/", views.update_requirement, name="update_req"),
     path("add_requirement/<str:form_type>/", views.add_requirement, name="add_requirement"),
 
+
     path("Iskolar_ng_Bayan_Requirement/", views.render_requirement, {"form_type": "inb"}, name="inb_requirement"),
     path("Update_IskolarngBayan_Requirement/<int:requirement_id>/", views.update_inb_requirement, name="update_inb_requirement"),
 
     path("Financial_Assistance_Requirement/",views.render_requirement, {"form_type": "fa"}, name="fa_requirement",),
     path("Update_FinancialAssistance_Requirement/<int:requirement_id>/", views.update_fa_requirement, name="update_fa_requirement"),
 
-    path('delete_requirements/<str:item_type>/<int:item_id>/', views.delete_requirements, name='delete_requirements'),
-
     
+
+
+
     path("Filter/", views.filter, name="filter"),
     path("Pending/", views.inb_pending_assesment, name="inb_pending"),
 ]

@@ -4,9 +4,9 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<link rel="stylesheet" href="{% static 'css/table.css' %}">
+
 <link rel="stylesheet" href="{% static 'css/import_modal.css' %}">
-<link rel="stylesheet" href="{% static 'css/modals.css' %}">
+<link rel="stylesheet" href="{% static 'css/table_list.css' %}">
 
 <div class="container">
   <div class="d-flex">
@@ -49,7 +49,6 @@
               </thead>
 
               <tbody>
-                <div class="scrollable-container">
                 {% for applicant_record, requirement_record in records %}
                 <tr onclick="window.location='{% url 'inb_applicant_info' applicant_record.id %}';"
                   style="cursor: pointer;">
@@ -65,7 +64,6 @@
                   <td>{{ applicant_record.course }}</td>
                 </tr>
                 {% endfor %}
-                </div>
               </tbody>
             </table>
           </div>
@@ -88,7 +86,6 @@
     </form>
   </div>
 </div>
-
 
 <script src="{% static 'js/modals.js' %}"></script>
 <script>
