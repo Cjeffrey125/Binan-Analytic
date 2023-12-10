@@ -152,62 +152,6 @@ class AddINBForm(forms.ModelForm):
         ("Non-Deped", "Non-DepEd"),
     ]
 
-    COURSES_OFFERED = [
-        ("0", "Choose Course"),
-        ("BS Psychology", "BS Psychology"),
-        ("BS Foreign Service", "BS Foreign Service"),
-        ("BS Computer Science", "BS Computer Science"),
-        ("BS Information Technology", "BS Information Technology"),
-        (
-            "Bachelor of Technical-Vocational Teacher Education",
-            "Bachelor of Technical-Vocational Teacher Education",
-        ),
-        ("BS Criminology", "BS Criminology"),
-        ("BS Accountancy", "BS Accountancy"),
-        ("Bachelor of Elementary Education", "Bachelor of Elementary Education"),
-        ("BSED English", "BSED English"),
-        ("BSED Filipino", "BSED Filipino"),
-        ("BSED Social Studies", "BSED Social Studies"),
-        ("BS Computer Engineering", "BS Computer Engineering"),
-        ("BS Industrial Engineering", "BS Industrial Engineering"),
-        ("BS Social Work", "BS Social Work"),
-        ("BS Nursing", "BS Nursing"),
-        ("BSED Math", "BSED Math"),
-        ("Doctor of Dental Medicine", "Doctor of Dental Medicine"),
-        ("Medical Technology", "Medical Technology"),
-        ("Midwifery", "Midwifery"),
-        ("Nursing", "Nursing"),
-        ("Occupational Therapy", "Occupational Therapy"),
-        ("Pharmacy", "Pharmacy"),
-        ("Physical Therapy", "Physical Therapy"),
-        ("Pharmacy", "Pharmacy"),
-        ("Radiologic Technology", "Radiologic Technology"),
-        ("BS Architecture", "BS Architecture"),
-        (
-            "Bachelor of Library and Information Science",
-            "Bachelor of Library and Information Science",
-        ),
-        (
-            "Bachelor of Early Childhood Education",
-            "Bachelor of Early Childhood Education",
-        ),
-        ("Bachelor of Physical Education", "Bachelor of Physical Education"),
-        (
-            "Bachelor of Special Needs Education - Generalist",
-            "Bachelor of Special Needs Education - Generalist",
-        ),
-        (
-            "Bachelor of Technology & Livelihood Education",
-            "Bachelor of Technology & Livelihood Education",
-        ),
-        ("Bachelor of Secondary Education", "Bachelor of Secondary Education"),
-        ("BS Civil Engineering", "BS Civil Engineering"),
-        ("BS Electrical Engineering", "BS Electrical Engineering"),
-        ("BS Electronics Engineering", "BS Electronics Engineering"),
-        ("BS Mechanical Engineering", "BS Mechanical Engineering"),
-        ("BS Nutrition and Dietetics", "BS Nutrition and Dietetics"),
-    ]
-
     VOTER_STATUS = [
         ("0", "Select Status"),
         ("Registered Voter", "Registered Voter"),

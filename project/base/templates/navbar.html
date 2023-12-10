@@ -35,7 +35,7 @@
 
         <li>
           <img src="{% static 'images/home-icon.png' %}" height="20" width="20">
-          <a href="#">Dashboard</a>
+          <a href= {% url 'dashboard' %}>Dashboard</a>
         </li>
 
         <!--dropdown mechanic-->
@@ -45,10 +45,9 @@
             Biñan</a>
 
           <div class="dropdown-container">
-            <a href="#"><img src="{% static 'images/applicants-icon.png' %}" height="20" width="20">Applicants</a>
-            <a href="#"><img src="{% static 'images/passed-icon.png' %}" height="20" width="20">Passed List</a>
-            <a href="#"><img src="{% static 'images/failed-icon.png' %}" height="20" width="20">Failed List</a>
-            <a href="#"><img src="{% static 'images/grades-icon.png' %}" height="20" width="20">Grades List</a>
+            <a href= {% url 'inb_applicant_list' %}><img src="{% static 'images/applicants-icon.png' %}" height="20" width="20">Applicants</a>
+            <a href= {% url 'inb_passed_applicant' %}><img src="{% static 'images/passed-icon.png' %}" height="20" width="20">Passed List</a>
+            <a href= {% url 'inb_failed_applicant' %}><img src="{% static 'images/failed-icon.png' %}" height="20" width="20">Failed List</a>
           </div>
         </li>
 
@@ -59,9 +58,9 @@
             Financial
             Assistance</a>
           <div class="dropdown-container">
-            <a href="#"><img src="{% static 'images/applicants-icon.png' %}" height="20" width="20">Applicants</a>
-            <a href="#"><img src="{% static 'images/passed-icon.png' %}" height="20" width="20">Passed List</a>
-            <a href="#"><img src="{% static 'images/failed-icon.png' %}" height="20" width="20">Failed List</a>
+            <a href= {% url 'fa_applicant_list' %} ><img src="{% static 'images/applicants-icon.png' %}" height="20" width="20">Applicants</a>
+            <a href= {% url 'fa_passed_applicant' %}><img src="{% static 'images/passed-icon.png' %}" height="20" width="20">Passed List</a>
+            <a href= {% url 'fa_failed_applicant' %}><img src="{% static 'images/failed-icon.png' %}" height="20" width="20">Failed List</a>
           </div>
         </li>
 
