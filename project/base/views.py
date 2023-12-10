@@ -1137,6 +1137,22 @@ def add_requirement(request, form_type):
     else:
         messages.error(request, "You need to be logged in for this process.")
         return redirect('home')
+    
+def delete_requirements(request, item_type, item_id):
+    if item_type == "inb":
+        model_class = INBRequirementRepository
+    elif item_type == "fa":
+        model_class = FARequirementRepository
+    else:
+        return redirect("sc_list")
+
+    if request.method == "POST":
+        item = get_object_or_404(model_class, pk=item_id)
+        item.delete()
+        messages.success(request, "Requirement Deleted Successfully")
+        return redirect("update_req")
+
+    return redirect("update_req")
 
 def update_inb_requirement(request, requirement_id):
     requirement = get_object_or_404(INBRequirementRepository, id=requirement_id)
