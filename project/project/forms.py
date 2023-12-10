@@ -36,15 +36,20 @@ class INBRequirementList(forms.ModelForm):
         model = INBRequirementRepository
         fields = ["requirement"]
         widgets = {
-            'requirement': forms.TextInput(attrs={"placeholder": "Add New Requirements", "class": "form-control"})
+            "requirement": forms.TextInput(
+                attrs={"placeholder": "Add New Requirements", "class": "form-control"}
+            )
         }
+
 
 class FARequirementList(forms.ModelForm):
     class Meta:
         model = FARequirementRepository
         fields = ["requirement"]
         widgets = {
-            'requirement': forms.TextInput(attrs={"placeholder": "Add New Requirements", "class": "form-control"})
+            "requirement": forms.TextInput(
+                attrs={"placeholder": "Add New Requirements", "class": "form-control"}
+            )
         }
 
 
@@ -301,14 +306,14 @@ class AddINBForm(forms.ModelForm):
 
     school = forms.ChoiceField(
         required=True,
-        choices=[('0', 'Choose School')],
+        choices=[("0", "Choose School")],
         widget=forms.Select(attrs={"class": "form-control"}),
         label="",
     )
 
     course = forms.ChoiceField(
         required=True,
-        choices=[('0', 'Choose Course')],
+        choices=[("0", "Choose Course")],
         widget=forms.Select(attrs={"class": "form-control"}),
         label="",
     )
@@ -483,13 +488,13 @@ class AddINBForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        distinct_courses = INBCourse.objects.values_list('course', flat=True).distinct()
+        distinct_courses = INBCourse.objects.values_list("course", flat=True).distinct()
         course_choices = [(course, course) for course in distinct_courses]
-        self.fields['course'].choices = [("", "Select a course")] + course_choices
+        self.fields["course"].choices = [("", "Select a course")] + course_choices
 
         schools = INBSchool.objects.all()
         school_choices = [(str(school.school), school.school) for school in schools]
-        self.fields['school'].choices = [('0', 'Choose School')] + school_choices
+        self.fields["school"].choices = [("0", "Choose School")] + school_choices
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -793,3 +798,42 @@ class AddFinancialAssistanceForm(forms.ModelForm):
         model = FinancialAssistanceApplication
 
         exclude = ("user",)
+
+
+# class UserLogInForm(forms.Form):
+#     username = forms.CharField(
+#         error_messages={
+#             "required": "Please enter your username",
+#         }
+#     )
+#     password = forms.CharField(
+#         widget=forms.PasswordInput,
+#         error_messages={
+#             "required": "Please enter your password",
+#         },
+#     )
+
+#     def clean(self):
+#         username = self.cleaned_data.get("username")
+#         password = self.cleaned_data.get("password")
+
+#         if username and password:
+#             self.user_cache = authenticate(
+#                 self.request, username=username, password=password
+#             )
+#             if self.user_cache is None:
+#                 raise forms.ValidationError(
+#                     self.error_messages["invalid_login"],
+#                     code="invalid_login",
+#                 )
+#             else:
+#                 self.confirm_login_allowed(self.user_cache)
+
+#         return self.cleaned_data
+
+#     def confirm_login_allowed(self, user):
+#         if not user.is_active:
+#             raise forms.ValidationError(
+#                 self.error_messages["inactive"],
+#                 code="inactive",
+#             )

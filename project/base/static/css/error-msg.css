@@ -1,14 +1,11 @@
-/* styles.css */
-.success-message {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px;
-    margin: 10px 0;
-}
+/* create the error message of the login */
+.error p{
 
-.error-message {
-    background-color: #f44336;
-    color: white;
-    padding: 10px;
-    margin: 10px 0;
+    position: relative;
+    top: 20px;
+    text-align: center;
+    color: red;
+    font-size: 12px;
+    font-weight: bold;
+
 }

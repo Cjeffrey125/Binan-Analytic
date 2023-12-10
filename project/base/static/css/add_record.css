@@ -95,7 +95,7 @@
 
 .address-field .txt-field {
   margin-left: 20px; /* Adjust the spacing between text fields */
-  border: solid red;
+  border: solid ;
 }
 
 .address-field .field-label {
