@@ -23,21 +23,20 @@
                 <tr>
                   <th class="table-header">Control Number</th>
                   <th class="table-header">Name</th>
+                  <th class="table-header">School</th>
                   <th class="table-header">Course</th>
-                  <th class="table-header">Remarks</th>
                 </tr>
               </thead>
 
               <tbody>
                 <div class="scrollable-container">
-                  {% for applicant_record, requirement_record in records %}
-                  <tr onclick="window.location='{% url 'inb_failed_applicant_info' applicant.control_number %}';"
+                  {% for applicant_record in applicant %}
+                  <tr onclick="window.location='{% url 'inb_passed_applicant_info' applicant.control_number %}';"
                     style="cursor: pointer;">
                     <td>{{ applicant.control_number }}</td>
                     <td>{{ applicant.fullname }}</td>
+                    <td>{{ applicant.school }}</td>
                     <td>{{ applicant.course }}</td>
-                    <td></td>
-                    <td></td>
                   </tr>
                   {% endfor %}
               </tbody>

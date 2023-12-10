@@ -37,6 +37,8 @@ import csv
 import pandas as pd
 from import_export import resources
 from django.db.models import Q
+import datetime
+from django.utils import timezone
 
 
 class CollegeStudentApplicationResource(resources.ModelResource):
@@ -290,10 +292,13 @@ def register_user(request):
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+def current_datetime(request):
+    now = timezone.now()
+    return render(request, "dashboard.html", {"now": now})
 
 
-# render data in dashboard
 def data_visualization(request):
+    course_list = INBCourse.objects.all()
     school_counts = (
         CollegeStudentApplication.objects.values("school")
         .exclude(school="0")
@@ -328,6 +333,7 @@ def data_visualization(request):
             "data": data,
             "count": total_students,
             "students_per_school": students_per_school,
+            "course_list": course_list,
         },
     )
 
@@ -462,8 +468,11 @@ def inb_filter_applicants(request):
             collegerequirements__requirement=13
         ).distinct()
 
-
         rejected_applicants = CollegeStudentApplication.objects.exclude(
+            collegerequirements__requirement=13
+        ).distinct()
+
+        pending_applicants = CollegeStudentApplication.objects.exclude(
             collegerequirements__requirement=13
         ).distinct()
 
@@ -477,8 +486,11 @@ def inb_filter_applicants(request):
                 school=applicant.school,
                 course=applicant.course,
             )
+            CollegeStudentApplication.objects.filter(
+                control_number=applicant.control_number
+            ).delete()
 
-        for applicant in rejected_applicants:
+        for applicant in pending_applicants:
             ApplicantInfoRepositoryINB.objects.filter(
                 control_number=applicant.control_number
             ).update(status="For Assesment")
@@ -486,6 +498,9 @@ def inb_filter_applicants(request):
                 control_number=applicant.control_number,
                 fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
             )
+            CollegeStudentApplication.objects.filter(
+                control_number=applicant.control_number
+            ).delete()
 
         for applicant in rejected_applicants:
             ApplicantInfoRepositoryINB.objects.filter(
@@ -495,15 +510,13 @@ def inb_filter_applicants(request):
                 control_number=applicant.control_number,
                 fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
             )
+            CollegeStudentApplication.objects.filter(
+                control_number=applicant.control_number
+            ).delete()
 
             # create an assesment function for pending applicant
 
-# 
-
-        CollegeStudentApplication.objects.filter(
-            Q(control_number__in=accepted_applicants.values("control_number"))
-            | Q(control_number__in=rejected_applicants.values("control_number"))
-        ).delete()
+        #
 
         messages.success(request, "Applicants have been successfully filtered.")
     else:

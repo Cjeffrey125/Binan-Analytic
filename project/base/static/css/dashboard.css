@@ -1,0 +1,226 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.dash-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.dash-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 60px;
+    width: 100%;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+}
+
+.time p {
+    margin: 0;
+}
+
+.two-column-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.first-column,
+.second-column {
+    width: calc(50% - 10px);
+    /* 10px margin between columns */
+}
+
+.first-table {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.scholar-count-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    background-color: white;
+    height: 80px;
+    width: 640px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+}
+
+.large {
+    margin-top: 20px;
+    font-size: 3em;
+    font-weight: 400;
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.medium {
+    margin-top: 16px;
+    font-size: 1.5em;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+
+.large-2 {
+    font-size: 3em;
+    font-weight: 400;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.medium-2 {
+    margin-top: 16px;
+    font-size: 1.5em;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+
+.resized-image {
+    width: 50px;
+    height: 40px;
+    margin-top: 25px;
+    margin-right: 25px;
+    align-self: center;
+}
+
+.course-per-year {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.course-table {
+    background-color: white;
+    width: 640px;
+    height: 600px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.course-selection {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(182, 182, 182);
+    width: 550px;
+    height: 430px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    align-items: center;
+    justify-content: start;
+    margin: auto;
+    margin-top: 20px;
+    overflow-y: auto;
+}
+
+.indiv-course {
+    background-color: white;
+    width: 480px;
+    height: 70px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    margin-top: 20px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.scrollable-container {
+    overflow-y: auto;
+}
+
+.admitted-applied {
+    margin-top: 20px;
+    background-color: white;
+    width: 640px;
+    height: 500px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.aa-table {
+    margin-top: 20px;
+    margin-left: 25px;
+}
+
+.map-table {
+    display: flex;
+    margin-top: 20px;
+}
+
+.map-container {
+    background-color: white;
+    width: 640px;
+    height: auto;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    padding: 20px;
+}
+
+.map-and-percentage-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.map,
+.map-percentage {
+    background-color: white;
+    width: 280px;
+    height: 250px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.map-percentage {
+    margin-left: 10px;
+}
+
+.university-scholar {
+    margin-top: 20px;
+    background-color: white;
+    width: 640px;
+    height: 500px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.university-table {
+    margin-top: 20px;
+    margin-left: 25px;
+}
+
+.total-per-year {
+    margin-top: 20px;
+    background-color: white;
+    width: 640px;
+    height: 450px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.bar-table {
+    margin-top: 25px;
+    margin-left: 25px;
+}

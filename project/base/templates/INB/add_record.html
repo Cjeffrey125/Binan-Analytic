@@ -1,233 +1,349 @@
 {% load static %} 
 
 
-<link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/css/add_record.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static '/css/forms.css' %}">
 
-    <h1>Add Record</h1>
+    <div class = "form-container">
 
-    <br/>
-    <form method="POST" action="{% url 'add_inb_applicant' %}">
-        {% csrf_token %}
-        
-        <div class = "text-center">
-            <h3>Personal Data</h3>
-        </div>
+    <div class="icon-header">
+        <img src="{% static 'images/binan.png' %}" height="80px" width="110px">
+        <h1 class = "add-header">ISKOLAR NG BIÑAN</h1>
+        <img src="{% static 'images/logo.png' %}" height="80px" width="110px">
+    </div>
 
-        <div class="form-group row">
-            <div class="col">
-            {{ form.control_number }}
-        </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col">
-                {{ form.first_name }}
-                <div class="subscript">{{ form.first_name.help_text | safe }}</div>
-            </div>
-            <div class="col">
-                {{ form.last_name }}
-                <div class="subscript">{{ form.last_name.help_text | safe }}</div>
-            </div>
-            <div class="col">
-                {{ form.middle_name }}
-                <div class="subscript">{{ form.middle_name.help_text | safe }}</div>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col">
-                    {{ form.blkstr }}
-                <div class="subscript">{{ form.blkstr.help_text | safe }}</div>
-            </div>
-
-            <div class="col">
-              
-                    {{ form.barangay }}
-               
-                <div class="subscript">{{ form.barangay.help_text | safe }}</div>
-            </div>
-            <div class="col">     
-                    {{ form.city }}
-                <div class="subscript">{{ form.city.help_text | safe }}</div>
-            </div>
-            <div class="col">
-                    {{ form.province }}
-                <div class="subscript">{{ form.province.help_text | safe }}</div>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="input-group col">
-                {{ form.date_of_birth }}
-            </div>
-            <div class="col">
-                {{ form.place_of_birth }}
-            </div>
-            <div class="col">
-                {{ form.gender }}
-            </div>
-            <div class="col">
-                {{ form.contact_no }}
-            </div>
-        </div>
-        
-        <div class="form-group row"> 
-            <div class="col">
-            {{ form.email_address }}
-            </div>
-
-            <div class="col">
-            {{ form.school }}
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col">
-            {{ form.course }}
-            </div>
-       
-            <div class="col">
-            {{ form.gwa }}
-            </div>
-
-            <div class="col">
-            {{ form.rank }}
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col">
-            {{ form.jhs }}
-            </div>
-
-            <div class="col">
-            {{ form.jhs_address }}
-            </div>
-
-            <div class="col">
-            {{ form.jhs_educational_provider }}
-            </div>
-        </div>
-     
-        <div class="form-group row">
-            <div class="col">
-            {{ form.shs }}
-            </div>
+    <div class="center">
+        <hr class="hr-heading">
+    </div>
     
-            <div class="col">
-            {{ form.shs_address }}
-            </div>
-
-            <div class="col">
-            {{ form.shs_educational_provider }}
-            </div>
-        </div>
-    
-
-
-        <div class = "text-center">
-            <h3>Family Data</h3>
-        </div>
-
-        <div class="form-group row">
-            <label for="applicant_father">Father</label>
-            <div class="col">
-            {{ form.father_voter_status }}
-            </div>
-
-            <div class="col">
-            {{ form.father_name }}
-            </div>
-        
-            <div class="col">
-            {{ form.father_educational_attainment }}
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col">
-            {{ form.father_occupation }}
-            </div>
-            <div class="col">
-            {{ form.father_employer}}
-            </div>
-        </div>
-        
-
-
-        <div class="form-group row">
-            <label for="applicant_mother">Mother</label>
-            <div class="col">
-            {{ form.mother_voter_status }}
-            </div>
-
-            <div class="col">
-            {{ form.mother_name }}
-            </div>
-
-            <div class="col">
-            {{ form.mother_educational_attainment }}
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="col">
-            {{ form.mother_occupation}}
-            </div>
-
-            <div class="col">
-            {{ form.mother_employer}}
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label for="applicant_guardian">Guardian</label>
-            <div class="col">
-            {{ form.guardian_voter_status }}
-            </div>
+        <form method="POST" action="{% url 'add_inb_applicant' %}">
+            {% csrf_token %}
             
-            <div class="col">
-            {{ form.guardian_name }}
+        
+            <div class="form-group row">
+                <div class="col">
+                    <h3>Personal Data</h3>
+                </div>
+                <div class="col">
+                    {{ form.control_number }}
+                </div>
             </div>
+            <hr class="hr-text">
 
-            <div class="col">
-            {{ form.guardian_educational_attainment }}
+
+        <div class = "name-container">
+            <div class="form-group row">
+                <div class="col">
+                    <p class ="text-layout left-align">Full Name: </p>
+                </div>
+                <div class="col margin-right">
+                    {{ form.first_name }}
+                </div>
+                <div class="col margin-right">
+                    {{ form.last_name }}
+                </div>
+                <div class="col margin-right">
+                    {{ form.middle_name }}
+                </div>
+            </div>
+        </div>
+
+        <div class = "name-container">
+            <div class="form-group row">
+                <div class="col margin-right">
+                    <p class ="text-layout left-align">Address: </p>
+                </div>
+                <div class="col margin-right">
+                        {{ form.blkstr }}
+                </div>
+                <div class="col margin-right">
+                        {{ form.barangay }}
+                </div>
+                <div class="col margin-right">     
+                        {{ form.city }}
+                </div>
+                <div class="col margin-right">
+                        {{ form.province }}
+                </div>
             </div>
         </div>
         
-        <div class="form-group row">
-            <div class="col">
-            {{ form.guardian_occupation }}
-            </div>
+        <div class="name-container">
+            <div class="form-group row">
+                
+                <div class="col margin-right">
+                    <p class ="text-layout left-align">Date of Birth: </p>
+                </div>
 
-            <div class="col">
-            {{ form.guardian_employer }}
+                <div class="col">
+                    {{ form.date_of_birth }}
+                </div>
+
+                <div class="col radio-container">
+                    <p class ="text-layout left-align">Gender: </p>
+                    {{ form.gender }}
+                </div>
+              
+                <div class="col margin-right">
+                    {{ form.place_of_birth }}
+                </div>
+                <div class="col">
+                    <p class ="text-layout left-align">Contact Number: </p>
+                </div> 
+                <div class="col margin-right">
+                    {{ form.contact_no }}
+                </div>
             </div>
         </div>
-     
         
-        <div class = "text-center">
-            <button type="submit" class="modal-button">Save Record</button>
+        <div class="name-container">
+            <div class="form-group row">
+                <div class="col">
+                    <p class ="text-layout left-align">Email Address: </p>
+                </div> 
+                <div class="col margin-right">
+                    {{ form.email_address }}
+                </div>
+
+                <div class="col">
+                    <p class ="text-layout left-align">Preferred School: </p>
+                </div>
+                <div class="col margin-right">
+                    {{ form.school }}
+                </div>
+            </div>
         </div>
 
-    </form>
+        <div class="name-container">
+            <div class="form-group row">
+                <div class="col margin-right">
+                    <p class ="text-layout left-align">Desired Course: </p>
+                </div> 
+                <div class="col margin-right">
+                {{ form.course }}
+                </div>
+                
+                <div class="col margin-right">
+                    <p class ="text-layout left-align">GWA: </p>
+                </div> 
+                <div class="col margin-right">
+                {{ form.gwa }}
+                </div>
 
+                <div class="col margin-right">
+                    <p class ="text-layout left-align">Rank: </p>
+                </div> 
+                <div class="col margin-right">
+                {{ form.rank }}
+                </div>
+            </div>
+        </div>
+
+
+        <div class="name-container">
+            <div class="form-group row">
+                <div class="col margin-right">
+                    <p class ="text-layout left-align">Junior High School: </p>
+                </div> 
+                <div class="col margin-right">
+                {{ form.jhs }}
+                </div>
+
+                <div class="col margin-right">
+                    <p class ="text-layout left-align">Address: </p>
+                </div> 
+                <div class="col margin-right">
+                {{ form.jhs_address }}
+                </div>
+
+                <div class="col margin-right">
+                {{ form.jhs_educational_provider }}
+                </div>
+            </div>
+        </div>
+            
+        <div class="name-container">
+            <div class="form-group row">
+                <div class="col margin-right">
+                    <p class ="text-layout left-align">Senior High School: </p>
+                </div> 
+                <div class="col margin-right">
+                {{ form.shs }}
+                </div>
+
+                <div class="col margin-right">
+                    <p class ="text-layout left-align">Address: </p>
+                </div> 
+                <div class="col margin-right">
+                {{ form.shs_address }}
+                </div>
+
+                <div class="col margin-right">
+                {{ form.shs_educational_provider }}
+                </div>
+            </div>
+        </div>
+
+
+
+            <div class = "text-center">
+                <h3>Family Data</h3>
+            </div>
+
+            <div class="selection-container">
+                <label class="radio-label">
+                  <input type="radio" name="radio" onclick="toggleSection('Father')" /> Father
+                </label>
+              
+                <label class="radio-label">
+                  <input type="radio" name="radio" onclick="toggleSection('Mother')" /> Mother 
+                </label>
+              
+                <label class="radio-label">
+                  <input type="radio" name="radio" onclick="toggleSection('LegalGuardian')" /> Legal Guardian
+                </label>
+              </div>
+                        
+        
+    <div id="Father" class="form-section">
+        <div class="name-container"> 
+            <div class="form-group row">
+                <div class="col">
+                {{ form.father_voter_status }}
+                </div>
+                <div class="col">
+                {{ form.father_name }}
+                </div>
+                <div class="col">
+                {{ form.father_educational_attainment }}
+                </div>
+            </div>
+        </div>
+
+        <div class="name-container"> 
+            <div class="form-group row">
+                <div class="col">
+                {{ form.father_occupation }}
+                </div>
+
+                <div class="col">
+                {{ form.father_employer}}
+                </div>
+            </div>
+        </div>
+        
+    </div>        
+
+
+    
+    <div id="Mother" class="form-section" style="display: none;">  
+        <div class="name-container">  
+            <div class="form-group row">
+                <div class="col">
+                {{ form.mother_voter_status }}
+                </div>
+
+                <div class="col">
+                {{ form.mother_name }}
+                </div>
+
+                <div class="col">
+                {{ form.mother_educational_attainment }}
+                </div>
+            </div>
+        </div>
+
+        <div class="name-container"> 
+            <div class="form-group row">
+                <div class="col">
+                {{ form.mother_occupation}}
+                </div>
+
+                <div class="col">
+                {{ form.mother_employer}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    <div id="LegalGuardian" class="form-section" style="display: none;">
+        <div class="name-container">
+            <div class="form-group row">
+                <div class="col">
+                {{ form.guardian_voter_status }}
+                </div>
+                
+                <div class="col">
+                {{ form.guardian_name }}
+                </div>
+
+                <div class="col">
+                {{ form.guardian_educational_attainment }}
+                </div>
+            </div>
+        </div>
+
+        <div class="name-container">
+            <div class="form-group row">
+                <div class="col">
+                {{ form.guardian_occupation }}
+                </div>
+
+                <div class="col">
+                {{ form.guardian_employer }}
+                </div>
+            </div>
+        </div> 
+    </div>
+            
+            <div class = "text-center">
+                <button type="submit" class="modal-button">Save Record</button>
+            </div>
+
+        </form>
+   
+    </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var dateOfBirthSelect = document.getElementById("id_date_of_birth");
-            dateOfBirthSelect.addEventListener("change", function() {
-                dateOfBirthSelect.classList.remove("placeholder");
-            });
-        });
+    document.addEventListener("DOMContentLoaded", function() {
+        var voterStatusCheckbox = document.getElementById("id_father_voter_status");
 
-        
-    </script>
-    <style>
-        #id_date_of_birth.placeholder {
-            color: #6c757d;
+        voterStatusCheckbox.addEventListener("change", function() {
+            var notRegisteredVoterLabel = document.getElementById("notRegisteredVoterLabel");
+
+            if (voterStatusCheckbox.checked) {
+                notRegisteredVoterLabel.style.display = "none";
+            } else {
+                notRegisteredVoterLabel.style.display = "block";
+            }
+        });
+    });
+
+       
+    function toggleSection(sectionId) {
+    var sectionToToggle = document.getElementById(sectionId);
+    var otherSections = document.querySelectorAll('.form-section');
+
+    otherSections.forEach(function (section) {
+        if (section.id !== sectionId) {
+        section.style.display = 'none';
         }
-    </style>
+    });
+
+    if (sectionToToggle.style.display === 'none') {
+        sectionToToggle.style.display = 'block';
+    } else {
+        sectionToToggle.style.display = 'none';
+    }
+    }
+        
+
+    </script>
+
+
+
 
 
 
