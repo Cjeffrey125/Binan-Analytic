@@ -498,8 +498,9 @@ def inb_pending_assesment(request):
 
 
 # CRUD
-def view_applicant_table(request):
+def iskolar_ng_bayan_list(request):
     if request.user.is_authenticated:
+        form = AddINBForm()
         all_applicants = CollegeStudentApplication.objects.all()
 
         accepted_applicants = CollegeStudentAccepted.objects.values_list(
@@ -522,12 +523,13 @@ def view_applicant_table(request):
     return render(
         request,
         "INB/applicant_list.html",
-        {"records": zip(filtered_applicants, requirement_records)},
+        {"records": zip(filtered_applicants, requirement_records), 'form': form},
     )
 
 
 def financial_assistance_list(request):
     if request.user.is_authenticated:
+        form = AddFinancialAssistanceForm()
         all_applicants = FinancialAssistanceApplication.objects.all()
 
         accepted_applicants = FinancialAssistanceAccepted.objects.values_list(
@@ -550,7 +552,7 @@ def financial_assistance_list(request):
     return render(
         request,
         "FA/applicant_list.html",
-        {"records": zip(filtered_applicants, requirement_records)},
+        {"records": zip(filtered_applicants, requirement_records), 'form': form},
     )
 
 
@@ -768,7 +770,7 @@ def add_information(request, form_type):
     if request.user.is_authenticated:
         if form_type == "applicant":
             form = AddINBForm(request.POST or None)
-            template = "INB/applicant_list.html"
+            template = "INB/add_record.html"
             success_url = "inb_applicant_list"
         elif form_type == "financial_assistance":
             form = AddFinancialAssistanceForm(request.POST or None)

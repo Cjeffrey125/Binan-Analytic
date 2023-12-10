@@ -1,314 +1,233 @@
-{% load static %}
-{% block content %}
+{% load static %} 
 
 
+<link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
 
-<link rel="stylesheet" href="{% static 'css/add_record.css' %}">
+    <h1>Add Record</h1>
 
-
-<div class="form-overall">
-
-
-    <div class="text-headers">
-        <p>Add Record</p>
-    </div>
-
+    <br/>
     <form method="POST" action="{% url 'add_inb_applicant' %}">
         {% csrf_token %}
-
-
-        <div class="text-headers">
-            <p>Personal Data</p>
+        
+        <div class = "text-center">
+            <h3>Personal Data</h3>
         </div>
 
+        <div class="form-group row">
+            <div class="col">
+            {{ form.control_number }}
+        </div>
+        </div>
 
-
-        <div class="ctrlno-field">
-            <div class="field-container">
-                <div class="txt-field">
-                    {{ form.control_number }}
-                </div>
-                <div class="field-label">{{ form.control_number.help_text | safe }}</div>
+        <div class="form-group row">
+            <div class="col">
+                {{ form.first_name }}
+                <div class="subscript">{{ form.first_name.help_text | safe }}</div>
+            </div>
+            <div class="col">
+                {{ form.last_name }}
+                <div class="subscript">{{ form.last_name.help_text | safe }}</div>
+            </div>
+            <div class="col">
+                {{ form.middle_name }}
+                <div class="subscript">{{ form.middle_name.help_text | safe }}</div>
             </div>
         </div>
 
-
-        <!------------------------------------------------>
-
-        <!--name category-->
-
-        <div class="name-field">
-            <div class="field-container">
-                <div class="txt-field">
-                    {{ form.first_name }}
-                </div>
-                <div class="field-label">{{ form.first_name.help_text | safe }}</div>
-            </div>
-
-            <div class="field-container">
-                <div class="txt-field">
-                    {{ form.last_name }}
-                </div>
-                <div class="field-label">{{ form.last_name.help_text | safe }}</div>
-            </div>
-
-            <div class="field-container">
-                <div class="txt-field">
-                    {{ form.middle_name }}
-                </div>
-                <div class="field-label">{{ form.middle_name.help_text | safe }}</div>
-            </div>
-        </div>
-        <!------------------------------------------------>
-
-        <!--address category-->
-
-        <div class="address-field">
-            <div class="field-container">
-                <div class="txt-field">
+        <div class="form-group row">
+            <div class="col">
                     {{ form.blkstr }}
-                </div>
-                <div class="field-label">{{ form.blkstr.help_text | safe }}</div>
+                <div class="subscript">{{ form.blkstr.help_text | safe }}</div>
             </div>
 
-            <div class="field-container">
-                <div class="txt-field">
+            <div class="col">
+              
                     {{ form.barangay }}
-                </div>
-                <div class="field-label">{{ form.barangay.help_text | safe }}</div>
+               
+                <div class="subscript">{{ form.barangay.help_text | safe }}</div>
             </div>
-
-            <div class="field-container">
-                <div class="txt-field">
+            <div class="col">     
                     {{ form.city }}
-                </div>
-                <div class="field-label">{{ form.city.help_text | safe }}</div>
+                <div class="subscript">{{ form.city.help_text | safe }}</div>
             </div>
-
-            <div class="field-container">
-                <div class="txt-field">
+            <div class="col">
                     {{ form.province }}
-                </div>
-                <div class="field-label">{{ form.province.help_text | safe }}</div>
+                <div class="subscript">{{ form.province.help_text | safe }}</div>
             </div>
         </div>
 
-        <!------------------------------------------------>
-
-
-        <!--custom fields 1-->
-        <div class="custom-fields1">
-            <div class="field-container">
-                <div class="radio-buttons">
-                    <input type="radio" id="male" name="gender" value="male">
-                    <label for="male">Male</label>
-                    <input type="radio" id="female" name="gender" value="female">
-                    <label for="female">Female</label>
-                </div>
-                <label for="gender">Gender</label>
+        <div class="form-group row">
+            <div class="input-group col">
+                {{ form.date_of_birth }}
+            </div>
+            <div class="col">
+                {{ form.place_of_birth }}
+            </div>
+            <div class="col">
+                {{ form.gender }}
+            </div>
+            <div class="col">
+                {{ form.contact_no }}
+            </div>
+        </div>
+        
+        <div class="form-group row"> 
+            <div class="col">
+            {{ form.email_address }}
             </div>
 
-            <div class="field-container">
-                <input type="date" id="birth-date" name="birth-date">
-                <label for="birth-date">Birth Date</label>
-            </div>
-
-            <div class="field-container">
-                <div class="txt-field" id="jhs-txt_field">
-                    {{ form.place_of_birth }}
-                </div>
-                <label for="jhs-txt_field">Place of Birth</label>
-            </div>
-
-            <div class="field-container">
-                <div class="txt-field">
-                    {{ form.contact_no }}
-                </div>
-
-                <label>Mobile Number</label>
+            <div class="col">
+            {{ form.school }}
             </div>
         </div>
 
-        <!------------------------------------------------>
-
-        <!--dropdowns-->
-
-        <div class="dropdown-fields">
-            <div class="field-container">
-                {{ form.email_address }}
-                <label>Email</label>
+        <div class="form-group row">
+            <div class="col">
+            {{ form.course }}
+            </div>
+       
+            <div class="col">
+            {{ form.gwa }}
             </div>
 
-            <div class="field-container">
-                {{ form.school }}
-                <label for="country">Preferred School</label>
-            </div>
-
-
-        </div>
-
-        <!------------------------------------------------>
-
-
-
-        <!--dropdown field 2-->
-        <div class="dropdown-fields2">
-            <div class="field-container">
-                {{ form.course }}
-                <label for="country">Desired Course</label>
-            </div>
-
-            <div class="field-container">
-                {{ form.gwa }}
-                <label>Gen Ave</label>
-            </div>
-
-            <div class="field-container">
-                {{ form.rank }}
-                <label>Rank</label>
-            </div>
-
-        </div>
-
-
-
-        <!------------------------------------------------>
-
-
-        <!--custom fields 2-->
-        <div class="custom-fields2">
-            <div class="field-container">
-                {{ form.jhs }}
-                <label for="country">Junior Highschool</label>
-            </div>
-
-            <div class="field-container">
-                <div class="txt-field" id="jhs-txt_field">
-                    {{ form.jhs_address }}
-                </div>
-                <label for="jhs-txt_field">JHS Address</label>
-            </div>
-
-            <div class="field-container">
-                <div class="radio-buttons">
-                    <input type="radio" id="DepEd" name="program" value="DepEd">
-                    <label for="DepEd">DepEd</label>
-
-                    <input type="radio" id="Non-DepEd" name="program" value="Non-DepEd">
-                    <label for="Non-DepEd">Non-DepEd</label>
-                </div>
-                <label for="program">Program</label>
-
+            <div class="col">
+            {{ form.rank }}
             </div>
         </div>
 
-        <!------------------------------------------------>
-
-
-        <!--custom fields 3-->
-        <div class="custom-fields3">
-            <div class="field-container">
-                {{ form.shs }}
-                <label for="country">Senior Highschool</label>
+        <div class="form-group row">
+            <div class="col">
+            {{ form.jhs }}
             </div>
 
-            <div class="field-container">
-                <div class="txt-field" id="jhs-txt_field">
-                    {{ form.shs_address }}
-                </div>
-                <label for="jhs-txt_field">SHS Address</label>
+            <div class="col">
+            {{ form.jhs_address }}
             </div>
 
-            <div class="field-container">
-                <div class="radio-buttons">
-                    <input type="radio" id="DepEd2" name="program2" value="DepEd">
-                    <label for="DepEd2">DepEd</label>
+            <div class="col">
+            {{ form.jhs_educational_provider }}
+            </div>
+        </div>
+     
+        <div class="form-group row">
+            <div class="col">
+            {{ form.shs }}
+            </div>
+    
+            <div class="col">
+            {{ form.shs_address }}
+            </div>
 
-                    <input type="radio" id="Non-DepEd2" name="program2" value="Non-DepEd">
-                    <label for="Non-DepEd2">Non-DepEd</label>
-                </div>
-                <label for="program2">Program</label>
+            <div class="col">
+            {{ form.shs_educational_provider }}
+            </div>
+        </div>
+    
 
+
+        <div class = "text-center">
+            <h3>Family Data</h3>
+        </div>
+
+        <div class="form-group row">
+            <label for="applicant_father">Father</label>
+            <div class="col">
+            {{ form.father_voter_status }}
+            </div>
+
+            <div class="col">
+            {{ form.father_name }}
+            </div>
+        
+            <div class="col">
+            {{ form.father_educational_attainment }}
             </div>
         </div>
 
-
-
-        <!------------------------------------------------>
-
-
-
-
-        <br />
-
-        <div class="text-headers">
-            <p>Family Data</p>
+        <div class="form-group row">
+            <div class="col">
+            {{ form.father_occupation }}
+            </div>
+            <div class="col">
+            {{ form.father_employer}}
+            </div>
         </div>
+        
 
 
+        <div class="form-group row">
+            <label for="applicant_mother">Mother</label>
+            <div class="col">
+            {{ form.mother_voter_status }}
+            </div>
 
+            <div class="col">
+            {{ form.mother_name }}
+            </div>
 
-
-
-        <!--radio set-->
-        <div class="radio-set">
-            <div class="field-container">
-                <div class="radio-buttons">
-                    <input type="radio" id="option1" name="options" value="Father">
-                    <label for="option1">Father</label>
-
-                    <input type="radio" id="option2" name="options" value="Mother">
-                    <label for="option2">Mother</label>
-
-                    <input type="radio" id="option3" name="options" value="Legal Guardian">
-                    <label for="option3">Legal Guardian</label>
-                </div>
-                <label for="options">Choose an Option</label>
+            <div class="col">
+            {{ form.mother_educational_attainment }}
             </div>
         </div>
 
-
-
-        <!------------------------------------------------>
-
-        <!--custom fields 4-->
-
-        <div class="custom-fields4">
-            <div class="field-container">
-                {{ form.father_name }}
-                <label>{{ form.father_name.help_text | safe }}</label>
+        <div class="form-group row">
+            <div class="col">
+            {{ form.mother_occupation}}
             </div>
 
-            <div class="field-container">
-                {{ form.father_educational_attainment }}
-                <label>{{ form.father_educational_attainment.help_text | safe }}</label>
-            </div>
-
-
-            <div class="field-container">
-                {{ form.father_occupation }}
-                <label>{{ form.father_occupation.help_text | safe }}</label>
-            </div>
-
-            <div class="field-container">
-                {{ form.father_employer}}
-                <label>{{ form.father_employer.help_text | safe }}</label>
-            </div>
-
-
-        </div>
-
-        <div class="custom-fields5">
-
-
-            <div class="button-container">
-                <button type="submit" class="submit">Submit</button>
-                <button type="button" class="cancel">Cancel</button>
+            <div class="col">
+            {{ form.mother_employer}}
             </div>
         </div>
 
+        <div class="form-group row">
+            <label for="applicant_guardian">Guardian</label>
+            <div class="col">
+            {{ form.guardian_voter_status }}
+            </div>
+            
+            <div class="col">
+            {{ form.guardian_name }}
+            </div>
 
-</div>
+            <div class="col">
+            {{ form.guardian_educational_attainment }}
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="col">
+            {{ form.guardian_occupation }}
+            </div>
+
+            <div class="col">
+            {{ form.guardian_employer }}
+            </div>
+        </div>
+     
+        
+        <div class = "text-center">
+            <button type="submit" class="modal-button">Save Record</button>
+        </div>
+
+    </form>
 
 
-{% endblock %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var dateOfBirthSelect = document.getElementById("id_date_of_birth");
+            dateOfBirthSelect.addEventListener("change", function() {
+                dateOfBirthSelect.classList.remove("placeholder");
+            });
+        });
+
+        
+    </script>
+    <style>
+        #id_date_of_birth.placeholder {
+            color: #6c757d;
+        }
+    </style>
+
+
+

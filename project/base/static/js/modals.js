@@ -5,11 +5,9 @@ document.getElementById('openSchoolForm').addEventListener('click', function () 
 });
 
 
-/*function ng applicant_list*/
-
 document.addEventListener("DOMContentLoaded", function() {
     var dateOfBirthSelect = document.getElementById("id_date_of_birth");
     dateOfBirthSelect.addEventListener("change", function() {
         dateOfBirthSelect.classList.remove("placeholder");
-    });
+    }); 
 });
