@@ -136,7 +136,7 @@ class ApplicantInfoRepositoryINB(models.Model):
     )
 
     fullname = models.CharField(max_length=250, default="")
-
+    
     blkstr = models.CharField(max_length=100, default="")
     barangay = models.CharField(max_length=100, default="Unknown")
     province = models.CharField(max_length=100, default="Unknown")
