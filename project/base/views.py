@@ -922,41 +922,6 @@ def navbar_user(request):
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-def update_requirement(request):
-    return render(request, "Admin/update-requirement.html")
-
-
-def add_requirement(request, form_type):
-    if request.user.is_authenticated:
-        if form_type == "inb":
-            form = INBRequirementList(request.POST or None)
-            template = "Admin/inb-requirements.html"
-            model_class = INBRequirementRepository
-
-        elif form_type == "fa":
-            form = FARequirementList(request.POST or None)
-            template = "Admin/fa-requirements.html"
-            model_class = FARequirementRepository
-
-        else:
-            messages.error(request, "Invalid form type.")
-            return redirect("home")
-
-        if request.method == "POST":
-            if form.is_valid():
-                requirement_data = form.cleaned_data
-                requirement_instance = model_class.objects.create(**requirement_data)
-                messages.success(request, "Requirements Successfully Added")
-                return redirect("update_req")
-
-        return render(request, template, {"form": form})
-    else:
-        messages.error(request, "You need to be logged in for this process.")
-        return redirect("home")
-
-
 def school_course_list(request):
     schools = INBSchool.objects.all()
 
@@ -1122,6 +1087,84 @@ def filter(request):
         "filtered_applicants": filtered_applicants,
     }
     return render(request, "sidebar_filter.html", context)
+
+
+def update_requirement(request):
+    inb_requirement_list = INBRequirementRepository.objects.all()
+    fa_requirement_list = FARequirementRepository.objects.all()
+    return render(request, 'Admin/update-requirement.html', {'inb_requirements': inb_requirement_list, 'fa_requirements': fa_requirement_list})
+
+def render_requirement(request, form_type):
+    if request.user.is_authenticated:
+        template = 'Admin/update-requirement.html'
+        requirements = None
+
+        if form_type == 'inb':
+            template = 'Admin/inb-requirements.html'
+            requirements = INBRequirementRepository.objects.all()
+        elif form_type == 'fa':
+            template = 'Admin/fa-requirements.html'
+            requirements = FARequirementRepository.objects.all()
+        else:
+            messages.error(request, "Invalid form type.")
+            return redirect('home')
+
+        return render(request, template, {'requirements': requirements, 'form_type': form_type})
+    else:
+        messages.error(request, "You need to be logged in for this process.")
+        return redirect('home')
+                  
+def add_requirement(request, form_type):
+    if request.user.is_authenticated:
+        if form_type == 'inb':
+            form = INBRequirementList(request.POST or None)
+            model_class = INBRequirementRepository
+        elif form_type == 'fa':
+            form = FARequirementList(request.POST or None)
+            model_class = FARequirementRepository
+        else:
+            messages.error(request, "Invalid form type.")
+            return redirect('home')
+
+        if request.method == "POST":
+            if form.is_valid():
+                requirement_data = form.cleaned_data
+                requirement_instance = model_class.objects.create(**requirement_data)
+                messages.success(request, "Requirements Successfully Added")
+                return redirect('update_req')
+
+        return render(request, 'Admin/update-requirement.html', {'form': form})
+    else:
+        messages.error(request, "You need to be logged in for this process.")
+        return redirect('home')
+
+def update_inb_requirement(request, requirement_id):
+    requirement = get_object_or_404(INBRequirementRepository, id=requirement_id)
+
+    if request.method == 'POST':
+        form = INBRequirementList(request.POST, instance=requirement)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Updated the Requirement Successfully')
+            return redirect('inb_requirement')  
+    else:
+        form = INBRequirementList(instance=requirement)
+
+    return render(request, 'Admin/inb-requirements.html', {'requirement': requirement, 'form': form})
+
+def update_fa_requirement(request, requirement_id):
+    requirement = get_object_or_404(FARequirementRepository, id=requirement_id)
+
+    if request.method == 'POST':
+        form = FARequirementList(request.POST, instance=requirement)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Updated the Requirement Successfully')
+            return redirect('fa_requirement')  
+    else:
+        form = FARequirementList(instance=requirement)
+
+    return render(request, 'Admin/fa-requirements.html', {'requirement': requirement, 'form': form})
 
 
 def test1(request):

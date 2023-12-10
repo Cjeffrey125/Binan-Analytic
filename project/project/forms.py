@@ -31,34 +31,21 @@ class INBCourseForm(forms.ModelForm):
         fields = ["course", "acronym"]
 
 
-class INBRequirementList(forms.Form):
-    requirement = forms.CharField(
-        required=True,
-        widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Add New Requirements", "class": "form-control"}
-        ),
-        label="",
-    )
+class INBRequirementList(forms.ModelForm):
+    class Meta:
+        model = INBRequirementRepository
+        fields = ["requirement"]
+        widgets = {
+            'requirement': forms.TextInput(attrs={"placeholder": "Add New Requirements", "class": "form-control"})
+        }
 
-
-class Meta:
-    model = INBRequirementRepository
-    fields = ["requirement"]
-
-
-class FARequirementList(forms.Form):
-    requirement = forms.CharField(
-        required=True,
-        widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Add New Requirements", "class": "form-control"}
-        ),
-        label="",
-    )
-
-
-class Meta:
-    model = FARequirementRepository
-    fields = ["requirement"]
+class FARequirementList(forms.ModelForm):
+    class Meta:
+        model = FARequirementRepository
+        fields = ["requirement"]
+        widgets = {
+            'requirement': forms.TextInput(attrs={"placeholder": "Add New Requirements", "class": "form-control"})
+        }
 
 
 class ApplicantUploadForm(forms.Form):
