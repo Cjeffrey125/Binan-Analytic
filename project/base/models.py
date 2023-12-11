@@ -5,6 +5,7 @@ class CollegeStudentApplication(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     control_number = models.CharField(unique=True, max_length=50)
+
     # personal data
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -121,6 +122,15 @@ class CollegeStudentAccepted(models.Model):
     school_year = models.CharField(max_length=50, default="1st Years")
     course = models.CharField(max_length=50, default="")
     school = models.CharField(max_length=150, default="")
+
+
+class CollegeStudentAssesment(models.Model):
+    control_number = models.CharField(primary_key=True, max_length=50)
+    fullname = models.CharField(max_length=50)
+    remarks = models.CharField(max_length=200, default="")
+    status = models.CharField(
+        max_length=20, choices=(("Accepted", "Accepted"), ("Rejected", "Rejected"))
+    )
 
 
 class CollegeStudentRejected(models.Model):
@@ -302,6 +312,14 @@ class FinancialAssistanceRejected(models.Model):
     remarks = models.CharField(max_length=200, default="")
 
 
+class FinancialAssistanceAssesment(models.Model):
+    control_number = models.CharField(primary_key=True, max_length=50)
+    fullname = models.CharField(max_length=50)
+    school_year = models.CharField(max_length=50, default="1st Years")
+    course = models.CharField(max_length=50, default="")
+    school = models.CharField(max_length=50, default="")
+
+
 class FinancialAssistanceInfoRepository(models.Model):
     control_number = models.CharField(unique=True, max_length=50)
     status = models.CharField(
@@ -373,7 +391,7 @@ class INBSchool(models.Model):
 
     def __str__(self):
         return self.school
-    
+
     def delete(self, *args, **kwargs):
         INBCourse.objects.filter(school_id=self.id).delete()
         super().delete(*args, **kwargs)

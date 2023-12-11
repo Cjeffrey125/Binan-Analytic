@@ -4,8 +4,9 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<link rel="stylesheet" href="{% static 'css/table.css' %}">
 
+<link rel="stylesheet" href="{% static 'css/import_modal.css' %}">
+<link rel="stylesheet" href="{% static 'css/table_list.css' %}">
 
 <div class="container">
   <div class="d-flex">
@@ -16,26 +17,32 @@
     <div class="main-content ms-auto">
 
       <div class="container-fluid">
+        
         <h1>Iskolar ng Bayan</h1>
         <div class="box">
 
           <div>
-            <a href="{% url 'add_inb_applicant' %}">
-              <img src="{% static 'images/add.png' %}" class="img-resize">
-            </a>
+            <button type="button" id="openSchoolForm">
+              <img src="{% static 'images/add.png' %}" alt="Add" class="img-resize">
+            </button>
 
-          <button type="button" id="importButton">
-              <img src="{% static 'images/upload.png' %}" class="img-resize">
-          </button>
+            <button type="button" id="importButton" class="image-button">
+              <img src="{% static 'images/upload.png' %}" alt="Upload" class="img-resize">
+            </button>
 
             <a href="{% url 'export' %}">
               <img src="{% static 'images/download.png' %}" class="img-resize">
             </a>
+            
+            <form method="post" action="{% url 'inb_filter_applicants' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondary">Filter Applicants</button>
+            </form>
 
           </div>
 
-          {% if records %}
           <div class="table-container">
+            {% if records %}
             <table class="table">
               <thead>
                 <tr>
@@ -70,59 +77,37 @@
           <div class="d-flex justify-content-center">
             <h1>There are no applicants.</h1>
           </div>
-          {% endif %}
+            {% endif %}
         </div>
       </div>
     </div>
   </div>
 </div>
+{% endif %}
 
-
-<div id="ImportFormContainer" class="modal-container">
-  <div class="modal-course">
-    <div class="center-course">
-      <form method="post" enctype="multipart/form-data">
-          {% csrf_token %}
-          <label for="id_file">Choose File:</label>
-          <input type="file" name="file" id="id_file">
-          <button type="submit" class="modal-button">Import</button>
-      </form>
-      <button type="button" id="closeButton" class="modals-button">Close</button>
-      </div>
+<div id="schoolFormContainer" class="modal-container">
+  <div class="modal-box">
+    <form method="POST" action="{% url 'add_inb_applicant' %}">
+        {% include 'INB/add_record.html' %}
+    </form>
   </div>
 </div>
 
-
+<script src="{% static 'js/modals.js' %}"></script>
 <script>
- document.addEventListener('DOMContentLoaded', function () {
-    var modalContainer = document.getElementById('ImportFormContainer');
-    var importButton = document.getElementById('importButton');
-    var closeButton = document.getElementById('closeButton');
-    var form = document.querySelector('#ImportFormContainer form');
-
-    importButton.addEventListener('click', function () {
-      modalContainer.style.display = 'block';
+  document.addEventListener("DOMContentLoaded", function () {
+    var dateOfBirthSelect = document.getElementById("id_date_of_birth");
+    dateOfBirthSelect.addEventListener("change", function () {
+      dateOfBirthSelect.classList.remove("placeholder");
     });
 
-    closeButton.addEventListener('click', function () {
-      modalContainer.style.display = 'none';
-    });
+    var schoolForm = document.getElementById("schoolForm");
 
-    form.addEventListener('submit', function (event) {
-      event.preventDefault();
-
-     
-      console.log('Form submitted!');
-
-    });
-
-    window.addEventListener('click', function (event) {
-      if (event.target === modalContainer) {
-        modalContainer.style.display = 'none';
-      }
+    document.getElementById('openSchoolForm').addEventListener('click', function () {
+      document.getElementById('schoolFormContainer').style.display = 'flex';
+      initializeInputBox();
     });
   });
 </script>
 
-{% endif %}
 {% endblock %}

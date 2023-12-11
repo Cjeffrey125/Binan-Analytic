@@ -36,15 +36,20 @@ class INBRequirementList(forms.ModelForm):
         model = INBRequirementRepository
         fields = ["requirement"]
         widgets = {
-            'requirement': forms.TextInput(attrs={"placeholder": "Add New Requirements", "class": "form-control"})
+            "requirement": forms.TextInput(
+                attrs={"placeholder": "Add New Requirements", "class": "form-control"}
+            )
         }
+
 
 class FARequirementList(forms.ModelForm):
     class Meta:
         model = FARequirementRepository
         fields = ["requirement"]
         widgets = {
-            'requirement': forms.TextInput(attrs={"placeholder": "Add New Requirements", "class": "form-control"})
+            "requirement": forms.TextInput(
+                attrs={"placeholder": "Add New Requirements", "class": "form-control"}
+            )
         }
 
 
@@ -136,75 +141,16 @@ class ExportForm(forms.Form):
 
 class AddINBForm(forms.ModelForm):
     GENDER_CHOICES = [
-        ("0", "Select Gender"),
-        ("Male", "Male"),
-        ("Female", "Female"),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
     ]
 
     EDUCATIONAL_PROVIDERS = [
-        ("0", "Choose Educational Provider"),
         ("Deped", "DepEd"),
         ("Non-Deped", "Non-DepEd"),
     ]
 
-    COURSES_OFFERED = [
-        ("0", "Choose Course"),
-        ("BS Psychology", "BS Psychology"),
-        ("BS Foreign Service", "BS Foreign Service"),
-        ("BS Computer Science", "BS Computer Science"),
-        ("BS Information Technology", "BS Information Technology"),
-        (
-            "Bachelor of Technical-Vocational Teacher Education",
-            "Bachelor of Technical-Vocational Teacher Education",
-        ),
-        ("BS Criminology", "BS Criminology"),
-        ("BS Accountancy", "BS Accountancy"),
-        ("Bachelor of Elementary Education", "Bachelor of Elementary Education"),
-        ("BSED English", "BSED English"),
-        ("BSED Filipino", "BSED Filipino"),
-        ("BSED Social Studies", "BSED Social Studies"),
-        ("BS Computer Engineering", "BS Computer Engineering"),
-        ("BS Industrial Engineering", "BS Industrial Engineering"),
-        ("BS Social Work", "BS Social Work"),
-        ("BS Nursing", "BS Nursing"),
-        ("BSED Math", "BSED Math"),
-        ("Doctor of Dental Medicine", "Doctor of Dental Medicine"),
-        ("Medical Technology", "Medical Technology"),
-        ("Midwifery", "Midwifery"),
-        ("Nursing", "Nursing"),
-        ("Occupational Therapy", "Occupational Therapy"),
-        ("Pharmacy", "Pharmacy"),
-        ("Physical Therapy", "Physical Therapy"),
-        ("Pharmacy", "Pharmacy"),
-        ("Radiologic Technology", "Radiologic Technology"),
-        ("BS Architecture", "BS Architecture"),
-        (
-            "Bachelor of Library and Information Science",
-            "Bachelor of Library and Information Science",
-        ),
-        (
-            "Bachelor of Early Childhood Education",
-            "Bachelor of Early Childhood Education",
-        ),
-        ("Bachelor of Physical Education", "Bachelor of Physical Education"),
-        (
-            "Bachelor of Special Needs Education - Generalist",
-            "Bachelor of Special Needs Education - Generalist",
-        ),
-        (
-            "Bachelor of Technology & Livelihood Education",
-            "Bachelor of Technology & Livelihood Education",
-        ),
-        ("Bachelor of Secondary Education", "Bachelor of Secondary Education"),
-        ("BS Civil Engineering", "BS Civil Engineering"),
-        ("BS Electrical Engineering", "BS Electrical Engineering"),
-        ("BS Electronics Engineering", "BS Electronics Engineering"),
-        ("BS Mechanical Engineering", "BS Mechanical Engineering"),
-        ("BS Nutrition and Dietetics", "BS Nutrition and Dietetics"),
-    ]
-
     VOTER_STATUS = [
-        ("0", "Select Status"),
         ("Registered Voter", "Registered Voter"),
         ("Not Registered Voter", "Not Registered Voter"),
     ]
@@ -212,7 +158,7 @@ class AddINBForm(forms.ModelForm):
     control_number = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Control Number", "class": "form-control"}
+            attrs={"placeholder": "Control Number", "class": "control-number-input"}
         ),
         label="",
     )
@@ -220,44 +166,41 @@ class AddINBForm(forms.ModelForm):
     # Personal Data
     first_name = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "form-control"}),
-        help_text='<span class="subscript">First Name</span>',
+        widget=forms.widgets.TextInput(attrs={"class": "name-input", "placeholder":"First name"}),
         label="",
     )
     last_name = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "form-control"}),
-        help_text='<span class="subscript">Surname</span>',
+        widget=forms.widgets.TextInput(attrs={"class": "name-input", "placeholder":"Last name"}),
         label="",
     )
     middle_name = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "form-control"}),
-        help_text='<span class="subscript">Middle Name</span>',
+        widget=forms.widgets.TextInput(attrs={"class": "name-input", "placeholder":"Middle Name"}),
         label="",
     )
 
     blkstr = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "form-control"}),
+        widget=forms.widgets.TextInput(attrs={"class": "address-input-1", "placeholder":"Number/Block/Street"}),
         help_text='<span class="subscript">Blk Street</span>',
         label="",
     )
     barangay = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "form-control"}),
+        widget=forms.widgets.TextInput(attrs={"class": "address-input-2", "placeholder":"Barangay"}),
         help_text='<span class="subscript">Barangay</span>',
         label="",
     )
     province = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "form-control"}),
+        widget=forms.widgets.TextInput(attrs={"class": "address-input-2", "placeholder":"Province"}),
         help_text='<span class="subscript">Province</span>',
         label="",
     )
     city = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "form-control"}),
+        widget=forms.widgets.TextInput(attrs={"class": "address-input-2", "placeholder":"City"}),
         help_text='<span class="subscript">City</span>',
         label="",
     )
@@ -265,28 +208,28 @@ class AddINBForm(forms.ModelForm):
     gender = forms.ChoiceField(
         required=True,
         choices=GENDER_CHOICES,
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.RadioSelect(attrs={"class": "radio-container"}),
         label="",
     )
+    
 
     date_of_birth = forms.DateField(
         required=True,
-        widget=forms.SelectDateWidget(attrs={"class": "form-control"}),
-        help_text='<span class="subscript">Date of Birth</span>',
+        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
         label="Date of Birth",
     )
 
     place_of_birth = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Place of Birth", "class": "form-control"}
+            attrs={"class":"place-birth-input", "placeholder":"Place of Birth"}
         ),
         label="",
     )
     contact_no = forms.IntegerField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Contact No", "class": "form-control"}
+            attrs={"class":"contact-input", "placeholder":"Contact Number"}
         ),
         label="",
     )
@@ -294,35 +237,35 @@ class AddINBForm(forms.ModelForm):
     email_address = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Email Address", "class": "form-control"}
+            attrs={"class":"half-input", "placeholder":"Email Address"}
         ),
         label="",
     )
 
     school = forms.ChoiceField(
-        required=True,
-        choices=[('0', 'Choose School')],
-        widget=forms.Select(attrs={"class": "form-control"}),
-        label="",
-    )
+    required=True,
+    choices=[("0", "Choose School")],
+    widget=forms.Select(attrs={"class": "custom-dropdown"}),
+    label="",
+)
 
     course = forms.ChoiceField(
         required=True,
-        choices=[('0', 'Choose Course')],
-        widget=forms.Select(attrs={"class": "form-control"}),
+        choices=[("0", "Choose Course")],
+        widget=forms.Select(attrs={"class": "course-dropdown"}),
         label="",
     )
     gwa = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "General Weighted Average", "class": "form-control"}
+            attrs={"placeholder": "General Weighted Average", "class": "rank-gwa-input"}
         ),
         label="",
     )
     rank = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Rank", "class": "form-control"}
+            attrs={"placeholder": "Rank", "class": "rank-gwa-input"}
         ),
         label="",
     )
@@ -330,42 +273,44 @@ class AddINBForm(forms.ModelForm):
     jhs = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Junior High School", "class": "form-control"}
+            attrs={"placeholder": "Junior High School", "class": "prev-school"}
         ),
         label="",
     )
     jhs_address = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "SHS Address", "class": "form-control"}
+            attrs={"placeholder": "SHS Address", "class": "prev-school"}
         ),
         label="",
     )
+    
     jhs_educational_provider = forms.ChoiceField(
         required=True,
         choices=EDUCATIONAL_PROVIDERS,
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.RadioSelect(attrs={"class": "radio-container"}),
         label="",
     )
 
     shs = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Senior High School", "class": "form-control"}
+            attrs={"placeholder": "Senior High School", "class": "prev-school"}
         ),
         label="",
     )
     shs_address = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "SHS Address", "class": "form-control"}
+            attrs={"placeholder": "SHS Address", "class": "prev-school"}
         ),
         label="",
     )
+
     shs_educational_provider = forms.ChoiceField(
         required=True,
         choices=EDUCATIONAL_PROVIDERS,
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.RadioSelect(attrs={"class": "radio-container"}),
         label="",
     )
 
@@ -373,34 +318,34 @@ class AddINBForm(forms.ModelForm):
     father_voter_status = forms.ChoiceField(
         required=True,
         choices=VOTER_STATUS,
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.RadioSelect(attrs={"class": "radio-container"}),
         label="",
     )
     father_name = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Father Name", "class": "form-control"}
+            attrs={"placeholder": "Father Name", "class": "prev-school"}
         ),
         label="",
     )
     father_educational_attainment = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Educational Attainment", "class": "form-control"}
+            attrs={"placeholder": "Educational Attainment", "class": "prev-school"}
         ),
         label="",
     )
     father_occupation = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Occupation", "class": "form-control"}
+            attrs={"placeholder": "Occupation", "class": "prev-school"}
         ),
         label="",
     )
     father_employer = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Name of Employer", "class": "form-control"}
+            attrs={"placeholder": "Name of Employer", "class": "prev-school"}
         ),
         label="",
     )
@@ -408,34 +353,34 @@ class AddINBForm(forms.ModelForm):
     mother_voter_status = forms.ChoiceField(
         required=True,
         choices=VOTER_STATUS,
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.RadioSelect(attrs={"class": "radio-container"}),
         label="",
     )
     mother_name = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Mother Name", "class": "form-control"}
+            attrs={"placeholder": "Mother Name", "class": "prev-school"}
         ),
         label="",
     )
     mother_educational_attainment = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Educational Attainment", "class": "form-control"}
+            attrs={"placeholder": "Educational Attainment", "class": "prev-school"}
         ),
         label="",
     )
     mother_occupation = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Occupation", "class": "form-control"}
+            attrs={"placeholder": "Occupation", "class": "prev-school"}
         ),
         label="",
     )
     mother_employer = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Name of Employer", "class": "form-control"}
+            attrs={"placeholder": "Name of Employer", "class": "prev-school"}
         ),
         label="",
     )
@@ -443,34 +388,34 @@ class AddINBForm(forms.ModelForm):
     guardian_voter_status = forms.ChoiceField(
         required=True,
         choices=VOTER_STATUS,
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.RadioSelect(attrs={"class": "radio-container"}),
         label="",
     )
     guardian_name = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Legal Guardian Name", "class": "form-control"}
+            attrs={"placeholder": "Legal Guardian Name", "class": "prev-school"}
         ),
         label="",
     )
     guardian_educational_attainment = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Educational Attainment", "class": "form-control"}
+            attrs={"placeholder": "Educational Attainment", "class": "prev-school"}
         ),
         label="",
     )
     guardian_occupation = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Occupation", "class": "form-control"}
+            attrs={"placeholder": "Occupation", "class": "prev-school"}
         ),
         label="",
     )
     guardian_employer = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Name of Employer", "class": "form-control"}
+            attrs={"placeholder": "Name of Employer", "class": "prev-school"}
         ),
         label="",
     )
@@ -483,13 +428,13 @@ class AddINBForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        distinct_courses = INBCourse.objects.values_list('course', flat=True).distinct()
+        distinct_courses = INBCourse.objects.values_list("course", flat=True).distinct()
         course_choices = [(course, course) for course in distinct_courses]
-        self.fields['course'].choices = [("", "Select a course")] + course_choices
+        self.fields["course"].choices = [("", "Select a course")] + course_choices
 
         schools = INBSchool.objects.all()
         school_choices = [(str(school.school), school.school) for school in schools]
-        self.fields['school'].choices = [('0', 'Choose School')] + school_choices
+        self.fields["school"].choices = [("0", "Choose School")] + school_choices
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -582,8 +527,7 @@ class AddFinancialAssistanceForm(forms.ModelForm):
 
     date_of_birth = forms.DateField(
         required=True,
-        widget=forms.SelectDateWidget(attrs={"class": "form-control"}),
-        help_text='<span class="subscript">Date of Birth</span>',
+        widget=forms.SelectDateWidget(attrs={"class": "date-input"}),
         label="Date of Birth",
     )
 
@@ -793,3 +737,5 @@ class AddFinancialAssistanceForm(forms.ModelForm):
         model = FinancialAssistanceApplication
 
         exclude = ("user",)
+
+

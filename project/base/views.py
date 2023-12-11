@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils.datastructures import MultiValueDictKeyError
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from project.forms import (
@@ -16,11 +17,13 @@ from .models import (
     CollegeStudentApplication,
     CollegeRequirements,
     CollegeStudentAccepted,
+    CollegeStudentAssesment,
     CollegeStudentRejected,
     ApplicantInfoRepositoryINB,
     FinancialAssistanceApplication,
     FinancialAssistanceRequirement,
     FinancialAssistanceAccepted,
+    FinancialAssistanceAssesment,
     FinancialAssistanceRejected,
     FinancialAssistanceInfoRepository,
     INBRequirementRepository,
@@ -34,7 +37,8 @@ import csv
 import pandas as pd
 from import_export import resources
 from django.db.models import Q
-
+import datetime
+from django.utils import timezone
 
 
 class CollegeStudentApplicationResource(resources.ModelResource):
@@ -61,11 +65,9 @@ def import_excel(request):
             file = request.FILES["file"]
             df = pd.read_excel(file, na_values=["N/A", "-", "Not Available"])
 
-          
             df = df.fillna("N/A")
 
-        
-            date_columns = ["Date of Birth"]  
+            date_columns = ["Date of Birth"]
             for col in date_columns:
                 df[col] = pd.to_datetime(df[col], errors="coerce").dt.strftime(
                     "%Y-%m-%d"
@@ -123,7 +125,6 @@ def import_excel(request):
                             guardian_occupation=row["Guardian Occupation"],
                         )
                     else:
-                      
                         sibling_count = row["Sibling Count"]
                         if pd.isna(sibling_count) or sibling_count == 0:
                             messages.warning(
@@ -250,14 +251,19 @@ def csv_record(request):
 # Login  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 def login_user(request):
     if request.method == "POST":
-        username = request.POST["user_name"]
-        password = request.POST["user_password"]
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect("dashboard")
-        else:
-            messages.error(request, "Incorrect username or password.")
+        try:
+            username = request.POST["username"]
+            password = request.POST["user_password"]
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect("dashboard")
+            else:
+                messages.error(request, "Incorrect username or password.")
+        except MultiValueDictKeyError:
+            # Handle the error, perhaps redirect to the login page with an error message.
+            messages.error(request, "Please provide a username.")
+            return render(request, "login.html")
     return render(request, "login.html")
 
 
@@ -286,10 +292,13 @@ def register_user(request):
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+def current_datetime(request):
+    now = timezone.now()
+    return render(request, "dashboard.html", {"now": now})
 
 
-# render data in dashboard
 def data_visualization(request):
+    course_list = INBCourse.objects.all()
     school_counts = (
         CollegeStudentApplication.objects.values("school")
         .exclude(school="0")
@@ -324,6 +333,7 @@ def data_visualization(request):
             "data": data,
             "count": total_students,
             "students_per_school": students_per_school,
+            "course_list": course_list,
         },
     )
 
@@ -341,7 +351,10 @@ def fa_filter_applicants(request):
                 place_of_birth=applicant.place_of_birth,
                 gender=applicant.gender,
                 religion=applicant.religion,
-                address=applicant.address,
+                blkstr=applicant.blkstr,
+                barangay=applicant.barangay,
+                city=applicant.city,
+                province=applicant.province,
                 email_address=applicant.email_address,
                 contact_no=applicant.contact_no,
                 general_average=applicant.general_average,
@@ -415,7 +428,10 @@ def inb_filter_applicants(request):
             ApplicantInfoRepositoryINB.objects.get_or_create(
                 control_number=applicant.control_number,
                 fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                address=applicant.address,
+                blkstr=applicant.blkstr,
+                barangay=applicant.barangay,
+                province=applicant.province,
+                city=applicant.city,
                 gender=applicant.gender,
                 date_of_birth=applicant.date_of_birth,
                 place_of_birth=applicant.place_of_birth,
@@ -456,6 +472,10 @@ def inb_filter_applicants(request):
             collegerequirements__requirement=13
         ).distinct()
 
+        pending_applicants = CollegeStudentApplication.objects.exclude(
+            collegerequirements__requirement=13
+        ).distinct()
+
         for applicant in accepted_applicants:
             ApplicantInfoRepositoryINB.objects.filter(
                 control_number=applicant.control_number
@@ -466,6 +486,21 @@ def inb_filter_applicants(request):
                 school=applicant.school,
                 course=applicant.course,
             )
+            CollegeStudentApplication.objects.filter(
+                control_number=applicant.control_number
+            ).delete()
+
+        for applicant in pending_applicants:
+            ApplicantInfoRepositoryINB.objects.filter(
+                control_number=applicant.control_number
+            ).update(status="For Assesment")
+            CollegeStudentAssesment.objects.create(
+                control_number=applicant.control_number,
+                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+            )
+            CollegeStudentApplication.objects.filter(
+                control_number=applicant.control_number
+            ).delete()
 
         for applicant in rejected_applicants:
             ApplicantInfoRepositoryINB.objects.filter(
@@ -475,11 +510,13 @@ def inb_filter_applicants(request):
                 control_number=applicant.control_number,
                 fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
             )
+            CollegeStudentApplication.objects.filter(
+                control_number=applicant.control_number
+            ).delete()
 
-        CollegeStudentApplication.objects.filter(
-            Q(control_number__in=accepted_applicants.values("control_number"))
-            | Q(control_number__in=rejected_applicants.values("control_number"))
-        ).delete()
+            # create an assesment function for pending applicant
+
+        #
 
         messages.success(request, "Applicants have been successfully filtered.")
     else:
@@ -488,18 +525,27 @@ def inb_filter_applicants(request):
     return redirect("inb_applicant_list")
 
 
+# ---------------------------------------------
+
+
+def inb_pending_assesment(request):
+    pending_applicant = ApplicantInfoRepositoryINB.objects.all()
+    return render(request, "INB/inb_pending_list.html", {"pending": pending_applicant})
+
+
 # ------------------------------------------------------------------------------------------------------------------------
 
 
 # CRUD
-def view_applicant_table(request):
+def iskolar_ng_bayan_list(request):
     if request.user.is_authenticated:
+        form = AddINBForm()
         all_applicants = CollegeStudentApplication.objects.all()
 
         accepted_applicants = CollegeStudentAccepted.objects.values_list(
             "control_number", flat=True
         )
-        rejected_applicants = CollegeStudentRejected.objects.values_list(
+        rejected_applicants = CollegeStudentAssesment.objects.values_list(
             "control_number", flat=True
         )
 
@@ -516,12 +562,13 @@ def view_applicant_table(request):
     return render(
         request,
         "INB/applicant_list.html",
-        {"records": zip(filtered_applicants, requirement_records)},
+        {"records": zip(filtered_applicants, requirement_records), "form": form},
     )
 
 
 def financial_assistance_list(request):
     if request.user.is_authenticated:
+        form = AddFinancialAssistanceForm()
         all_applicants = FinancialAssistanceApplication.objects.all()
 
         accepted_applicants = FinancialAssistanceAccepted.objects.values_list(
@@ -544,7 +591,7 @@ def financial_assistance_list(request):
     return render(
         request,
         "FA/applicant_list.html",
-        {"records": zip(filtered_applicants, requirement_records)},
+        {"records": zip(filtered_applicants, requirement_records), "form": form},
     )
 
 
@@ -922,49 +969,59 @@ def school_course_list(request):
     schools_with_courses = []
     for school in schools:
         courses = INBCourse.objects.filter(school_id=school.id)
-        schools_with_courses.append({
-            'school': school,
-            'courses': courses,
-        })
+        schools_with_courses.append(
+            {
+                "school": school,
+                "courses": courses,
+            }
+        )
 
-    return render(request, 'Admin/list_course_school.html', {'schools_with_courses': schools_with_courses, 'schools': schools})
+    return render(
+        request,
+        "Admin/list_course_school.html",
+        {"schools_with_courses": schools_with_courses, "schools": schools},
+    )
 
 
 def create_school(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = INBSchoolForm(request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, "School Successfully Added")
-            return redirect('sc_list')  
+            return redirect("sc_list")
     else:
         form = INBSchoolForm()
 
-    return render(request, 'Admin/list-school-course.html', {'school_form': form})
+    return render(request, "Admin/list-school-course.html", {"school_form": form})
+
 
 def add_course(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = INBCourseForm(request.POST)
         if form.is_valid():
-            selected_schools = request.POST.getlist('schools')
+            selected_schools = request.POST.getlist("schools")
             course_data = form.cleaned_data
 
             for school_id in selected_schools:
                 course_instance = INBCourse(
-                    course=course_data['course'],
-                    acronym=course_data['acronym'],
-                    school_id=int(school_id)
+                    course=course_data["course"],
+                    acronym=course_data["acronym"],
+                    school_id=int(school_id),
                 )
                 course_instance.save()
 
             messages.success(request, "Course(s) Successfully Added")
-            return redirect('sc_list')
+            return redirect("sc_list")
     else:
         form = INBCourseForm()
 
     schools = INBSchool.objects.all()
-    return render(request, 'Admin/list_course_school.html', {'course_form': form, 'schools': schools})
-
+    return render(
+        request,
+        "Admin/list_course_school.html",
+        {"course_form": form, "schools": schools},
+    )
 
 
 def update_list(request):
@@ -974,85 +1031,101 @@ def update_list(request):
 
     for school in schools:
         school_courses = INBCourse.objects.filter(school_id=school.id)
-        schools_with_courses.append({
-            'school': school,
-            'courses': school_courses,
-            'form': INBSchoolForm(),  
-        })
+        schools_with_courses.append(
+            {
+                "school": school,
+                "courses": school_courses,
+                "form": INBSchoolForm(),
+            }
+        )
 
-    return render(request, 'Admin/update-school-course.html', {'schools_with_courses': schools_with_courses, 'all_courses': courses})
+    return render(
+        request,
+        "Admin/update-school-course.html",
+        {"schools_with_courses": schools_with_courses, "all_courses": courses},
+    )
 
 
 def update_school_list(request, school_id):
     school = get_object_or_404(INBSchool, id=school_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = INBSchoolForm(request.POST, instance=school)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Updated the Data Successfully')
-            return redirect('sc_list')  
+            messages.success(request, "Updated the Data Successfully")
+            return redirect("sc_list")
     else:
         form = INBSchoolForm(instance=school)
 
-    return render(request, 'Admin/update-school-course.html', {'school': school, 'form': form})
+    return render(
+        request, "Admin/update-school-course.html", {"school": school, "form": form}
+    )
+
 
 def update_course_list(request, course_id):
     course = get_object_or_404(INBCourse, id=course_id)
 
-    if request.method == 'POST':
-        print(request.method)  
-        print(request.POST) 
+    if request.method == "POST":
+        print(request.method)
+        print(request.POST)
         form = INBCourseForm(request.POST, instance=course)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Updated the Data Successfully')
-            return redirect('sc_list')
+            messages.success(request, "Updated the Data Successfully")
+            return redirect("sc_list")
     else:
         form = INBCourseForm(instance=course)
 
-    return render(request, 'Admin/update-school-course.html', {'course': course, 'form': form})
+    return render(
+        request, "Admin/update-school-course.html", {"course": course, "form": form}
+    )
 
 
 def delete_item(request, item_type, item_id):
-    if item_type == 'school':
+    if item_type == "school":
         model_class = INBSchool
-        success_message = 'School and Courses Deleted Successfully'
-    elif item_type == 'course':
+        success_message = "School and Courses Deleted Successfully"
+    elif item_type == "course":
         model_class = INBCourse
-        success_message = 'Course Deleted Successfully'
+        success_message = "Course Deleted Successfully"
     else:
-        return redirect('sc_list')
+        return redirect("sc_list")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         item = get_object_or_404(model_class, pk=item_id)
-        if item_type == 'school':
+        if item_type == "school":
             item.inbcourse_set.all().delete()
         item.delete()
         messages.success(request, success_message)
-        return redirect('sc_list')
+        return redirect("sc_list")
 
-    return redirect('sc_list')
+    return redirect("sc_list")
+
 
 def filter(request):
     schools = INBSchool.objects.all()
     courses = INBCourse.objects.all()
 
-    selected_schools = request.GET.getlist('school')
-    selected_courses = request.GET.getlist('course')
+    selected_schools = request.GET.getlist("school")
+    selected_courses = request.GET.getlist("course")
 
     filtered_applicants = CollegeStudentApplication.objects.all()
 
     if selected_schools:
-        filtered_applicants = filtered_applicants.filter(school__id__in=selected_schools)
+        filtered_applicants = filtered_applicants.filter(
+            school__id__in=selected_schools
+        )
 
     if selected_courses:
-        filtered_applicants = filtered_applicants.filter(course__id__in=selected_courses)
+        filtered_applicants = filtered_applicants.filter(
+            course__id__in=selected_courses
+        )
 
     context = {
-        'schools': schools,
-        'courses': courses,
-        'filtered_applicants': filtered_applicants,
+        "schools": schools,
+        "courses": courses,
+        "filtered_applicants": filtered_applicants,
     }
     return render(request, "sidebar_filter.html", context)
 
@@ -1060,79 +1133,100 @@ def filter(request):
 def update_requirement(request):
     inb_requirement_list = INBRequirementRepository.objects.all()
     fa_requirement_list = FARequirementRepository.objects.all()
-    return render(request, 'Admin/update-requirement.html', {'inb_requirements': inb_requirement_list, 'fa_requirements': fa_requirement_list})
+    return render(
+        request,
+        "Admin/update-requirement.html",
+        {
+            "inb_requirements": inb_requirement_list,
+            "fa_requirements": fa_requirement_list,
+        },
+    )
+
 
 def render_requirement(request, form_type):
     if request.user.is_authenticated:
-        template = 'Admin/update-requirement.html'
+        template = "Admin/update-requirement.html"
         requirements = None
 
-        if form_type == 'inb':
-            template = 'Admin/inb-requirements.html'
+        if form_type == "inb":
+            template = "Admin/inb-requirements.html"
             requirements = INBRequirementRepository.objects.all()
-        elif form_type == 'fa':
-            template = 'Admin/fa-requirements.html'
+        elif form_type == "fa":
+            template = "Admin/fa-requirements.html"
             requirements = FARequirementRepository.objects.all()
         else:
             messages.error(request, "Invalid form type.")
-            return redirect('home')
+            return redirect("home")
 
-        return render(request, template, {'requirements': requirements, 'form_type': form_type})
+        return render(
+            request, template, {"requirements": requirements, "form_type": form_type}
+        )
     else:
         messages.error(request, "You need to be logged in for this process.")
-        return redirect('home')
-                  
+        return redirect("home")
+
+
 def add_requirement(request, form_type):
     if request.user.is_authenticated:
-        if form_type == 'inb':
+        if form_type == "inb":
             form = INBRequirementList(request.POST or None)
             model_class = INBRequirementRepository
-        elif form_type == 'fa':
+        elif form_type == "fa":
             form = FARequirementList(request.POST or None)
             model_class = FARequirementRepository
         else:
             messages.error(request, "Invalid form type.")
-            return redirect('home')
+            return redirect("home")
 
         if request.method == "POST":
             if form.is_valid():
                 requirement_data = form.cleaned_data
                 requirement_instance = model_class.objects.create(**requirement_data)
                 messages.success(request, "Requirements Successfully Added")
-                return redirect('update_req')
+                return redirect("update_req")
 
-        return render(request, 'Admin/update-requirement.html', {'form': form})
+        return render(request, "Admin/update-requirement.html", {"form": form})
     else:
         messages.error(request, "You need to be logged in for this process.")
-        return redirect('home')
+        return redirect("home")
+
 
 def update_inb_requirement(request, requirement_id):
     requirement = get_object_or_404(INBRequirementRepository, id=requirement_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = INBRequirementList(request.POST, instance=requirement)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Updated the Requirement Successfully')
-            return redirect('inb_requirement')  
+            messages.success(request, "Updated the Requirement Successfully")
+            return redirect("inb_requirement")
     else:
         form = INBRequirementList(instance=requirement)
 
-    return render(request, 'Admin/inb-requirements.html', {'requirement': requirement, 'form': form})
+    return render(
+        request,
+        "Admin/inb-requirements.html",
+        {"requirement": requirement, "form": form},
+    )
+
 
 def update_fa_requirement(request, requirement_id):
     requirement = get_object_or_404(FARequirementRepository, id=requirement_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = FARequirementList(request.POST, instance=requirement)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Updated the Requirement Successfully')
-            return redirect('fa_requirement')  
+            messages.success(request, "Updated the Requirement Successfully")
+            return redirect("fa_requirement")
     else:
         form = FARequirementList(instance=requirement)
 
-    return render(request, 'Admin/fa-requirements.html', {'requirement': requirement, 'form': form})
+    return render(
+        request,
+        "Admin/fa-requirements.html",
+        {"requirement": requirement, "form": form},
+    )
 
 def delete_requirement(request, item_type, item_id):
     if item_type == 'inb':
@@ -1157,4 +1251,3 @@ def delete_requirement(request, item_type, item_id):
 
 def test1(request):
     return render(request, "cms-forms.html")
-

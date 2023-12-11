@@ -7,6 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  <link rel="stylesheet" href="{% static 'css/error-msg.css' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap" rel="stylesheet">
@@ -17,36 +18,36 @@
 <body>
   <form method="POST" action="{% url 'login' %}">
     {% csrf_token %}
-
     <div class="container">
       <img src="{% static 'images/Logo.png' %}">
       <h2>BIÑAN ANALYTICS</h2>
       <h4>Account Login</h4>
-      <form action="">
-        <div class="input-box">
-          <input type="text" name="user_name" class="form-control" placeholder="Username" required>
-          <i class='bx bxs-user'></i>
-        </div>
-        <div class="input-box">
-          <input type="password" class="form-control" name="user_password" placeholder="Password" required>
-          <i class='bx bx-lock'></i>
-        </div>
-        <button type="submit" class="btn">Login</button>
-        <div class="remember-forget">
-          <label><input type="checkbox">Remeber Me</label>
-          <a href="#">Forgot Password</a>
-        </div>
 
+      {% if messages %}
+      <div class="error">
+        {% for message in messages %}
+        <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+      {% endif %}
 
-        <div class="signup">━━━━━━━━━━ <a href="{% url 'signup' %}">Sign Up</a> ━━━━━━━━━━</div>
-
-      </form>
+      <div class="input-box">
+        <input type="text" name="username" class="form-control" placeholder="Username" required>
+        <i class='bx bxs-user'></i>
+      </div>
+      <div class="input-box">
+        <input type="password" class="form-control" name="user_password" placeholder="Password" required>
+        <i class='bx bx-lock'></i>
+      </div>
+      <button type="submit" class="btn">Login</button>
+      <div class="remember-forget">
+        <label><input type="checkbox">Remember Me</label>
+        <a href="#">Forgot Password</a>
+      </div>
+      <div class="signup">━━━━━━━━━━ <a href="{% url 'signup' %}">Sign Up</a> ━━━━━━━━━━</div>
     </div>
-
-
+  </form>
 </body>
 
 </html>
-
-
 {% endblock %}

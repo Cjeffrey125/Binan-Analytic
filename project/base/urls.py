@@ -15,15 +15,17 @@ urlpatterns = [
     path('delete_applicant/<str:control_number>/<str:model_name>/', views.delete_by_control_number, name='delete_applicant'),
 
     
+    path("Applicant_List/", views.iskolar_ng_bayan_list, name="inb_applicant_list"),
+    path("Applicant_List/Add",views.add_information, {"form_type": "applicant"}, name="add_inb_applicant",),
 
-    path("Add_IskolarngBayan_Applicant/",views.add_information, {"form_type": "applicant"}, name="add_inb_applicant",),
+    path("Financial_Assistance_List/",views.financial_assistance_list,name="fa_applicant_list",),
     path("Add_FinancialAssistance_Applicant/",views.add_information,{"form_type": "financial_assistance"},name="add_fa_applicant",),
 
     path("Update_INB_Record/<int:pk>", views.update_information, name="update_inb_record"),
     path("Update_FA_Record/<int:pk>", views.update_information, name="update_fa_record"),
     # ------------------------------------------------------------------------------------------------------------------------------
 
-    path("Applicant_List/", views.view_applicant_table, name="inb_applicant_list"),
+  
     path("INB_Applicant_Info/<int:pk>/",views.inb_applicant_information,name="inb_applicant_info",),
     path("inb_requirements_list/<str:control_number>",views.inb_requirements_list,name="inb_requirements_list",),
     path("inb_filter_applicants/",views.inb_filter_applicants,name="inb_filter_applicants",),
@@ -75,9 +77,6 @@ urlpatterns = [
     path('delete_requirement/<str:item_type>/<int:item_id>/', views.delete_requirement, name='delete_item'),
 
     
-
-
-
     path("Filter/", views.filter, name="filter"),
-
+    path("Pending/", views.inb_pending_assesment, name="inb_pending"),
 ]

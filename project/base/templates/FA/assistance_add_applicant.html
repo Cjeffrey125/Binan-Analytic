@@ -1,8 +1,5 @@
-{% extends 'base.html' %}
 
 {% load static %}
-
-{% block content %}
 
 <h1>Add Record</h1>
 
@@ -171,7 +168,10 @@
         {{ form.sibling_address }}
     </div>
 
-    <input type="submit" class="btn btn-primary" value="Submit">
+    <div class = "text-center">
+        <button type="submit" class="modal-button">Save Record</button>
+    </div>
+
 </form>
 
 <script>
@@ -189,4 +189,3 @@
     }
 </style>
 
-{% endblock %}
