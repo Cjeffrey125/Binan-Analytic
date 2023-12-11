@@ -731,6 +731,9 @@ def fa_applicant_list(request, status):
 
 def inb_applicant_information(request, pk):
     if request.user.is_authenticated:
+        
+        current_record_inb = CollegeStudentApplication.objects.get(id=pk)
+        form_inb = AddINBForm(request.POST or None, instance=current_record_inb)
         try:
             records = CollegeStudentApplication.objects.get(id=pk)
             requirements = CollegeRequirements.objects.filter(control=records)
@@ -742,7 +745,7 @@ def inb_applicant_information(request, pk):
         return render(
             request,
             "INB/applicants_info.html",
-            {"records": records, "requirements": requirements},
+            {"records": records, "requirements": requirements, "form": form_inb},
         )
     else:
         messages.success(request, "You need to be logged in to see this data!")

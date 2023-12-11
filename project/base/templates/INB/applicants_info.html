@@ -1,12 +1,20 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
+
+<link rel="stylesheet" href="{% static 'css/update.css' %}">
 
 <div>
     <h1 style="display: inline-block;">Student Records</h1>
     <form action="{% url 'inb_requirements_list' control_number=records.control_number %}" method="get">
         <button class="btn btn-primary">View INB Requirements</button>
       </form>
+
+      <button type="button" id="openSchoolForm" class="modal-button">
+              Update
+    </button>
 
 </div>
 
@@ -80,15 +88,33 @@
 
 <br/> <br/>
 <a href = "{% url 'inb_applicant_list' %}" class="btn btn-secondary">Back</a>
-<a href = "{% url 'update_inb_record' records.id  %}" class="btn btn-secondary">Update Record</a>
 <a href="{% url 'delete_applicant_id' records.id 'application' %}" class="btn btn-danger">Delete Application</a>
 
+<div id="schoolFormContainer" class="modal-container">
+    <div class="modal-box">
+        <form method="POST" action="{% url 'update_inb_record' pk=records.id %}">
+
+            {% include 'INB/update_record.html' %}
+        </form>
+    </div>
+  </div>
 
 
+  <script src="{% static 'js/modals.js' %}"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var dateOfBirthSelect = document.getElementById("id_date_of_birth");
+    dateOfBirthSelect.addEventListener("change", function () {
+      dateOfBirthSelect.classList.remove("placeholder");
+    });
 
+    var schoolForm = document.getElementById("schoolForm");
 
-
-
-
+    document.getElementById('openSchoolForm').addEventListener('click', function () {
+      document.getElementById('schoolFormContainer').style.display = 'flex';
+      initializeInputBox();
+    });
+  });
+</script>
 
 {% endblock %}
