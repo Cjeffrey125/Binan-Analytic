@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>Applicant Information</h1>
+
+    <p>Control Number: {{ pending_applicant.control_number }}</p>
+    <p>Name: {{ pending_applicant.fullname }}</p>
+    <p>School: {{ pending_applicant.school }}</p>
+    <p>Course: {{ pending_applicant.course }}</p>
+
+    <br>
+    <h1>Grades</h1>
+
+    <a href="{% url 'delete_applicant' pending_applicant.control_number 'inb_pending' %}" class="btn btn-danger">Delete Application</a>
+
+    <a href="{% url 'inb_pending_applicant' %}" class="btn btn-secondary">Back to Applicant List</a>
+</div>
+{% endblock %}

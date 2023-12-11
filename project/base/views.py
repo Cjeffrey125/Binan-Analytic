@@ -528,11 +528,6 @@ def inb_filter_applicants(request):
 # ---------------------------------------------
 
 
-def inb_pending_assesment(request):
-    pending_applicant = ApplicantInfoRepositoryINB.objects.all()
-    return render(request, "INB/inb_pending_list.html", {"pending": pending_applicant})
-
-
 # ------------------------------------------------------------------------------------------------------------------------
 
 
@@ -602,7 +597,10 @@ def inb_applicant_info(request, status, control_number):
         if status == "passed":
             model_class = CollegeStudentAccepted
             template = "INB/passed_info.html"
-        elif status == "failed":
+        elif status == "pending":
+            model_class = CollegeStudentAssesment
+            template = "INB/inb_pending_info.html"
+        elif status == "pending":
             model_class = CollegeStudentRejected
             template = "INB/failed_info.html"
         else:
@@ -618,6 +616,16 @@ def inb_applicant_info(request, status, control_number):
                     request,
                     template,
                     {"passed_applicant": passed_applicant, "status": status},
+                )
+            
+            elif status == "pending":
+                pending_applicant = get_object_or_404(
+                    model_class, control_number=control_number
+                )
+                return render(
+                    request,
+                    template,
+                    {"pending_applicant": pending_applicant, "status": status},
                 )
             elif status == "failed":
                 failed_applicant = get_object_or_404(
@@ -642,6 +650,9 @@ def inb_applicant_list(request, status):
         if status == "passed":
             model_class = CollegeStudentAccepted
             template = "INB/accepted_applicants.html"
+        elif status == "pending":
+            model_class = CollegeStudentAssesment
+            template = "INB/inb_pending_list.html"
         elif status == "failed":
             model_class = CollegeStudentRejected
             template = "INB/rejected_applicants.html"
@@ -774,6 +785,7 @@ def delete_record(request, identifier, model_name, use_id=True):
         model_map = {
             "application": (CollegeStudentApplication, "inb_applicant_list"),
             "inb_passed": (CollegeStudentAccepted, "inb_passed_applicant"),
+            "inb_pending": (CollegeStudentAssesment, "inb_pending_applicant"),
             "inb_failed": (CollegeStudentRejected, "inb_failed_applicant"),
             "fa_application": (FinancialAssistanceApplication, "fa_applicant_list"),
             "fa_passed": (FinancialAssistanceAccepted, "fa_passed_applicant"),

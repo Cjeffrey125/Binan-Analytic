@@ -30,15 +30,16 @@
 
               <tbody>
                 <div class="scrollable-container">
-                  {% for applicant_record in applicant %}
-                  <tr onclick="window.location='{% url 'inb_passed_applicant_info' applicant.control_number %}';"
-                    style="cursor: pointer;">
-                    <td>{{ applicant.control_number }}</td>
-                    <td>{{ applicant.fullname }}</td>
-                    <td>{{ applicant.school }}</td>
-                    <td>{{ applicant.course }}</td>
-                  </tr>
+                  {% for applicant in applicants %}
+                    <tr onclick="window.location='{% url 'inb_passed_applicant_info' applicant.control_number %}';"
+                      style="cursor: pointer;">
+                      <td>{{ applicant.control_number }}</td>
+                      <td>{{ applicant.fullname }}</td>
+                      <td>{{ applicant.school }}</td>
+                      <td>{{ applicant.course }}</td>
+                    </tr>
                   {% endfor %}
+                </div>
               </tbody>
             </table>
             {% else %}
