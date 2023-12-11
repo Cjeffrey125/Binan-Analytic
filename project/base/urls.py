@@ -72,6 +72,8 @@ urlpatterns = [
     path("Financial_Assistance_Requirement/",views.render_requirement, {"form_type": "fa"}, name="fa_requirement",),
     path("Update_FinancialAssistance_Requirement/<int:requirement_id>/", views.update_fa_requirement, name="update_fa_requirement"),
 
+    path('delete_requirement/<str:item_type>/<int:item_id>/', views.delete_requirement, name='delete_item'),
+
     
 
 

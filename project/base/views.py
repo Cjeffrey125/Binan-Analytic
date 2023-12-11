@@ -1134,6 +1134,26 @@ def update_fa_requirement(request, requirement_id):
 
     return render(request, 'Admin/fa-requirements.html', {'requirement': requirement, 'form': form})
 
+def delete_requirement(request, item_type, item_id):
+    if item_type == 'inb':
+        model_class = INBRequirementList
+        success_message = 'Requirement Deleted Successfully'
+        redirect_site = 'inb_requirement'
+    elif item_type == 'fa':
+        model_class = FARequirementList
+        success_message = 'Requirement Deleted Successfully'
+        redirect_site = 'fa_requirement'
+    else:
+        return redirect(redirect_site)  
+    
+    if request.method == 'POST':
+        item = get_object_or_404(model_class, pk=item_id)
+        item.delete()
+        messages.success(request, success_message)
+        return redirect(redirect_site)  # Redirect to some appropriate view
+
+    return redirect('sc_list')  # Redirect to some appropriate view
+
 
 def test1(request):
     return render(request, "cms-forms.html")
