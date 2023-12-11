@@ -405,3 +405,13 @@ class INBCourse(models.Model):
 
     def __str__(self):
         return self.course
+    
+
+
+class Student_Monitoring(models.Model):
+    control_number = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=255)
+    middle_initial = models.CharField(max_length=50)
+    course = models.CharField(max_length=255)
+

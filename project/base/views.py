@@ -30,6 +30,7 @@ from .models import (
     FARequirementRepository,
     INBSchool,
     INBCourse,
+    Student_Monitoring,
 )
 from django.db.models import Count
 from django.http import HttpResponse
@@ -484,6 +485,13 @@ def inb_filter_applicants(request):
                 control_number=applicant.control_number,
                 fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
                 school=applicant.school,
+                course=applicant.course,
+            )
+            Student_Monitoring.objects.create(
+                control_number=applicant.control_number,
+                last_name = applicant.last_name,
+                first_name = applicant.first_name,
+                middle_initial =applicant.middle_name,
                 course=applicant.course,
             )
             CollegeStudentApplication.objects.filter(

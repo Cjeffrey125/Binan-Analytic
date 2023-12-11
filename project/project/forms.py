@@ -519,7 +519,7 @@ class AddFinancialAssistanceForm(forms.ModelForm):
         label="",
     )
     suffix = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(attrs={"class": "form-control"}),
         help_text='<span class="subscript">Suffix</span>',
         label="",
