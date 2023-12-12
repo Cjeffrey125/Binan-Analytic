@@ -1,5 +1,4 @@
-
-body{
+body {
   position: fixed;
 }
 .container {
@@ -13,8 +12,7 @@ body{
   padding: 10px;
   margin-top: 13px;
   border-radius: 10px;
-  background-color: #1C469A;
-
+  background-color: #1c469a;
 }
 
 .container-fluid h1 {
@@ -25,7 +23,7 @@ body{
   font-size: 30px;
   margin: 0;
   color: #fff;
-  font-family: 'PT Serif Caption', serif;
+  font-family: "PT Serif Caption", serif;
 }
 
 .table-container {
@@ -33,10 +31,9 @@ body{
   height: 1000px;
   margin-top: 13px;
   max-width: 100%;
-  width:1050px;
+  width: 1050px;
   position: relative;
   max-height: 500px;
-  
 }
 
 .table {
@@ -79,7 +76,7 @@ th.table-header {
   z-index: 2;
   position: sticky;
   position: -webkit-sticky;
-  background-color: #C4CCD3;
+  background-color: #c4ccd3;
   color: #000000;
   padding: 10px;
   border-radius: 0px;
@@ -97,7 +94,6 @@ tbody tr:last-child {
 tbody tr {
   border-bottom: 1px solid #000000;
 }
-
 
 /* - - - - - Images(button) - - - - - */
 .img-resize {
@@ -123,37 +119,35 @@ tbody tr {
   color: #fff;
 }
 
-
-
 .scrollable-container {
-max-height: 400px;
-padding: 1rem;
-overflow-y: auto;
-box-sizing: border-box;
-scrollbar-width: thin;
-scrollbar-color: transparent transparent;
+  max-height: 400px;
+  padding: 1rem;
+  overflow-y: auto;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
 }
 
 .scrollable-container::-webkit-scrollbar {
-width: 12px;
+  width: 12px;
 }
 
 .scrollable-container::-webkit-scrollbar-track {
-background-color: transparent;
+  background-color: transparent;
 }
 
 .scrollable-container::-webkit-scrollbar-thumb {
-background-color: transparent;
-border: 5px solid transparent;
-background-clip: content-box;
+  background-color: transparent;
+  border: 5px solid transparent;
+  background-clip: content-box;
 }
 
 .scrollable-container:hover {
-scrollbar-color: rgb(99, 178, 242) transparent;
+  scrollbar-color: rgb(99, 178, 242) transparent;
 }
 
 .scrollable-container:hover::-webkit-scrollbar-thumb {
-background-color: rgb(99, 178, 242);
+  background-color: rgb(99, 178, 242);
 }
 
 .modal-container {
@@ -184,6 +178,8 @@ background-color: rgb(99, 178, 242);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   margin: 0;
   padding: 0;
+
+  overflow-y: scroll;
 }
 
 .modal-button {

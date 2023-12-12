@@ -1,5 +1,5 @@
 
-document.getElementById('openSchoolForm').addEventListener('click', function () {
+document.getElementById('addButton').addEventListener('click', function () {
     document.getElementById('schoolFormContainer').style.display = 'flex';
     initializeInputBox();
 });
