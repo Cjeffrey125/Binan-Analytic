@@ -405,7 +405,7 @@ class INBCourse(models.Model):
 
     def __str__(self):
         return self.course
-    
+
 
 class Student_Monitoring(models.Model):
     control_number = models.CharField(max_length=255)
@@ -415,11 +415,14 @@ class Student_Monitoring(models.Model):
     course = models.CharField(max_length=255)
     gwa = models.FloatField(null=True, blank=True)
 
+
 class StudentGrade(models.Model):
-    student = models.ForeignKey(Student_Monitoring, on_delete=models.CASCADE, related_name='grades')
+    student = models.ForeignKey(
+        Student_Monitoring, on_delete=models.CASCADE, related_name="grades"
+    )
     subject = models.CharField(max_length=255)
     grade = models.CharField(max_length=255)
-    
+
 
 class Subject(models.Model):
     code = models.CharField(max_length=50, unique=True)

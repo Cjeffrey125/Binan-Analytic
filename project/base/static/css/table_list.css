@@ -1,11 +1,13 @@
+
 body {
   position: fixed;
+  
 }
 
 .container {
   position: relative;
-  top: 5px;
-  right: 10px;
+  bottom: 25px;
+  left: 15px;
 }
 
 .box {
@@ -29,12 +31,12 @@ body {
 
 .table-container {
   border-radius: 15px;
-  height: 1000px;
+  height: 1050px;
   margin-top: 13px;
   max-width: 100%;
   width: 1050px;
   position: relative;
-  max-height: 500px;
+  max-height: 620px;
 }
 
 .table {
@@ -106,7 +108,8 @@ tbody tr {
 }
 
 .image-button {
-  background: none;
+  background: #4163A6;
+  border-radius: 1px;
   border: none;
   padding: 0;
   margin: 0;
@@ -119,6 +122,10 @@ tbody tr {
   margin-left: 5px;
   text-decoration: none;
   color: #fff;
+  object-fit: contain;
+  object-position: center;
+  padding: 0;
+    margin: 0;
 }
 
 .inline-form {

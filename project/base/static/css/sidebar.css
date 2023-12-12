@@ -2,7 +2,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 250px;
+    width: 280px;
     height: 100%;
     background-color: transparent;
     padding: 20px;
@@ -16,13 +16,15 @@
 .yfilter-container,
 .zfilter-container {
     border: 1px solid #000000; 
-    border-radius: 10px; 
+    border-radius: 5px; 
     padding: 12px; 
     margin-bottom: 15px; 
+    background-color: white;
+    box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.50);
 }
 
 .xbox {
-    height: 100px; 
+    height: 150px; 
 }
 
 .xbox select {
@@ -35,8 +37,9 @@
 
 
 .scrollable-container {
+    padding: 0 10px 5px 10px;
     margin-bottom: 10px;
-    max-height: 70px;
+    max-height: 130px;
     overflow-y: auto;
     box-sizing: border-box;
     scrollbar-width: thin;
@@ -90,3 +93,10 @@ li {
 .zfilter-container li {
     margin-bottom: 5px; 
 }
+
+input[type=checkbox], .inputted {
+  margin-bottom: 5px;
+  padding: 0 0 5px 0;
+    font-size: 13px;
+}
+

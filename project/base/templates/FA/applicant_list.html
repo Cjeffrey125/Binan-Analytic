@@ -20,7 +20,7 @@
         <div class="box">
 
           <div>
-            <button type="button" id="addButton">
+            <button type="button" id="addButton" class="image-button">
               <img src="{% static 'images/add.png' %}" alt="Add" class="img-resize">
             </button>
           
@@ -28,15 +28,17 @@
               <img src="{% static 'images/upload.png' %}" alt="Upload" class="img-resize">
             </button>
           
-            <a href="{% url 'export' %}">
-              <img src="{% static 'images/download.png' %}" class="img-resize">
-            </a>
+            <button type="button" id="exportButton" class="image-button">
+              <img src="{% static 'images/download.png' %}" alt="export" class="img-resize">
+            </button>
           
-            <form method="post" action="{% url 'inb_filter_applicants' %}">
+          
+            <form method="post" action="{% url 'inb_filter_applicants' %}" class="inline-form">
               {% csrf_token %}
-              <button type="submit" class="btn btn-secondary">Filter Applicants</button>
+              <button type="submit" class="image-button">
+                <img src="{% static 'images/filter.png' %}" alt="Filter Applicants" class="img-resize">
+              </button>
             </form>
-          
           </div>
 
           {% if records %}

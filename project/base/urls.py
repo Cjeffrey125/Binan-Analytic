@@ -80,9 +80,6 @@ urlpatterns = [
     path("Update_FinancialAssistance_Requirement/<int:requirement_id>/", views.update_fa_requirement, name="update_fa_requirement"),
 
     path('delete_requirement/<str:item_type>/<int:item_id>/', views.delete_requirement, name='delete_item'),
-
-    
-    path("Filter/", views.filter, name="filter"),
    
 
    path('import-grade/', views.import_grade, name='import_excel'),

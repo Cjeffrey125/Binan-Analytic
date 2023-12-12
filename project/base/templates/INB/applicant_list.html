@@ -10,7 +10,7 @@
 <div class="container">
   <div class="d-flex">
     <div class="sidebar">
-      {% include 'sidebar_filter.html' %}
+      {% include 'sidebar_filter.html' with schools=schools courses=courses %}
     </div>
 
     <div class="main-content ms-auto">
@@ -21,7 +21,7 @@
         <div class="box">
 
           <div>
-            <button type="button" id="addButton">
+            <button type="button" id="addButton" class="image-button">
               <img src="{% static 'images/add.png' %}" alt="Add" class="img-resize">
             </button>
 
@@ -34,14 +34,12 @@
             </button>
 
               
-          <form method="post" action="{% url 'inb_filter_applicants' %}" class="inline-form">
-            {% csrf_token %}
-            <button type="submit" class="image-button">
-              <img src="{% static 'images/filter.png' %}" alt="Filter Applicants" class="img-resize">
-            </button>
-          </form>
-   
-
+            <form method="post" action="{% url 'inb_filter_applicants' %}" class="inline-form">
+              {% csrf_token %}
+              <button type="submit" class="image-button">
+                <img src="{% static 'images/filter.png' %}" alt="Filter Applicants" class="img-resize">
+              </button>
+            </form>
           </div>
  
           <div class="table-container">

@@ -1,11 +1,8 @@
 {% load static %}
+{% block content %}
 
-<!DOCTYPE html>
-<html>
-<head>
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
-</head>
-<body>
+    
     <div class="sidebar">
         <h1>Filter</h1>
         
@@ -25,31 +22,44 @@
                 <div class="scrollable-container">
                     <ul>
                         {% for school in schools %}
-                            <li>
-                                <input type="radio" name="school" value="{{ school.id }}">
+                        <li>
+                            <div class="inputted">
+                                <input type="checkbox" name="schools" value="{{ school.id }}">
                                 {{ school.school }}
-                            </li>
+                            </div>
+                        </li>
+                        {% empty %}
+                        <li>
+                            No School Found
+                        </li>
                         {% endfor %}
+
                     </ul>
                 </div>
             </div>
         </div>
-
+        
         <div class="zfilter-container">
             <div class="filter_course xbox">
                 <h5>Course</h5>
                 <div class="scrollable-container">
                     <ul>
                         {% for course in courses %}
-                            <li>
-                                <input type="radio" name="course" value="{{ course.id }}">
-                                {{ course.course}}
-                            </li>
+                        <li>
+                            <div class="inputted">
+                                <input type="checkbox" name="courses" value="{{ course.id }}">
+                                {{ course.course }}
+                            </div>
+                        </li>
+                        {% empty %}
+                        <li>
+                            No Course Found
+                        </li>
                         {% endfor %}
                     </ul>
                 </div>
             </div>
         </div>
+
     </div>
-</body>
-</html>
+{% endblock %}
