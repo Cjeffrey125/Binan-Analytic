@@ -824,7 +824,7 @@ def delete_record(request, identifier, model_name, use_id=True):
             "inb_failed": (CollegeStudentRejected, "inb_failed_applicant"),
             "fa_application": (FinancialAssistanceApplication, "fa_applicant_list"),
             "fa_passed": (FinancialAssistanceAccepted, "fa_passed_applicant"),
-            "fa_pending": (FinancialAssistanceAsses, "fa_pending_applicant"),
+            "fa_pending": (FinancialAssistanceAssesment, "fa_pending_applicant"),
             "fa_failed": (FinancialAssistanceRejected, "fa_failed_applicant"),
         }
 
