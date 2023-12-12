@@ -82,4 +82,6 @@ urlpatterns = [
     
     path("Filter/", views.filter, name="filter"),
    
+
+   path('import-excel/', views.import_grade, name='import_excel'),
 ]
