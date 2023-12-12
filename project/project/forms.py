@@ -54,8 +54,10 @@ class FARequirementList(forms.ModelForm):
 
 
 class ApplicantUploadForm(forms.Form):
-    file = forms.FileField()
+    file = forms.FileField(label='Choose Excel file', widget=forms.FileInput(attrs={'accept': '.xlsx'}))
 
+class GradeUploadForm(forms.Form):
+    file = forms.FileField(label='Choose Excel file', widget=forms.FileInput(attrs={'accept': '.xlsx'}))
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -519,7 +521,7 @@ class AddFinancialAssistanceForm(forms.ModelForm):
         label="",
     )
     suffix = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(attrs={"class": "form-control"}),
         help_text='<span class="subscript">Suffix</span>',
         label="",

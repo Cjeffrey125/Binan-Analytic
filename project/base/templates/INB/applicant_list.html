@@ -5,7 +5,6 @@
 {% block content %}
 {% if user.is_authenticated %}
 
-<link rel="stylesheet" href="{% static 'css/import_modal.css' %}">
 <link rel="stylesheet" href="{% static 'css/table_list.css' %}">
 
 <div class="container">
@@ -85,7 +84,7 @@
 </div>
 {% endif %}
 
-<div id="schoolFormContainer" class="modal-container">
+<div id="addFormContainer" class="modal-container">
   <div class="modal-box">
     <form method="POST" action="{% url 'add_inb_applicant' %}">
       {% include 'INB/add_record.html' %}
@@ -93,21 +92,31 @@
   </div>
 </div>
 
-<script src="{% static 'js/add-modal.js' %}"></script>
+<div id="uploadFormContainer" class="modal-upload-container">
+  <div class="modal-upload-box">
+    <form id="importForm" method="post" enctype="multipart/form-data">
+    {% include 'INB/import.html' %}
+  </form>
+  </div>
+</div>
+
+
+
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    var dateOfBirthSelect = document.getElementById("id_date_of_birth");
-    dateOfBirthSelect.addEventListener("change", function () {
-      dateOfBirthSelect.classList.remove("placeholder");
-    });
+  var schoolForm = document.getElementById("schoolForm");
 
-    var schoolForm = document.getElementById("schoolForm");
+  document.getElementById('addButton').addEventListener('click', function () {
+    document.getElementById('addFormContainer').style.display = 'flex';
+    document.getElementById('uploadFormContainer').style.display = 'none';
+    initializeInputBox();
+  });
 
-    document.getElementById('addButton').addEventListener('click', function () {
-      document.getElementById('schoolFormContainer').style.display = 'flex';
-      initializeInputBox();
-    });
+  document.getElementById('importButton').addEventListener('click', function () {
+    document.getElementById('uploadFormContainer').style.display = 'flex';
+    document.getElementById('addFormContainer').style.display = 'none';
+    initializeInputBox();
   });
 </script>
+
 
 {% endblock %}
