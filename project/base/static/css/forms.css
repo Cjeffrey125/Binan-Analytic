@@ -1,185 +1,184 @@
 .col {
-    margin-right: 5px; 
+  margin-right: 5px;
 }
 
 .margin-right {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
-.control-number-input{
-    width: 300px;
-    height: 45px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    margin-bottom: 10px;
+.control-number-input {
+  width: 300px;
+  height: 45px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-bottom: 10px;
 }
 
 .name-input {
-    text-indent: 15px;
+  text-indent: 15px;
 }
 
-.text-layout{
-    color: #4F5C79;
-    font-weight: 700;
-    text-align: right;
-    margin-top: 3px;
+.text-layout {
+  color: #4f5c79;
+  font-weight: 700;
+  text-align: right;
+  margin-top: 3px;
 }
 
 .left-align {
-    text-align: left;
+  text-align: left;
 }
 
 .name-container {
-    width: 1200px;
-    height: 46px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 30px;
-    margin-bottom: 10px;
-    background-color: #F5F5F5;
-    top: 10px;
-    right: 10px;
+  width: relative;
+  height: 46px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+  margin-bottom: 10px;
+  background-color: #f5f5f5;
+  top: 10px;
+  right: 10px;
 }
 
-.name-input{
-    width: 300px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    margin-bottom: 10px;
-    background-color: #FFFFFF;
+.name-input {
+  width: 300px;
+  height: 30px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
 }
 
-.address-input-1{
-    width: 250px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    margin-bottom: 10px;
-    background-color: #FFFFFF;
+.address-input-1 {
+  width: 250px;
+  height: 30px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
 }
 
-.address-input-2{
-    width: 207px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    margin-bottom: 10px;
-    background-color: #FFFFFF;
+.address-input-2 {
+  width: 207px;
+  height: 30px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
 }
 
 .radio-container {
-    justify-content: left;
-    display: flex;
-    top: 30%;
-    gap: 15px; 
+  justify-content: left;
+  display: flex;
+  top: 30%;
+  gap: 15px;
 }
 
 .radio-container label {
-    display: flex;
-    align-items: center;
-    font-weight: 700;
-    margin-top: 3px;
-    color: #4F5C79;
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+  margin-top: 3px;
+  color: #4f5c79;
 }
 
 .radio-container input {
-    margin-right: 5px;
+  margin-right: 5px;
 }
 
-.date-input{
-    width: 145px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    margin-bottom: 10px;
-    background-color: #FFFFFF;
+.date-input {
+  width: 145px;
+  height: 30px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
 }
 
-.place-birth-input{
-    width: 130px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    margin-bottom: 10px;
-    background-color: #FFFFFF;
+.place-birth-input {
+  width: 130px;
+  height: 30px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
 }
 
-.contact-input{
-    width: 150px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    margin-bottom: 10px;
-    background-color: #FFFFFF;
+.contact-input {
+  width: 150px;
+  height: 30px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
 }
 
-.half-input{
-    width: 340px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    margin-bottom: 10px;
-    background-color: #FFFFFF;
+.half-input {
+  width: 340px;
+  height: 30px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
 }
 
-.course-dropdown{
-    width: 250px;
-    height: 30px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    background-color: #FFFFFF;
-    font-weight: 450;
+.course-dropdown {
+  width: 250px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  background-color: #ffffff;
+  font-weight: 450;
 }
 
-.rank-gwa-input{
-    width: 100px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    margin-bottom: 10px;
-    background-color: #FFFFFF;
+.rank-gwa-input {
+  width: 100px;
+  height: 30px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
 }
 
 .custom-dropdown {
-    width: 350px;
-    height: 30px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    background-color: #FFFFFF;
-    
-    font-weight: 450;
+  width: 350px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  background-color: #ffffff;
+
+  font-weight: 450;
 }
 
 .custom-dropdown option:first-child {
-    color: #CECECE;
-    font-weight: 450;
+  color: #cecece;
+  font-weight: 450;
 }
 
 .custom-dropdown option:checked {
-    color: #4F5C79;
-    font-weight: 450;
+  color: #4f5c79;
+  font-weight: 450;
 }
 
-.prev-school{
-    width: 250px;
-    height: 30px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    margin-bottom: 10px;
-    background-color: #FFFFFF;
+.prev-school {
+  width: 250px;
+  height: 30px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
 }
-
 
 .address-input-1::placeholder,
 .address-input-2::placeholder,
@@ -190,6 +189,6 @@
 .half-input::placeholder,
 .rank-gwa-input::placeholder,
 .prev-school::placeholder {
-    color: #CECECE;
-    font-weight: 450;
+  color: #cecece;
+  font-weight: 450;
 }

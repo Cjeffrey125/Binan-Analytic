@@ -1,40 +1,39 @@
-{% load static %} 
+{% load static %}
 
 
 <link rel="stylesheet" type="text/css" href="{% static '/css/add_record.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static '/css/forms.css' %}">
 
-    <div class = "form-container">
-
+<div class="form-container">
     <div class="icon-header">
-        <img src="{% static 'images/binan.png' %}" height="80px" width="110px">
-        <h1 class = "add-header">ISKOLAR NG BIÑAN</h1>
-        <img src="{% static 'images/logo.png' %}" height="80px" width="110px">
+        <img src="{% static 'images/binan.png' %}" height="110px" width="110px">
+        <h1 class="add-header">ISKOLAR NG BIÑAN</h1>
+        <img src="{% static 'images/logo.png' %}" height="110px" width="110px">
     </div>
 
     <div class="center">
         <hr class="hr-heading">
     </div>
-    
-        <form method="POST" action="{% url 'add_inb_applicant' %}">
-            {% csrf_token %}
-            
-        
-            <div class="form-group row">
-                <div class="col">
-                    <h3>Personal Data</h3>
-                </div>
-                <div class="col">
-                    {{ form.control_number }}
-                </div>
+
+    <form method="POST" action="{% url 'add_inb_applicant' %}">
+        {% csrf_token %}
+
+
+        <div class="form-group row">
+            <div class="col">
+                <h3>Personal Data</h3>
             </div>
-            <hr class="hr-text">
+            <div class="col">
+                {{ form.control_number }}
+            </div>
+        </div>
+        <hr class="hr-text">
 
 
-        <div class = "name-container">
+        <div class="name-container">
             <div class="form-group row">
                 <div class="col">
-                    <p class ="text-layout left-align">Full Name: </p>
+                    <p class="text-layout left-align">Full Name:</p>
                 </div>
                 <div class="col margin-right">
                     {{ form.first_name }}
@@ -48,31 +47,31 @@
             </div>
         </div>
 
-        <div class = "name-container">
+        <div class="name-container">
             <div class="form-group row">
                 <div class="col margin-right">
-                    <p class ="text-layout left-align">Address: </p>
+                    <p class="text-layout left-align">Address: </p>
                 </div>
                 <div class="col margin-right">
-                        {{ form.blkstr }}
+                    {{ form.blkstr }}
                 </div>
                 <div class="col margin-right">
-                        {{ form.barangay }}
-                </div>
-                <div class="col margin-right">     
-                        {{ form.city }}
+                    {{ form.barangay }}
                 </div>
                 <div class="col margin-right">
-                        {{ form.province }}
+                    {{ form.city }}
+                </div>
+                <div class="col margin-right">
+                    {{ form.province }}
                 </div>
             </div>
         </div>
-        
+
         <div class="name-container">
             <div class="form-group row">
-                
+
                 <div class="col margin-right">
-                    <p class ="text-layout left-align">Date of Birth: </p>
+                    <p class="text-layout left-align">Date of Birth:</p>
                 </div>
 
                 <div class="col">
@@ -80,33 +79,33 @@
                 </div>
 
                 <div class="col radio-container">
-                    <p class ="text-layout left-align">Gender: </p>
+                    <p class="text-layout left-align">Gender: </p>
                     {{ form.gender }}
                 </div>
-              
+
                 <div class="col margin-right">
                     {{ form.place_of_birth }}
                 </div>
                 <div class="col">
-                    <p class ="text-layout left-align">Contact Number: </p>
-                </div> 
+                    <p class="text-layout left-align">Contact Number: </p>
+                </div>
                 <div class="col margin-right">
                     {{ form.contact_no }}
                 </div>
             </div>
         </div>
-        
+
         <div class="name-container">
             <div class="form-group row">
                 <div class="col">
-                    <p class ="text-layout left-align">Email Address: </p>
-                </div> 
+                    <p class="text-layout left-align">Email Address: </p>
+                </div>
                 <div class="col margin-right">
                     {{ form.email_address }}
                 </div>
 
                 <div class="col">
-                    <p class ="text-layout left-align">Preferred School: </p>
+                    <p class="text-layout left-align">Preferred School: </p>
                 </div>
                 <div class="col margin-right">
                     {{ form.school }}
@@ -117,24 +116,24 @@
         <div class="name-container">
             <div class="form-group row">
                 <div class="col margin-right">
-                    <p class ="text-layout left-align">Desired Course: </p>
-                </div> 
-                <div class="col margin-right">
-                {{ form.course }}
+                    <p class="text-layout left-align">Desired Course: </p>
                 </div>
-                
                 <div class="col margin-right">
-                    <p class ="text-layout left-align">GWA: </p>
-                </div> 
-                <div class="col margin-right">
-                {{ form.gwa }}
+                    {{ form.course }}
                 </div>
 
                 <div class="col margin-right">
-                    <p class ="text-layout left-align">Rank: </p>
-                </div> 
+                    <p class="text-layout left-align">GWA: </p>
+                </div>
                 <div class="col margin-right">
-                {{ form.rank }}
+                    {{ form.gwa }}
+                </div>
+
+                <div class="col margin-right">
+                    <p class="text-layout left-align">Rank: </p>
+                </div>
+                <div class="col margin-right">
+                    {{ form.rank }}
                 </div>
             </div>
         </div>
@@ -143,174 +142,177 @@
         <div class="name-container">
             <div class="form-group row">
                 <div class="col margin-right">
-                    <p class ="text-layout left-align">Junior High School: </p>
-                </div> 
-                <div class="col margin-right">
-                {{ form.jhs }}
+                    <p class="text-layout left-align">Junior High School: </p>
                 </div>
-
                 <div class="col margin-right">
-                    <p class ="text-layout left-align">Address: </p>
-                </div> 
-                <div class="col margin-right">
-                {{ form.jhs_address }}
+                    {{ form.jhs }}
                 </div>
 
                 <div class="col margin-right">
-                {{ form.jhs_educational_provider }}
+                    <p class="text-layout left-align">Address: </p>
                 </div>
-            </div>
-        </div>
-            
-        <div class="name-container">
-            <div class="form-group row">
                 <div class="col margin-right">
-                    <p class ="text-layout left-align">Senior High School: </p>
-                </div> 
-                <div class="col margin-right">
-                {{ form.shs }}
+                    {{ form.jhs_address }}
                 </div>
 
                 <div class="col margin-right">
-                    <p class ="text-layout left-align">Address: </p>
-                </div> 
-                <div class="col margin-right">
-                {{ form.shs_address }}
-                </div>
-
-                <div class="col margin-right">
-                {{ form.shs_educational_provider }}
-                </div>
-            </div>
-        </div>
-
-
-
-            <div class = "text-center">
-                <h3>Family Data</h3>
-            </div>
-
-            <div class="selection-container">
-                <label class="radio-label">
-                  <input type="radio" name="radio" onclick="toggleSection('Father')" /> Father
-                </label>
-              
-                <label class="radio-label">
-                  <input type="radio" name="radio" onclick="toggleSection('Mother')" /> Mother 
-                </label>
-              
-                <label class="radio-label">
-                  <input type="radio" name="radio" onclick="toggleSection('LegalGuardian')" /> Legal Guardian
-                </label>
-              </div>
-                        
-        
-    <div id="Father" class="form-section">
-        <div class="name-container"> 
-            <div class="form-group row">
-                <div class="col">
-                {{ form.father_voter_status }}
-                </div>
-                <div class="col">
-                {{ form.father_name }}
-                </div>
-                <div class="col">
-                {{ form.father_educational_attainment }}
-                </div>
-            </div>
-        </div>
-
-        <div class="name-container"> 
-            <div class="form-group row">
-                <div class="col">
-                {{ form.father_occupation }}
-                </div>
-
-                <div class="col">
-                {{ form.father_employer}}
-                </div>
-            </div>
-        </div>
-        
-    </div>        
-
-
-    
-    <div id="Mother" class="form-section" style="display: none;">  
-        <div class="name-container">  
-            <div class="form-group row">
-                <div class="col">
-                {{ form.mother_voter_status }}
-                </div>
-
-                <div class="col">
-                {{ form.mother_name }}
-                </div>
-
-                <div class="col">
-                {{ form.mother_educational_attainment }}
-                </div>
-            </div>
-        </div>
-
-        <div class="name-container"> 
-            <div class="form-group row">
-                <div class="col">
-                {{ form.mother_occupation}}
-                </div>
-
-                <div class="col">
-                {{ form.mother_employer}}
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    
-    <div id="LegalGuardian" class="form-section" style="display: none;">
-        <div class="name-container">
-            <div class="form-group row">
-                <div class="col">
-                {{ form.guardian_voter_status }}
-                </div>
-                
-                <div class="col">
-                {{ form.guardian_name }}
-                </div>
-
-                <div class="col">
-                {{ form.guardian_educational_attainment }}
+                    {{ form.jhs_educational_provider }}
                 </div>
             </div>
         </div>
 
         <div class="name-container">
             <div class="form-group row">
-                <div class="col">
-                {{ form.guardian_occupation }}
+                <div class="col margin-right">
+                    <p class="text-layout left-align">Senior High School: </p>
+                </div>
+                <div class="col margin-right">
+                    {{ form.shs }}
                 </div>
 
-                <div class="col">
-                {{ form.guardian_employer }}
+                <div class="col margin-right">
+                    <p class="text-layout left-align">Address: </p>
+                </div>
+                <div class="col margin-right">
+                    {{ form.shs_address }}
+                </div>
+
+                <div class="col margin-right">
+                    {{ form.shs_educational_provider }}
                 </div>
             </div>
-        </div> 
-    </div>
-            
-            <div class = "text-center">
-                <button type="submit" class="modal-button">Save Record</button>
+        </div>
+
+
+        <br>
+        <div class="text-center">
+            <h3>Family Data</h3>
+        </div>
+
+        <div class="selection-container">
+            <label class="radio-label">
+                <input type="radio" name="radio" onclick="toggleSection('Father')" checked /> Father
+            </label>
+
+            <label class="radio-label">
+                <input type="radio" name="radio" onclick="toggleSection('Mother')" /> Mother
+            </label>
+
+            <label class="radio-label">
+                <input type="radio" name="radio" onclick="toggleSection('LegalGuardian')" /> Legal Guardian
+            </label>
+        </div>
+
+
+        <div id="Father" class="form-section">
+            <div class="name-container">
+                <div class="form-group row">
+                    <div class="col">
+                        {{ form.father_voter_status }}
+                    </div>
+                    <div class="col">
+                        {{ form.father_name }}
+                    </div>
+                    <div class="col">
+                        {{ form.father_educational_attainment }}
+                    </div>
+                </div>
             </div>
 
-        </form>
-   
-    </div>
+            <div class="name-container">
+                <div class="form-group row">
+                    <div class="col">
+                        {{ form.father_occupation }}
+                    </div>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
+                    <div class="col">
+                        {{ form.father_employer}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div id="Mother" class="form-section" style="display: none;">
+            <div class="name-container">
+                <div class="form-group row">
+                    <div class="col">
+                        {{ form.mother_voter_status }}
+                    </div>
+
+                    <div class="col">
+                        {{ form.mother_name }}
+                    </div>
+
+                    <div class="col">
+                        {{ form.mother_educational_attainment }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="name-container">
+                <div class="form-group row">
+                    <div class="col">
+                        {{ form.mother_occupation}}
+                    </div>
+
+                    <div class="col">
+                        {{ form.mother_employer}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="LegalGuardian" class="form-section" style="display: none;">
+            <div class="name-container">
+                <div class="form-group row">
+                    <div class="col">
+                        {{ form.guardian_voter_status }}
+                    </div>
+
+                    <div class="col">
+                        {{ form.guardian_name }}
+                    </div>
+
+                    <div class="col">
+                        {{ form.guardian_educational_attainment }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="name-container">
+                <div class="form-group row">
+                    <div class="col">
+                        {{ form.guardian_occupation }}
+                    </div>
+
+                    <div class="col">
+                        {{ form.guardian_employer }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="modal-button">Save Record</button>
+        </div>
+
+    </form>
+</div>
+
+
+
+<script src="{% static 'js/add-record.js' %}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
         var voterStatusCheckbox = document.getElementById("id_father_voter_status");
 
-        voterStatusCheckbox.addEventListener("change", function() {
+        voterStatusCheckbox.addEventListener("change", function () {
             var notRegisteredVoterLabel = document.getElementById("notRegisteredVoterLabel");
 
             if (voterStatusCheckbox.checked) {
@@ -321,29 +323,8 @@
         });
     });
 
-       
-    function toggleSection(sectionId) {
-    var sectionToToggle = document.getElementById(sectionId);
-    var otherSections = document.querySelectorAll('.form-section');
-
-    otherSections.forEach(function (section) {
-        if (section.id !== sectionId) {
-        section.style.display = 'none';
-        }
-    });
-
-    if (sectionToToggle.style.display === 'none') {
-        sectionToToggle.style.display = 'block';
-    } else {
-        sectionToToggle.style.display = 'none';
-    }
-    }
-        
-
-    </script>
 
 
 
 
-
-
+</script>
