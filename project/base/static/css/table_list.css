@@ -167,19 +167,20 @@ tbody tr {
 
 .modal-box {
   background: #fff;
-  height: 780px;
-  width: 1200px;
+  height: 80vh;
+  width: 95vw;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  overflow-x: none;
+
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
   margin: 0;
   padding: 0;
 
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .modal-button {
@@ -199,13 +200,15 @@ tbody tr {
   text-align: center;
   text-decoration: none;
   user-select: none;
-  -webkit-user-select: none;
+
   touch-action: manipulation;
   vertical-align: middle;
   width: 100px;
-  margin-top: 5px;
+  margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
+
+  margin-bottom: 10px;
 }
 .modals-button {
   background-color: #fff;
