@@ -514,10 +514,6 @@ def inb_filter_applicants(request):
                 control_number=applicant.control_number
             ).delete()
 
-            # create an assesment function for pending applicant
-
-        #
-
         messages.success(request, "Applicants have been successfully filtered.")
     else:
         messages.warning(request, "There are no applicants to filter.")
@@ -617,7 +613,7 @@ def inb_applicant_info(request, status, control_number):
                     template,
                     {"passed_applicant": passed_applicant, "status": status},
                 )
-            
+
             elif status == "pending":
                 pending_applicant = get_object_or_404(
                     model_class, control_number=control_number
@@ -672,6 +668,9 @@ def fa_applicant_info(request, status, control_number):
         if status == "passed":
             model_class = FinancialAssistanceAccepted
             template = "FA/fa_passed_info.html"
+        elif status == "pending":
+            model_class = FinancialAssistanceAssesment
+            template = "FA/fa_pending_list.html"
         elif status == "failed":
             model_class = FinancialAssistanceRejected
             template = "FA/fa_failed_info.html"
@@ -688,6 +687,15 @@ def fa_applicant_info(request, status, control_number):
                     request,
                     template,
                     {"passed_applicant": passed_applicant, "status": status},
+                )
+            elif status == "pending":
+                pending_applicant = get_object_or_404(
+                    model_class, control_number=control_number
+                )
+                return render(
+                    request,
+                    template,
+                    {"pending_applicant": pending_applicant, "status": status},
                 )
             elif status == "failed":
                 failed_applicant = get_object_or_404(
@@ -712,6 +720,9 @@ def fa_applicant_list(request, status):
         if status == "passed":
             model_class = FinancialAssistanceAccepted
             template = "FA/fa_passed_list.html"
+        elif status == "pending":
+            model_class = FinancialAssistanceAssesment
+            template = "FA/fa_pending_list.html"
         elif status == "failed":
             model_class = FinancialAssistanceRejected
             template = "FA/fa_failed_list.html"
@@ -731,7 +742,6 @@ def fa_applicant_list(request, status):
 
 def inb_applicant_information(request, pk):
     if request.user.is_authenticated:
-        
         current_record_inb = CollegeStudentApplication.objects.get(id=pk)
         form_inb = AddINBForm(request.POST or None, instance=current_record_inb)
         try:
@@ -792,6 +802,7 @@ def delete_record(request, identifier, model_name, use_id=True):
             "inb_failed": (CollegeStudentRejected, "inb_failed_applicant"),
             "fa_application": (FinancialAssistanceApplication, "fa_applicant_list"),
             "fa_passed": (FinancialAssistanceAccepted, "fa_passed_applicant"),
+            "fa_pending": (FinancialAssistanceAsses, "fa_pending_applicant"),
             "fa_failed": (FinancialAssistanceRejected, "fa_failed_applicant"),
         }
 
@@ -1243,25 +1254,26 @@ def update_fa_requirement(request, requirement_id):
         {"requirement": requirement, "form": form},
     )
 
+
 def delete_requirement(request, item_type, item_id):
-    if item_type == 'inb':
+    if item_type == "inb":
         model_class = INBRequirementList
-        success_message = 'Requirement Deleted Successfully'
-        redirect_site = 'inb_requirement'
-    elif item_type == 'fa':
+        success_message = "Requirement Deleted Successfully"
+        redirect_site = "inb_requirement"
+    elif item_type == "fa":
         model_class = FARequirementList
-        success_message = 'Requirement Deleted Successfully'
-        redirect_site = 'fa_requirement'
+        success_message = "Requirement Deleted Successfully"
+        redirect_site = "fa_requirement"
     else:
-        return redirect(redirect_site)  
-    
-    if request.method == 'POST':
+        return redirect(redirect_site)
+
+    if request.method == "POST":
         item = get_object_or_404(model_class, pk=item_id)
         item.delete()
         messages.success(request, success_message)
         return redirect(redirect_site)  # Redirect to some appropriate view
 
-    return redirect('sc_list')  # Redirect to some appropriate view
+    return redirect("sc_list")  # Redirect to some appropriate view
 
 
 def test1(request):

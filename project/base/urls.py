@@ -48,6 +48,8 @@ urlpatterns = [
     path("FA_Requirements/<str:control_number>/",views.fa_requirement_list,name="fa_requirements_list",),
 
     path("fa/<str:status>/applicant_info/<str:control_number>/",views.fa_applicant_info,name="fa_applicant_info",),
+    
+    path("fa/pending/applicant/",views.fa_applicant_list,{"status": "pending"},name="fa_pending_applicant",),
 
     path("fa/passed/applicant/",views.fa_applicant_list,{"status": "passed"},name="fa_passed_applicant",),
     path("fa/passed/applicant_info/<str:control_number>/",views.fa_applicant_info,{"status": "passed"},name="fa_passed_applicant_info",),
