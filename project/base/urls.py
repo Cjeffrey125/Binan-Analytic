@@ -8,7 +8,7 @@ urlpatterns = [
     path("SignUp/", views.register_user, name="signup"),
     path("Dashboard/", views.data_visualization, name="dashboard"),
     path("CSV_Record", views.csv_record, name="export"),
-    #path("Import_File/", views.import_excel, name="import"),
+    
 
     
     path('delete_applicant_id/<int:pk>/<str:model_name>/', views.delete_by_id, name='delete_applicant_id'),
@@ -82,4 +82,7 @@ urlpatterns = [
     
     path("Filter/", views.filter, name="filter"),
    
+
+   path('import-grade/', views.import_grade, name='import_excel'),
+   path("import_applicant/", views.import_excel, name="import_applicant"),
 ]

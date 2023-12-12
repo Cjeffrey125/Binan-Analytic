@@ -4,19 +4,27 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<link rel="stylesheet" href="{% static 'css/table.css' %}">
+<link rel="stylesheet" href="{% static 'css/table_list.css' %}">
+<link rel="stylesheet" href="{% static 'css/import_modal.css' %}">
 
 <div class="container">
   <div class="d-flex">
     <div class="sidebar">
       {% include 'sidebar_filter.html' %}
     </div>
+    
+    <button id="openModal" class="modal-button">Import</button>
 
     <div class="main-content ms-auto">
       <div class="container-fluid">
         {% if applicants %}
         <h1>Iskolar ng Bayan</h1>
         <div class="box">
+          <div>
+            <a href="{% url 'export' %}">
+              <img src="{% static 'images/download.png' %}" class="img-resize">
+            </a>
+          </div>
           <div class="table-container">
             <table class="table">
               <thead>
@@ -43,9 +51,9 @@
               </tbody>
             </table>
             {% else %}
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center center-container">
               <h1>No student records found.</h1>
-            </div>
+            </div>            
             {% endif %}
           </div>
         </div>
@@ -54,4 +62,33 @@
   </div>
   {% endif %}
 
-  {% endblock %}
+
+  <div id="importModal" class="modal-container">
+    <div class="modal-box">
+        <h2>Import Grades</h2>
+
+        {% include 'modal/import_grades.html' %}
+
+        <button id="closeModal" class="modal-button">Close</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var openModalButton = document.getElementById("openModal");
+  var importModal = document.getElementById("importModal");
+  var closeModalButton = document.getElementById("closeModal");
+
+  openModalButton.addEventListener("click", function () {
+      importModal.style.display = "flex";
+  });
+
+  closeModalButton.addEventListener("click", function () {
+      importModal.style.display = "none";
+  });
+});
+
+</script>
+{% endblock %}
