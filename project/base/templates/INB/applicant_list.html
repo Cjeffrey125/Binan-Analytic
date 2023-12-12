@@ -17,12 +17,12 @@
     <div class="main-content ms-auto">
 
       <div class="container-fluid">
-        
+
         <h1>Iskolar ng Bayan</h1>
         <div class="box">
 
           <div>
-            <button type="button" id="openSchoolForm">
+            <button type="button" id="addButton">
               <img src="{% static 'images/add.png' %}" alt="Add" class="img-resize">
             </button>
 
@@ -33,7 +33,7 @@
             <a href="{% url 'export' %}">
               <img src="{% static 'images/download.png' %}" class="img-resize">
             </a>
-            
+
             <form method="post" action="{% url 'inb_filter_applicants' %}">
               {% csrf_token %}
               <button type="submit" class="btn btn-secondary">Filter Applicants</button>
@@ -77,7 +77,7 @@
           <div class="d-flex justify-content-center">
             <h1>There are no applicants.</h1>
           </div>
-            {% endif %}
+          {% endif %}
         </div>
       </div>
     </div>
@@ -88,12 +88,12 @@
 <div id="schoolFormContainer" class="modal-container">
   <div class="modal-box">
     <form method="POST" action="{% url 'add_inb_applicant' %}">
-        {% include 'INB/add_record.html' %}
+      {% include 'INB/add_record.html' %}
     </form>
   </div>
 </div>
 
-<script src="{% static 'js/modals.js' %}"></script>
+<script src="{% static 'js/add-modal.js' %}"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     var dateOfBirthSelect = document.getElementById("id_date_of_birth");
