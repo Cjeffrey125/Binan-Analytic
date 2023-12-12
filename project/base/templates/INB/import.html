@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,13 +7,14 @@
     <title>Import Excel</title>
 </head>
 <body>
-    <h2>Import Excel</h2>
-    <form id="importForm" action="{% url 'import_excel' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %} 
+    <h2>Import Applicant</h2>
+    <form id="importForm" action="{% url 'import_applicant' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="modal-button">Submit</button>
     </form>
-    
+</body>
+
 
 </body>
 </html>

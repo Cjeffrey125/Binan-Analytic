@@ -54,7 +54,7 @@ class FARequirementList(forms.ModelForm):
 
 
 class ApplicantUploadForm(forms.Form):
-    file = forms.FileField()
+    file = forms.FileField(label='Choose Excel file', widget=forms.FileInput(attrs={'accept': '.xlsx'}))
 
 class GradeUploadForm(forms.Form):
     file = forms.FileField(label='Choose Excel file', widget=forms.FileInput(attrs={'accept': '.xlsx'}))

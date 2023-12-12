@@ -4,12 +4,8 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<<<<<<< HEAD
-<link rel="stylesheet" href="{% static 'css/table.css' %}">
-<link rel="stylesheet" href="{% static 'css/import_modal.css' %}">
-=======
 <link rel="stylesheet" href="{% static 'css/table_list.css' %}">
->>>>>>> 136db5f1fe6fd441f80bfa891d71f03668888f09
+<link rel="stylesheet" href="{% static 'css/import_modal.css' %}">
 
 <div class="container">
   <div class="d-flex">
@@ -55,9 +51,9 @@
               </tbody>
             </table>
             {% else %}
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center center-container">
               <h1>No student records found.</h1>
-            </div>
+            </div>            
             {% endif %}
           </div>
         </div>

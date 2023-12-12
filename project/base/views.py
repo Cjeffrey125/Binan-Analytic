@@ -191,7 +191,7 @@ def import_excel(request):
 
     else:
         form = ApplicantUploadForm()
-    return render(request, "INB/applicant_list.html", {"form": form})
+    return render(request, "INB/import.html", {"form": form})
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------
@@ -546,6 +546,7 @@ def inb_filter_applicants(request):
 def iskolar_ng_bayan_list(request):
     if request.user.is_authenticated:
         form = AddINBForm()
+        import_form = ApplicantUploadForm(request.POST, request.FILES)
         all_applicants = CollegeStudentApplication.objects.all()
 
         accepted_applicants = CollegeStudentAccepted.objects.values_list(
@@ -568,7 +569,7 @@ def iskolar_ng_bayan_list(request):
     return render(
         request,
         "INB/applicant_list.html",
-        {"records": zip(filtered_applicants, requirement_records), "form": form},
+        {"records": zip(filtered_applicants, requirement_records), "form": form, "import_form":import_form},
     )
 
 
