@@ -29,17 +29,21 @@
               <img src="{% static 'images/upload.png' %}" alt="Upload" class="img-resize">
             </button>
 
-            <a href="{% url 'export' %}">
-              <img src="{% static 'images/download.png' %}" class="img-resize">
-            </a>
+            <button type="button" id="exportButton" class="image-button">
+              <img src="{% static 'images/download.png' %}" alt="export" class="img-resize">
+            </button>
 
-            <form method="post" action="{% url 'inb_filter_applicants' %}">
-              {% csrf_token %}
-              <button type="submit" class="btn btn-secondary">Filter Applicants</button>
-            </form>
+              
+          <form method="post" action="{% url 'inb_filter_applicants' %}" class="inline-form">
+            {% csrf_token %}
+            <button type="submit" class="image-button">
+              <img src="{% static 'images/filter.png' %}" alt="Filter Applicants" class="img-resize">
+            </button>
+          </form>
+   
 
           </div>
-
+ 
           <div class="table-container">
             {% if records %}
             <table class="table">
@@ -101,7 +105,7 @@
 </div>
 
 
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
   var schoolForm = document.getElementById("schoolForm");
 
@@ -115,6 +119,10 @@
     document.getElementById('uploadFormContainer').style.display = 'flex';
     document.getElementById('addFormContainer').style.display = 'none';
     initializeInputBox();
+  });
+
+  document.getElementById('exportButton').addEventListener('click', function () {
+    window.location.href = "{% url 'export' %}";
   });
 </script>
 
