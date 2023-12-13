@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<link rel="stylesheet" href="{% static 'css/table_list.css' %}">
+
+<div class="container">
+    <div class="d-flex">
+        <div class="sidebar">
+            {% include 'sidebar_filter.html' %}
+        </div>
+
+        <div class="main-content ms-auto">
+            <div class="container-fluid">
+                {% if applicants %}
+                <h1>Assesmen List</h1>
+                <div class="box">
+
+                    <div class="boxesbutton">
+
+                        <a href="{% url 'export' %}">
+                            <img src="{% static 'images/download.png' %}" class="img-resize">
+                        </a>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="table-header">Control Number</th>
+                                    <th class="table-header">Name</th>
+                                    <th class="table-header">Course</th>
+                                    <th class="table-header">Remarks</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="scrollable-container">
+                                {% for applicant in applicants %}
+                                <tr onclick="window.location='{% url 'fa_pending_applicant_info' applicant.control_number %}';"
+                                    style="cursor: pointer;">
+                                    <td>{{ applicant.control_number }}</td>
+                                    <td>{{ applicant.fullname }}</td>
+                                    <td>{{ applicant.course }}</td>
+                                    <td></td>
+
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+
+
+                            {% else %}
+                            <div class="d-flex justify-content-center center-container">
+                                <h1>No student records found.</h1>
+                            </div>
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% endblock %}

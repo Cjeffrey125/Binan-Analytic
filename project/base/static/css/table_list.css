@@ -16,6 +16,7 @@ body {
   margin-top: 13px;
   border-radius: 10px;
   background-color: #1c469a;
+  
 }
 
 .container-fluid h1 {
@@ -32,11 +33,12 @@ body {
 .table-container {
   border-radius: 15px;
   height: 1050px;
-  margin-top: 13px;
+  margin-top: 10px;
   max-width: 100%;
   width: 1050px;
   position: relative;
   max-height: 620px;
+  position: 0;
 }
 
 .table {
@@ -45,7 +47,7 @@ body {
   margin-top: 13x;
   border-radius: 5px;
   position: absolute;
-  top: 1px;
+  top: 25px;
 }
 
 .table th,
@@ -293,4 +295,8 @@ tbody tr {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+.boxesbutton{
+  position: relative;
+  top: 25px;
 }

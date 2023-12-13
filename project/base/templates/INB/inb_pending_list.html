@@ -15,14 +15,13 @@
         <div class="main-content ms-auto">
     <div class="container-fluid">
         {% if applicants %}
-        <h1>Assesmen List</h1>
+        <h1>Assesment List</h1>
         <div class="box">
 
-            <div>
-
-                <a href="{% url 'export' %}">
-                    <img src="{% static 'images/download.png' %}" class="img-resize">
-                </a>
+            <div class="boxesbutton">
+                <button type="button" id="exportButton" class="image-button">
+                    <img src="{% static 'images/download.png' %}" alt="export" class="img-resize">
+                </button>
             </div>
 
             <div class="table-container">
