@@ -84,4 +84,6 @@ urlpatterns = [
 
    path('import-grade/', views.import_grade, name='import_excel'),
    path("import_applicant/", views.import_excel, name="import_applicant"),
+
+   path('chart/', views.chart_view, name='chart_view'),
 ]

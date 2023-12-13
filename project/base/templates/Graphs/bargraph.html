@@ -1,3 +1,4 @@
+<!-- bargraph.html -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,30 +19,39 @@
         document.addEventListener('DOMContentLoaded', function () {
             var ctx = document.getElementById('barChart').getContext('2d');
 
-            const DATA_COUNT = 5;
-            const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
-
-            const labels = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year'];
-
-            const data = {
-                labels: labels,
-                datasets: [
-                    {
-                        label: 'Dataset 1',
-                        data: Array.from({ length: DATA_COUNT }, () => Math.floor(Math.random() * (NUMBER_CFG.max - NUMBER_CFG.min + 1)) + NUMBER_CFG.min),
-                        borderColor: 'red',
-                        backgroundColor: 'rgba(255, 0, 0, 0.5)',
-                        borderWidth: 1,
-                    }
-                ]
-            };
+            var chart_data = {{ chart_data|safe }};  // Access the chart_data from Django
 
             var barChart = new Chart(ctx, {
                 type: 'bar',
-                data: data,
+                data: chart_data,
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                        },
+                        tooltip: {
+                            displayColors: true,
+                            callbacks: {
+                                label: function (context) {
+                                    return context.dataset.label + ': ' + Math.round(context.parsed.y);
+                                },
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            stacked: false,
+                        },
+                        y: {
+                            stacked: false,
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0,
+                            },
+                        },
+                    },
                 }
             });
 

@@ -300,7 +300,32 @@ def current_datetime(request):
     now = timezone.now()
     return render(request, "dashboard.html", {"now": now})
 
+def chart_view(request):
+    school_years = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year']
+    datasets = []
 
+    # Define a list of colors for the bars
+    colors = ['pink', 'blue', 'green', 'violet', 'red']
+
+    for i, year in enumerate(school_years):
+        # Replace this with your actual data retrieval logic
+        data_points_count = CollegeStudentAccepted.objects.filter(school_year=year).count()
+
+        datasets.append({
+            'label': f'{year}',
+            'data': [data_points_count],
+            'backgroundColor': colors[i],
+            'borderColor': 'black',
+            'borderWidth': 0.5,
+        })
+
+    chart_data = {
+        'labels': school_years,
+        'datasets': datasets,
+    }
+
+    return render(request, 'dashboard.html', {'chart_data': chart_data})
+    
 def data_visualization(request):
     course_list = INBCourse.objects.all()
     school_counts = (
@@ -508,6 +533,8 @@ def inb_filter_applicants(request):
             CollegeStudentAssesment.objects.create(
                 control_number=applicant.control_number,
                 fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                school=applicant.school,
+                course=applicant.course,
             )
             CollegeStudentApplication.objects.filter(
                 control_number=applicant.control_number
