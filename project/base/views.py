@@ -1401,4 +1401,4 @@ def import_grade(request):
 
 
 def test1(request):
-    return render(request, "cms-forms.html")
+    return render(request, "test-template.html")

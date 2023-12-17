@@ -56,7 +56,7 @@ urlpatterns = [
     path("fa/failed/applicant/",views.fa_applicant_list,{"status": "failed"},name="fa_failed_applicant",),
     path("fa/failed/applicant_info/<str:control_number>/",views.fa_applicant_info,{"status": "failed"},name="fa_failed_applicant_info",),
 
-    path("test1", views.test1, name="forms",),
+    
     
     
     path("School_List/", views.school_course_list, name="sc_list",),
@@ -86,4 +86,7 @@ urlpatterns = [
    path("import_applicant/", views.import_excel, name="import_applicant"),
 
    path('chart/', views.chart_view, name='chart_view'),
+
+
+   path("test1", views.test1, name="forms",),
 ]
