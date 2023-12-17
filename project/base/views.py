@@ -261,7 +261,7 @@ def login_user(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("dashboard")
+                return redirect("inb-dashboard")
             else:
                 messages.error(request, "Incorrect username or password.")
         except MultiValueDictKeyError:
@@ -296,9 +296,6 @@ def register_user(request):
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-def current_datetime(request):
-    now = timezone.now()
-    return render(request, "dashboard.html", {"now": now})
 
 def chart_view(request):
     school_years = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year']
@@ -324,9 +321,15 @@ def chart_view(request):
         'datasets': datasets,
     }
 
-    return render(request, 'dashboard.html', {'chart_data': chart_data})
+    return render(request, 'inb-dashboard.html', {'chart_data': chart_data})
+
+
+def fa_data_visualization(request):
+
+    return render(request, 'fa-dashboard.html',)
     
-def data_visualization(request):
+    
+def inb_data_visualization(request):
     course_list = INBCourse.objects.all()
     school_counts = (
         CollegeStudentApplication.objects.values("school")
@@ -356,7 +359,7 @@ def data_visualization(request):
 
     return render(
         request,
-        "dashboard.html",
+        "inb-dashboard.html",
         {
             "labels": labels,
             "data": data,

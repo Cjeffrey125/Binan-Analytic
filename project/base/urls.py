@@ -6,7 +6,8 @@ urlpatterns = [
     path("Login/", views.login_user, name="login"),
     path("Logout/", views.logout_user, name="logout"),
     path("SignUp/", views.register_user, name="signup"),
-    path("Dashboard/", views.data_visualization, name="dashboard"),
+    path("INB-Dashboard/", views.inb_data_visualization, name="inb-dashboard"),
+    path("FA-Dashboard/", views.fa_data_visualization, name="fa-dashboard"),
     path("CSV_Record", views.csv_record, name="export"),
     
 
