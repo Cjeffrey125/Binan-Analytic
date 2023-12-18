@@ -1,57 +1,70 @@
 {% extends 'base.html' %}
 
+{% load static tailwind_tags %}
+
+{% tailwind_css %}
 {% load static %}
 
 {% block content %}
 {% if user.is_authenticated %}
-<link rel="stylesheet" href="{% static 'css/table_list.css' %}">
 
-<div class="container">
-  <div class="d-flex">
-    <div class="sidebar">
-      {% include 'sidebar_filter.html' %}
-    </div>
+<div class="px-10 mx-5">
+<div class="py-3">
+  <h1 class="text-4xl">Failed</h1>
+  <h3 class="text-cyan-400">WELCOME TO YOUR FAILED LIST</h3>
+</div>
 
-    <div class="main-content ms-auto">
-      <div class="container-fluid">
-        {% if applicants %}
-        <h1>Failed List</h1>
-          <div class="box">
-            <div class="boxesbutton">
-              <button type="button" id="exportButton" class="image-button">
-                <img src="{% static 'images/download.png' %}" alt="export" class="img-resize">
-              </button>
-            </div>
-          <div class="table-container">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th class="table-header">Control Number</th>
-                  <th class="table-header">Name</th>
-                  <th class="table-header">Course</th>
-                  <th class="table-header">Remarks</th>
-                </tr>
-              </thead>
+{% if applicants %}
+  <div class="boxesbutton flex my-1 ">
+    <button id="importButton" class="flex items-center py-1 px-1 mx-1">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+      </svg>
+      <span class="mx-2 text-sm font-normal">IMPORT</span>
+    </button>
+  
+  
+    <button id="exportButton" class="flex items-center py-1 px-1 mx-1">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+      </svg>
+      <span class="mx-2 text-sm font-normal">EXPORT</span>
+    </button>
+  </div>
 
-              <tbody>
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+              <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">Control Number</th>
+                    <th scope="col" class="px-6 py-3">Name</th>
+                    <th scope="col" class="px-6 py-3">Course</th>
+                    <th scope="col" class="px-6 py-3">Remarks</th>
+                  </tr>
+                </thead>
+                
+                <tbody>
                 <div class="scrollable-container">
                   {% for applicant_record, requirement_record in records %}
-                  <tr onclick="window.location='{% url 'inb_failed_applicant_info' applicant.control_number %}';"
-                    style="cursor: pointer;">
-                    <td>{{ applicant.control_number }}</td>
-                    <td>{{ applicant.fullname }}</td>
-                    <td>{{ applicant.course }}</td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  {% endfor %}
+                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" onclick="window.location='{% url 'inb_failed_applicant_info' applicant.control_number %}';"
+                  style="cursor: pointer;">
+                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.control_number }}</td>
+                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.fullname }}</td>
+                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.course }}</td>
+                </tr>
+                {% endfor %}
               </tbody>
             </table>
             {% else %}
-            <div class="d-flex justify-content-center center-container">
+            <div class="flex items-center justify-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
               <h1>No student records found.</h1>
             </div>
             {% endif %}
+            </div>
           </div>
         </div>
       </div>
@@ -59,4 +72,10 @@
   </div>
   {% endif %}
 
+  <script>
+    document.getElementById('exportButton').addEventListener('click', function () {
+      window.location.href = "{% url 'export' %}";
+    });
+  </script>
+  
   {% endblock %}

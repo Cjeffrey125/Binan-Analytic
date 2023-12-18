@@ -4,30 +4,42 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<link rel="stylesheet" href="{% static 'css/table_list.css' %}">
-<link rel="stylesheet" href="{% static 'css/import_modal.css' %}">
 
-<div class="container">
-  <div class="d-flex">
-    <div class="sidebar">
-      {% include 'sidebar_filter.html' %}
-    </div>
+
+<div class="px-10 mx-5">
+  <div class="py-3">
+    <h1 class="text-4xl">Passed</h1>
+    <h3 class="text-cyan-400">WELCOME TO YOUR PASSED LIST</h3>
+  </div>
     
-    <button id="openModal" class="modal-button">Import</button>
+<div  class="boxesbutton flex my-1" >
 
-    <div class="main-content ms-auto">
-      <div class="container-fluid">
+
+  <button onclick="openModal()" class="flex items-center py-1 px-1 mx-1" id="openModal" type="button">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+      class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+    </svg>
+    <span class="mx-2 text-sm font-normal">IMPORT</span>
+  </button>
+
+
+  <button id="exportButton" class="flex items-center py-1 px-1 mx-1">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+      class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round"
+        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+    </svg>
+    <span class="mx-2 text-sm font-normal">EXPORT</span>
+  </button>
+</div>
+
+{% include 'modal/import_grades.html' %}
         {% if applicants %}
-        <h1>Passed List</h1>
-        <div class="box">
-          <div class="boxesbutton">
-            <button type="button" id="exportButton" class="image-button">
-              <img src="{% static 'images/download.png' %}" alt="export" class="img-resize">
-            </button>
-          </div>
-          <div class="table-container">
-            <table class="table">
-              <thead>
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+          <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white">
                 <tr>
                   <th class="table-header">Control Number</th>
                   <th class="table-header">Name</th>
@@ -51,9 +63,10 @@
               </tbody>
             </table>
             {% else %}
-            <div class="d-flex justify-content-center center-container">
+            <div
+              class="flex items-center justify-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
               <h1>No student records found.</h1>
-            </div>            
+            </div>
             {% endif %}
           </div>
         </div>
@@ -62,33 +75,10 @@
   </div>
   {% endif %}
 
-
-  <div id="importModal" class="modal-container">
-    <div class="modal-box">
-        <h2>Import Grades</h2>
-
-        {% include 'modal/import_grades.html' %}
-
-        <button id="closeModal" class="modal-button">Close</button>
-    </div>
-  </div>
-
-</div>
-
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  var openModalButton = document.getElementById("openModal");
-  var importModal = document.getElementById("importModal");
-  var closeModalButton = document.getElementById("closeModal");
-
-  openModalButton.addEventListener("click", function () {
-      importModal.style.display = "flex";
+  document.getElementById('exportButton').addEventListener('click', function () {
+    window.location.href = "{% url 'export' %}";
   });
-
-  closeModalButton.addEventListener("click", function () {
-      importModal.style.display = "none";
-  });
-});
-
 </script>
+
 {% endblock %}
