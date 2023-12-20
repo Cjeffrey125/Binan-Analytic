@@ -40,7 +40,7 @@
             </button>
           </form>
         
-          <button onclick="openModal()" class="flex items-center py-1 px-1 mx-1" id="openModal" type="button">
+          <button onclick="openImport()" id="openModal" type="button" class="flex items-center py-1 px-1 mx-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
               class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round"
@@ -49,8 +49,7 @@
             <span class="mx-2 text-sm font-normal">IMPORT</span>
           </button>
           
-        
-          <button onclick="openExport()" id="openExportopenExport" class="flex items-center py-1 px-1 mx-1">
+          <button onclick="openExport()" id="openExport" type="button" class="flex items-center py-1 px-1 mx-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
               class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round"
@@ -58,7 +57,8 @@
             </svg>
             <span class="mx-2 text-sm font-normal">EXPORT</span>
           </button>
-        </div>
+
+          </div>
 
         <label for="table-search" class="sr-only">Search</label>
         <div class="relative">
@@ -129,59 +129,64 @@
           </div>
         </div>   
 
+     
+        {% include 'INB/export_form.html' %}
+
         {% include 'INB/import.html' %}
+
+        
+       
+      
+ 
  
 
 {% endif %}
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script>
-  var schoolForm = document.getElementById("schoolForm");
+  document.addEventListener('DOMContentLoaded', function () {
+    var schoolForm = document.getElementById("schoolForm");
 
-  document.getElementById('addButton').addEventListener('click', function () {
+    document.getElementById('addButton').addEventListener('click', function () {
       window.location.href = "{% url 'add_inb_applicant' %}";
-  });
+    });
 
-  document.getElementById('exportButton').addEventListener('click', function () {
-      window.location.href = "{% url 'export' %}";
-  });
-
-
-  function openModal() {
-      const modal = document.getElementById('importModal');
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
       modal.classList.remove('fadeOut');
       modal.classList.add('fadeIn');
       modal.style.display = 'flex';
-  }
+    }
 
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
 
-  function closeModal() {
-      const modal = document.getElementById('importModal');
-
-   
       setTimeout(() => {
-          modal.style.display = 'none';
+        modal.style.display = 'none';
       }, 50);
-  }
+    }
 
+    document.getElementById('openModal').addEventListener('click', function () {
+      openModal('importModal');
+      closeModal('exportModal'); 
+    });
 
-  document.getElementById('openModal').addEventListener('click', openModal);
+    document.getElementById('openExport').addEventListener('click', function () {
+      openModal('exportModal');
+      closeModal('importModal'); 
+    });
 
+    document.getElementById('cancelImportButton').addEventListener('click', function () {
+      closeModal('importModal');
+    });
 
-  document.getElementById('cancelButton').addEventListener('click', closeModal);
-
-  
-  document.getElementById('importForm').addEventListener('submit', function (event) {
-     
-      event.preventDefault();
-   
-      closeModal();
+    document.getElementById('cancelExportButton').addEventListener('click', function () {
+      closeModal('exportModal');
+    });
   });
-
- 
 </script>
-
 
 
 
