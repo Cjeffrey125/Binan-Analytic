@@ -61,7 +61,7 @@ from django.db import IntegrityError
 from django.contrib import messages
 
 
-# INB import
+
 def import_excel(request):
     if request.method == "POST":
         form = ApplicantUploadForm(request.POST, request.FILES)

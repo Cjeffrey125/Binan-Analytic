@@ -99,7 +99,8 @@
           {% endif %}
           </div>
         </div>   
-{% include 'INB/import.html' %}
+
+        {% include 'INB/import.html' %}
  
 
 {% endif %}
@@ -110,13 +111,50 @@
   var schoolForm = document.getElementById("schoolForm");
 
   document.getElementById('addButton').addEventListener('click', function () {
-    window.location.href = "{% url 'add_inb_applicant' %}";
+      window.location.href = "{% url 'add_inb_applicant' %}";
   });
 
   document.getElementById('exportButton').addEventListener('click', function () {
-    window.location.href = "{% url 'export' %}";
+      window.location.href = "{% url 'export' %}";
   });
+
+
+  function openModal() {
+      const modal = document.getElementById('importModal');
+      modal.classList.remove('fadeOut');
+      modal.classList.add('fadeIn');
+      modal.style.display = 'flex';
+  }
+
+
+  function closeModal() {
+      const modal = document.getElementById('importModal');
+
+   
+      setTimeout(() => {
+          modal.style.display = 'none';
+      }, 50);
+  }
+
+
+  document.getElementById('openModal').addEventListener('click', openModal);
+
+
+  document.getElementById('cancelButton').addEventListener('click', closeModal);
+
+  
+  document.getElementById('importForm').addEventListener('submit', function (event) {
+     
+      event.preventDefault();
+   
+      closeModal();
+  });
+
+ 
 </script>
+
+
+
 
 
 {% endblock %}
