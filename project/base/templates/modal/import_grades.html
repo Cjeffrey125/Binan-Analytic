@@ -1,23 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Import Excel</title>
-</head>
-<body>
-    <h2>Import Excel</h2>
-    <form id="importForm" action="{% url 'import_excel' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %} 
-        {{ form.as_p }}
-        <button type="submit" class="modal-button">Submit</button>
-    </form>
-    
+<style>
+    .animated {
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
 
-<<<<<<< HEAD
-</body>
-</html>
-=======
+
+
     .animated.faster {
         -webkit-animation-duration: 500ms;
         animation-duration: 500ms;
@@ -125,5 +115,8 @@
             if (event.target == modal) modalClose();
         }
     }
+
 </script>
->>>>>>> aca7b48 (FA tables & import(may error din similar kay INB))
+
+</script>
+

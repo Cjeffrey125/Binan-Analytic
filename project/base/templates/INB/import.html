@@ -1,25 +1,55 @@
+<style>
+    .animated {
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+    }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Import Excel</title>
-</head>
-<body>
-    <h2>Import Applicant</h2>
-    <form id="importForm" action="{% url 'import_applicant' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="modal-button">Submit</button>
-    </form>
-</body>
+    .animated.faster {
+        -webkit-animation-duration: 500ms;
+        animation-duration: 500ms;
+    }
+
+    .fadeIn {
+        -webkit-animation-name: fadeIn;
+        animation-name: fadeIn;
+    }
+
+    .fadeOut {
+        -webkit-animation-name: fadeOut;
+        animation-name: fadeOut;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+</style>
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 </body>
 </html>
 =======
+=======
+>>>>>>> aca7b483d96827a715f43074b59b0a7abfaefd3a
 <div id="importModal" class="main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
     style="background: rgba(0,0,0,.7);">
     <div
@@ -89,5 +119,9 @@
             if (event.target == modal) modalClose();
         }
     }
+<<<<<<< HEAD
 </script>
 >>>>>>> aca7b48 (FA tables & import(may error din similar kay INB))
+=======
+</script>
+>>>>>>> aca7b483d96827a715f43074b59b0a7abfaefd3a
