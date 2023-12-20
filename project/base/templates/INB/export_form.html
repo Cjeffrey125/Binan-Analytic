@@ -1,12 +1,58 @@
-{% extends 'base.html' %}
+{% load static tailwind_tags %}
+
+{% tailwind_css %}
+{% load static %}
 
 {% block content %}
 
-  {% if user.is_authenticated %}
+<style>
+  .animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+
+  .animated.faster {
+    -webkit-animation-duration: 500ms;
+    animation-duration: 500ms;
+  }
+
+  .fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+  }
+
+  .fadeOut {
+    -webkit-animation-name: fadeOut;
+    animation-name: fadeOut;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+    }
+  }
+</style>
+
 
 <h1>Choose what to data to export</h1>
 
-<form method="post">
+<form method="post" action="{% url 'export' %}">
     {% csrf_token %}
 
     {{ form.as_p }}
@@ -17,6 +63,39 @@
 </form>
 
 
-{% endif %}
+
+
+<script>
+  const modal = document.querySelector('.main-modal');
+  const closeButton = document.querySelectorAll('.modal-close');
+
+  const modalClose = () => {
+    modal.classList.remove('fadeIn');
+    modal.classList.add('fadeOut');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 500);
+  }
+
+  function openExport() {
+    const modal = document.querySelector('#importModal');
+    modal.classList.remove('fadeOut');
+    modal.classList.add('fadeIn');
+    modal.style.display = 'flex';
+  }
+
+  for (let i = 0; i < closeButton.length; i++) {
+
+    const elements = closeButton[i];
+
+    elements.onclick = (e) => modalClose();
+
+    modal.style.display = 'none';
+
+    window.onclick = function (event) {
+      if (event.target == modal) modalClose();
+    }
+  }
+</script>
 
 {% endblock %}
