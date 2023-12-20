@@ -9,12 +9,11 @@
 <div class="px-10 mx-5">
   <div class="py-3">
     <h1 class="text-4xl">Passed</h1>
-    <h3 class="text-cyan-400">WELCOME TO YOUR PASSED LIST</h3>
+    <h3 class="text-cyan-400">ISKOLAR NG BAYAN PASSED LIST</h3>
   </div>
     
+  {% if applicants %}
 <div  class="boxesbutton flex my-1" >
-
-
   <button onclick="openModal()" class="flex items-center py-1 px-1 mx-1" id="openModal" type="button">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
       class="w-6 h-6">
@@ -36,7 +35,6 @@
 </div>
 
 {% include 'modal/import_grades.html' %}
-        {% if applicants %}
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white">

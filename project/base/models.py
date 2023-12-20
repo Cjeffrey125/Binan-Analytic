@@ -128,7 +128,7 @@ class CollegeStudentAssesment(models.Model):
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
     course = models.CharField(max_length=100, default="")
-    school =  models.CharField(max_length=200, default="")
+    school = models.CharField(max_length=200, default="")
     remarks = models.CharField(max_length=200, default="")
     status = models.CharField(
         max_length=20, choices=(("Accepted", "Accepted"), ("Rejected", "Rejected"))
@@ -304,7 +304,7 @@ class FinancialAssistanceAccepted(models.Model):
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
     school_year = models.CharField(max_length=50, default="1st Years")
-    course = models.CharField(max_length=50, default="")
+    strand = models.CharField(max_length=50, default="")
     school = models.CharField(max_length=50, default="")
 
 
@@ -318,7 +318,7 @@ class FinancialAssistanceAssesment(models.Model):
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
     school_year = models.CharField(max_length=50, default="1st Years")
-    course = models.CharField(max_length=50, default="")
+    strand = models.CharField(max_length=50, default="")
     school = models.CharField(max_length=50, default="")
 
 
