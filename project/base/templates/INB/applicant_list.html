@@ -24,6 +24,7 @@
               class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
             </svg>
+
           </button>
         
           <form method="post" action="{% url 'inb_filter_applicants' %}" class="inline-form">
@@ -109,9 +110,7 @@
   var schoolForm = document.getElementById("schoolForm");
 
   document.getElementById('addButton').addEventListener('click', function () {
-    document.getElementById('addFormContainer').style.display = 'flex';
-    document.getElementById('uploadFormContainer').style.display = 'none';
-    initializeInputBox();
+    window.location.href = "{% url 'add_inb_applicant' %}";
   });
 
   document.getElementById('exportButton').addEventListener('click', function () {
