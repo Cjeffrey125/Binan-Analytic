@@ -48,7 +48,7 @@
           </button>
           
         
-          <button onclick="openExport()" id="openExport" class="flex items-center py-1 px-1 mx-1">
+          <button onclick="openExport()" id="openExportopenExport" class="flex items-center py-1 px-1 mx-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
               class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round"
@@ -99,13 +99,12 @@
           </div>
         </div>   
 {% include 'INB/import.html' %}
-{% include 'INB/export_form.html' %}
  
 
 {% endif %}
 
 
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
   var schoolForm = document.getElementById("schoolForm");
 
@@ -118,7 +117,7 @@
   document.getElementById('exportButton').addEventListener('click', function () {
     window.location.href = "{% url 'export' %}";
   });
-</script> -->
+</script>
 
 
 {% endblock %}
