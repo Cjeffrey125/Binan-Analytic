@@ -202,18 +202,18 @@ def import_excel(request):
 
 def csv_record(request):
     if request.method == "POST":
-        form = ExportForm(request.POST)
+        export_form = ExportForm(request.POST)
 
-        if form.is_valid():
+        if export_form.is_valid():
             response = HttpResponse(content_type="text/csv")
             response["Content-Disposition"] = "attachment; filename=record.csv"
 
             writer = csv.writer(response)
 
-            include_id = form.cleaned_data.get("include_id", False)
-            include_name = form.cleaned_data.get("include_name", False)
-            include_course = form.cleaned_data.get("include_course", False)
-            include_school = form.cleaned_data.get("include_school", False)
+            include_id = export_form.cleaned_data.get("include_id", False)
+            include_name = export_form.cleaned_data.get("include_name", False)
+            include_course = export_form.cleaned_data.get("include_course", False)
+            include_school = export_form.cleaned_data.get("include_school", False)
 
             headers = []
             if include_id:
@@ -244,9 +244,9 @@ def csv_record(request):
 
             return response
     else:
-        form = ExportForm()
+        export_form = ExportForm()
 
-    return render(request, "INB/export_form.html", {"form": form})
+    return render(request, "INB/export_form.html", {"export_form": export_form})
 
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -573,6 +573,7 @@ def iskolar_ng_bayan_list(request):
     if request.user.is_authenticated:
         form = AddINBForm()
         import_form = ApplicantUploadForm(request.POST, request.FILES)
+        export_form = ExportForm(request.POST)
         all_applicants = CollegeStudentApplication.objects.all()
 
         accepted_applicants = CollegeStudentAccepted.objects.values_list(
@@ -604,6 +605,7 @@ def iskolar_ng_bayan_list(request):
             "courses": courses,
             "form": form,
             "import_form": import_form,
+            "export_form": export_form,
         },
     )
 
