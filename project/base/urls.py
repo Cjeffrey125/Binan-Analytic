@@ -89,5 +89,5 @@ urlpatterns = [
    path('chart/', views.chart_view, name='chart_view'),
 
 
-   path("test1", views.test1, name="forms",),
+   path("test1", views.test1, {"form_type": "financial_assistance"},  name="forms",),
 ]

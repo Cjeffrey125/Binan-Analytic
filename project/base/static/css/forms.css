@@ -7,10 +7,10 @@
 }
 
 .control-number-input {
-  width: 300px;
+  width: 500px;
   height: 45px;
   padding: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #fb1919;
   border-radius: 25px;
   margin-bottom: 10px;
 }

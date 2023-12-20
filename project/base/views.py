@@ -1403,5 +1403,28 @@ def import_grade(request):
     return render(request, "modal/import_grades.html", {"form": form})
 
 
-def test1(request):
-    return render(request, "test-template.html")
+def test1(request, form_type):
+    if request.user.is_authenticated:
+        if form_type == "applicant":
+            form = AddINBForm(request.POST or None)
+            template = "INB/add_record.html"
+            success_url = "inb_applicant_list"
+        elif form_type == "financial_assistance":
+            form = AddFinancialAssistanceForm(request.POST or None)
+            template = "test-template.html"
+            success_url = "fa_applicant_list"
+        else:
+            messages.error(request, "Invalid form type.")
+            return redirect("home")
+
+        if request.method == "POST":
+            if form.is_valid():
+                add_record = form.save()
+                messages.success(request, "Record Successfully Added")
+                return redirect(success_url)
+
+        return render(request, template, {"form": form})
+    else:
+        messages.error(request, "You need to be logged in for this process.")
+        return redirect("home")
+ 

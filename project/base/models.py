@@ -37,19 +37,19 @@ class CollegeStudentApplication(models.Model):
     shs_educational_provider = models.CharField(max_length=100, default="")
 
     # family data
-    father_voter_status = models.CharField(max_length=100, default="")
+    father_voter_status = models.CharField(max_length=100, default="Not Registered")
     father_name = models.CharField(max_length=100, default="")
     father_educational_attainment = models.CharField(max_length=100, default="")
     father_occupation = models.CharField(max_length=100, default="")
     father_employer = models.CharField(max_length=100, default="")
 
-    mother_voter_status = models.CharField(max_length=100, default="")
+    mother_voter_status = models.CharField(max_length=100, default="Not Registered")
     mother_name = models.CharField(max_length=100, default="")
     mother_educational_attainment = models.CharField(max_length=100, default="")
     mother_occupation = models.CharField(max_length=100, default="")
     mother_employer = models.CharField(max_length=100, default="")
 
-    guardian_voter_status = models.CharField(max_length=100, default="")
+    guardian_voter_status = models.CharField(max_length=100, default="Not Registered")
     guardian_name = models.CharField(max_length=100, default="")
     guardian_educational_attainment = models.CharField(max_length=100, default="")
     guardian_occupation = models.CharField(max_length=100, default="")
