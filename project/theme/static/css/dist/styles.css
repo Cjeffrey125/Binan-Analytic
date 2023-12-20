@@ -789,6 +789,10 @@ select {
   inset: 0px;
 }
 
+.-inset-1 {
+  inset: -0.25rem;
+}
+
 .inset-y-0 {
   top: 0px;
   bottom: 0px;
@@ -808,6 +812,18 @@ select {
 
 .z-50 {
   z-index: 50;
+}
+
+.z-auto {
+  z-index: auto;
+}
+
+.z-0 {
+  z-index: 0;
+}
+
+.-z-0 {
+  z-index: 0;
 }
 
 .col-auto {
@@ -903,10 +919,6 @@ select {
 
 .ms-2 {
   margin-inline-start: 0.5rem;
-}
-
-.ms-auto {
-  margin-inline-start: auto;
 }
 
 .mt-2 {
