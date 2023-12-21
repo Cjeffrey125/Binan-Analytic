@@ -700,36 +700,134 @@ class AddFinancialAssistanceForm(forms.ModelForm):
     )
 
     sibling_count = forms.IntegerField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "No. of Siblings", "class": "form-control"}
+            attrs={"placeholder": "Siblings", "class": "form-control"}
         ),
         label="",
     )
 
-    sibling_name = forms.CharField(
-        required=True,
+    a_sibling_name = forms.CharField(
+        required=False,
         widget=forms.widgets.TextInput(attrs={"placeholder": "Name", "class": "form-control"}),
     
         label="",
     )
-    sibling_DOB = forms.DateField(
-        required=True,
+    a_sibling_DOB = forms.DateField(
+        required=False,
         widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
         label="Date of Birth",
     )
-    sibling_age = forms.IntegerField(
-        required=True,
+    a_sibling_age = forms.IntegerField(
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Age", "class": "form-control"}
         ),
         label="",
     )
-    sibling_address = forms.CharField(
-        required=True,
+    a_sibling_address = forms.CharField(
+        required=False,
         widget=forms.widgets.TextInput(attrs={"placeholder": "Address", "class": "form-control"}),
         label="",
     )
+
+    b_sibling_name = forms.CharField(
+        required=False,
+        widget=forms.widgets.TextInput(attrs={"placeholder": "Name", "class": "form-control"}),
+        label="",
+    )
+    b_sibling_DOB = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        label="Date of Birth",
+    )
+    b_sibling_age = forms.IntegerField(
+        required=False,
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Age", "class": "form-control"}
+        ),
+        label="",
+    )
+    b_sibling_address = forms.CharField(
+        required=False,
+        widget=forms.widgets.TextInput(attrs={"placeholder": "Address", "class": "form-control"}),
+        label="",
+    )
+
+    c_sibling_name = forms.CharField(
+        required=False,
+        widget=forms.widgets.TextInput(attrs={"placeholder": "Name", "class": "form-control"}),
+    
+        label="",
+    )
+    c_sibling_DOB = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        label="Date of Birth",
+    )
+    c_sibling_age = forms.IntegerField(
+        required=False,
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Age", "class": "form-control"}
+        ),
+        label="",
+    )
+    c_sibling_address = forms.CharField(
+        required=False,
+        widget=forms.widgets.TextInput(attrs={"placeholder": "Address", "class": "form-control"}),
+        label="",
+    )
+
+    d_sibling_name = forms.CharField(
+        required=False,
+        widget=forms.widgets.TextInput(attrs={"placeholder": "Name", "class": "form-control"}),
+    
+        label="",
+    )
+    d_sibling_DOB = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        label="Date of Birth",
+    )
+    d_sibling_age = forms.IntegerField(
+        required=False,
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Age", "class": "form-control"}
+        ),
+        label="",
+    )
+    d_sibling_address = forms.CharField(
+        required=False,
+        widget=forms.widgets.TextInput(attrs={"placeholder": "Address", "class": "form-control"}),
+        label="",
+    )
+
+    e_sibling_name = forms.CharField(
+        required=False,
+        widget=forms.widgets.TextInput(attrs={"placeholder": "Name", "class": "form-control"}),
+    
+        label="",
+    )
+    e_sibling_DOB = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        label="Date of Birth",
+    )
+    e_sibling_age = forms.IntegerField(
+        required=False,
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Age", "class": "form-control"}
+        ),
+        label="",
+    )
+    e_sibling_address = forms.CharField(
+        required=False,
+        widget=forms.widgets.TextInput(attrs={"placeholder": "Address", "class": "form-control"}),
+        label="",
+    )
+
+
+
 
     class Meta:
         model = FinancialAssistanceApplication

@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import date
 
 class CollegeStudentApplication(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -242,10 +242,32 @@ class FinancialAssistanceApplication(models.Model):
 
     sibling_count = models.SmallIntegerField(default="")
 
-    sibling_name = models.CharField(max_length=100, default="")
-    sibling_DOB = models.DateField(default="01-01-2001")
-    sibling_age = models.SmallIntegerField(default=0)
-    sibling_address = models.CharField(max_length=100, default="")
+    a_sibling_name = models.CharField(max_length=100, default="")
+    a_sibling_DOB = models.DateField(default="00-00-0000")
+    a_sibling_age = models.SmallIntegerField(default=0)
+    a_sibling_address = models.CharField(max_length=100, default="")
+
+    b_sibling_name = models.CharField(max_length=100, default="")
+    b_sibling_DOB = models.DateField(default="00-00-0000")
+    b_sibling_age = models.SmallIntegerField(default=0)
+    b_sibling_address = models.CharField(max_length=100, default="")
+
+    c_sibling_name = models.CharField(max_length=100, default="")
+    c_sibling_DOB = models.DateField(default="00-00-0000")
+    c_sibling_age = models.SmallIntegerField(default=0)
+    c_sibling_address = models.CharField(max_length=100, default="")
+
+    d_sibling_name = models.CharField(max_length=100, default="")
+    d_sibling_DOB = models.DateField(default="00-00-0000")
+    d_sibling_age = models.SmallIntegerField(default=0)
+    d_sibling_address = models.CharField(max_length=100, default="")
+
+    e_sibling_name = models.CharField(max_length=100, default="")
+    e_sibling_DOB = models.DateField(default="00-00-0000")
+    e_sibling_age = models.SmallIntegerField(default=0)
+    e_sibling_address = models.CharField(max_length=100, default="")
+
+  
 
     def __str__(self):
         return f"{self.last_name}, {self.first_name} {self.middle_name}"
@@ -365,10 +387,30 @@ class FinancialAssistanceInfoRepository(models.Model):
 
     sibling_count = models.SmallIntegerField(default="")
 
-    sibling_name = models.CharField(max_length=100, default="")
-    sibling_DOB = models.DateField(default="01-01-2001")
-    sibling_age = models.SmallIntegerField(default=0)
-    sibling_address = models.CharField(max_length=100, default="")
+    a_sibling_name = models.CharField(max_length=100, default="")
+    a_sibling_DOB = models.DateField(default="01-01-2001")
+    a_sibling_age = models.SmallIntegerField(default=0)
+    a_sibling_address = models.CharField(max_length=100, default="")
+
+    b_sibling_name = models.CharField(max_length=100, default="")
+    b_sibling_DOB = models.DateField(default="01-01-2001")
+    b_sibling_age = models.SmallIntegerField(default=0)
+    b_sibling_address = models.CharField(max_length=100, default="")
+
+    c_sibling_name = models.CharField(max_length=100, default="")
+    c_sibling_DOB = models.DateField(default="01-01-2001")
+    c_sibling_age = models.SmallIntegerField(default=0)
+    c_sibling_address = models.CharField(max_length=100, default="")
+
+    d_sibling_name = models.CharField(max_length=100, default="")
+    d_sibling_DOB = models.DateField(default="01-01-2001")
+    d_sibling_age = models.SmallIntegerField(default=0)
+    d_sibling_address = models.CharField(max_length=100, default="")
+
+    e_sibling_name = models.CharField(max_length=100, default="")
+    e_sibling_DOB = models.DateField(default="01-01-2001")
+    e_sibling_age = models.SmallIntegerField(default=0)
+    e_sibling_address = models.CharField(max_length=100, default="")
 
     def __str__(self):
         return self.fullname
