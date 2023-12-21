@@ -90,8 +90,8 @@
         </div>
 
       {% if records %}
-          <div class="relative overflow-x-auto shadow-md sm:rounded-lg" style="z-index: -1;">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+          <div class="relative overflow-x-auto shadow-md sm:rounded-lg" >
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 " >
               <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0">
                 <tr>
                   <th scope="col" class="px-6 py-3">Requirements</th>
@@ -103,10 +103,10 @@
               </thead>
 
               <tbody>
-                {% for item in page_obj %}
+                
                 {% for applicant_record, requirement_record in records %}
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" onclick="window.location='{% url 'inb_applicant_info' applicant_record.id %}';"
-                  style="cursor: pointer;">
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  onclick="window.location='{% url 'inb_applicant_info' applicant_record.id %}';" style="cursor: pointer;">
                   <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{% if requirement_record.requirement == 13 %}
                     Complete
                     {% else %}
@@ -118,7 +118,7 @@
                   <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.school }}</td>
                   <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.course }}</td>
                 </tr>
-                  {% endfor %}
+               
                 {% endfor %}
               </tbody>
             </table>
