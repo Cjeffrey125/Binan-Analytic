@@ -9,6 +9,9 @@
 {% block content %}
 {% if user.is_authenticated %}
 
+
+
+<!-- EXPORT NOT YET FIX -->
 <div class="px-10 mx-5">
   <div class="py-3">
     <h1 class="text-4xl">Applicants</h1>
@@ -16,88 +19,117 @@
   </div>
 
             <div class="flex my-1 ">
-              <button class="bg-green-400 hover:bg-green-700 text-white font-bold py-1 px-4 rounded" id="addButton">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                  class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
-                </svg>
-              </button>
-            
-              <form method="post" action="{% url 'fa_filter_applicants' %}" class="inline-form">
-                {% csrf_token %}
-                <button type="submit" class="flex items-center py-1 px-1 mx-1">
-                  <svg width="22" height="22" viewBox="0 0 22 11" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                      d="M7.33333 10.2143C7.33333 10.0059 7.42991 9.80605 7.60182 9.6587C7.77373 9.51135 8.00688 9.42857 8.25 9.42857H13.75C13.9931 9.42857 14.2263 9.51135 14.3982 9.6587C14.5701 9.80605 14.6667 10.0059 14.6667 10.2143C14.6667 10.4227 14.5701 10.6225 14.3982 10.7699C14.2263 10.9172 13.9931 11 13.75 11H8.25C8.00688 11 7.77373 10.9172 7.60182 10.7699C7.42991 10.6225 7.33333 10.4227 7.33333 10.2143ZM3.66667 5.5C3.66667 5.29162 3.76324 5.09177 3.93515 4.94442C4.10706 4.79707 4.34022 4.71429 4.58333 4.71429H17.4167C17.6598 4.71429 17.8929 4.79707 18.0648 4.94442C18.2368 5.09177 18.3333 5.29162 18.3333 5.5C18.3333 5.70838 18.2368 5.90823 18.0648 6.05558C17.8929 6.20293 17.6598 6.28571 17.4167 6.28571H4.58333C4.34022 6.28571 4.10706 6.20293 3.93515 6.05558C3.76324 5.90823 3.66667 5.70838 3.66667 5.5ZM0 0.785714C0 0.57733 0.0965773 0.377481 0.268486 0.230131C0.440394 0.0827805 0.673552 0 0.916667 0H21.0833C21.3264 0 21.5596 0.0827805 21.7315 0.230131C21.9034 0.377481 22 0.57733 22 0.785714C22 0.994099 21.9034 1.19395 21.7315 1.3413C21.5596 1.48865 21.3264 1.57143 21.0833 1.57143H0.916667C0.673552 1.57143 0.440394 1.48865 0.268486 1.3413C0.0965773 1.19395 0 0.994099 0 0.785714Z"
-                      fill="#F8F8F8" />
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <button class="bg-green-400 hover:bg-green-700 text-white font-bold py-1 px-4 rounded" id="addButton">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
                   </svg>
-                  <span class="mx-2 text-sm font-normal">FILTERS</span>
+            
                 </button>
-              </form>
             
-              <button onclick="openModal()" class="flex items-center py-1 px-1 mx-1" id="openModal" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                  class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                </svg>
-                <span class="mx-2 text-sm font-normal">IMPORT</span>
-              </button>
+                <form method="post" action="{% url 'fa_filter_applicants' %}" class="inline-form">
+                  {% csrf_token %}
+                  <button type="submit" class="flex items-center py-1 px-1 mx-1">
+                    <svg width="22" height="22" viewBox="0 0 22 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        d="M7.33333 10.2143C7.33333 10.0059 7.42991 9.80605 7.60182 9.6587C7.77373 9.51135 8.00688 9.42857 8.25 9.42857H13.75C13.9931 9.42857 14.2263 9.51135 14.3982 9.6587C14.5701 9.80605 14.6667 10.0059 14.6667 10.2143C14.6667 10.4227 14.5701 10.6225 14.3982 10.7699C14.2263 10.9172 13.9931 11 13.75 11H8.25C8.00688 11 7.77373 10.9172 7.60182 10.7699C7.42991 10.6225 7.33333 10.4227 7.33333 10.2143ZM3.66667 5.5C3.66667 5.29162 3.76324 5.09177 3.93515 4.94442C4.10706 4.79707 4.34022 4.71429 4.58333 4.71429H17.4167C17.6598 4.71429 17.8929 4.79707 18.0648 4.94442C18.2368 5.09177 18.3333 5.29162 18.3333 5.5C18.3333 5.70838 18.2368 5.90823 18.0648 6.05558C17.8929 6.20293 17.6598 6.28571 17.4167 6.28571H4.58333C4.34022 6.28571 4.10706 6.20293 3.93515 6.05558C3.76324 5.90823 3.66667 5.70838 3.66667 5.5ZM0 0.785714C0 0.57733 0.0965773 0.377481 0.268486 0.230131C0.440394 0.0827805 0.673552 0 0.916667 0H21.0833C21.3264 0 21.5596 0.0827805 21.7315 0.230131C21.9034 0.377481 22 0.57733 22 0.785714C22 0.994099 21.9034 1.19395 21.7315 1.3413C21.5596 1.48865 21.3264 1.57143 21.0833 1.57143H0.916667C0.673552 1.57143 0.440394 1.48865 0.268486 1.3413C0.0965773 1.19395 0 0.994099 0 0.785714Z"
+                        fill="#F8F8F8" />
+                    </svg>
+                    <span class="mx-2 text-sm font-normal">FILTERS</span>
+                  </button>
+                </form>
             
+                <button id="openModal" type="button" class="flex items-center py-1 px-1 mx-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                  </svg>
+                  <span class="mx-2 text-sm font-normal">IMPORT</span>
+                </button>
             
-              <button id="exportButton" class="flex items-center py-1 px-1 mx-1">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                  class="w-6 h-6">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                </svg>
-                <span class="mx-2 text-sm font-normal">EXPORT</span>
-              </button>
+                <button onclick="openExport()" id="openExport" type="button" class="flex items-center py-1 px-1 mx-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                  </svg>
+                  <span class="mx-2 text-sm font-normal">EXPORT</span>
+                </button>
+            
+              </div>
+            
+              <label for="table-search" class="sr-only">Search</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clip-rule="evenodd"></path>
+                  </svg>
+                </div>
+            
+                <div class="relative">
+                  <label for="table-search" class="sr-only">Search</label>
+                  <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg">
+                      <path fill-rule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clip-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <input type="text" id="table-search"
+                    class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Search">
+                </div>
+            
+              </div>
             </div>
-
-          {% if records %}
-          <div class="relative overflow-x-auto shadow-md sm:rounded-lg" style="z-index: -1;">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white">
-                <tr>
-                  <th scope="col" class="px-6 py-3">Requirements</th>
-                  <th scope="col" class="px-6 py-3">Control Number</th>
-                  <th scope="col" class="px-6 py-3">Name</th>
-                  <th scope="col" class="px-6 py-3">School</th>
-                  <th scope="col" class="px-6 py-3 ">Strand</th>
-                </tr>
-              </thead>
-          
-              <tbody>
-                {% for applicant_record, requirement_record in records %}
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" onclick="window.location='{% url 'fa_applicant_info' applicant_record.id %}';"
-                  style="cursor: pointer;">
-                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white"></td>>{% if requirement_record.requirement == 8 %}
+            
+            {% if records %}
+            <div class="relative overflow-x-auto shadow-md sm:rounded-lg" style="z-index: -1;">
+              <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+                <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0">
+                  <tr>
+                    <th scope="col" class="px-6 py-3">Requirements</th>
+                    <th scope="col" class="px-6 py-3">Control Number</th>
+                    <th scope="col" class="px-6 py-3">Name</th>
+                    <th scope="col" class="px-6 py-3">School</th>
+                    <th scope="col" class="px-6 py-3 ">Strand</th>
+                  </tr>
+                </thead>
+            
+                <tbody>
+                  {% for applicant_record, requirement_record in records %}
+                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    onclick="window.location='{% url 'fa_applicant_info' applicant_record.id %}';" style="cursor: pointer;">
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{% if requirement_record.requirement == 8 %}
                     Complete
                     {% else %}
                     {{requirement_record.requirement}}/8
                     {% endif %}
-                  </td>
-                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white"></td>>{{ applicant_record.control_number }}</td>
-                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white"></td>>{{ applicant_record }}</td>
-                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white"></td>>{{ applicant_record.school }}</td>
-                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white"></td>>{{ applicant_record.strand }}</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-          {% else %}
-          <div
-            class="flex items-center justify-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-            <h1>No student records found.</h1>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+                    </td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.control_number }}</td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record }}</td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.school }}</td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.strand }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              {% else %}
+              <div
+                class="flex items-center justify-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+                <h1>No student records found.</h1>
+              </div>
+              {% endif %}
+            </div>
+            </div>
+
+    
 {% include 'FA/import.html' %}
 
 {% endif %}
@@ -112,30 +144,46 @@
   </div>
 </div> -->
 
-
-<script src="{% static 'js/modals.js' %}"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    var dateOfBirthSelect = document.getElementById("id_date_of_birth");
-    dateOfBirthSelect.addEventListener("change", function () {
-      dateOfBirthSelect.classList.remove("placeholder");
-    });
 
-    var schoolForm = document.getElementById("schoolForm");
-
-    document.getElementById('openSchoolForm').addEventListener('click', function () {
-      document.getElementById('schoolFormContainer').style.display = 'flex';
-      initializeInputBox();
-    });
+  document.getElementById('addButton').addEventListener('click', function () {
+    window.location.href = "{% url 'add_fa_applicant' %}";
   });
 
+  function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('fadeOut');
+    modal.classList.add('fadeIn');
+    modal.style.display = 'flex';
+  }
 
+  function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
 
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 50);
+  }
 
-  document.getElementById('exportButton').addEventListener('click', function () {
-    window.location.href = "{% url 'export' %}";
+  document.getElementById('openModal').addEventListener('click', function () {
+    openModal('importModal');
+    closeModal('exportModal');
+  });
+
+  document.getElementById('openExport').addEventListener('click', function () {
+    openModal('exportModal');
+    closeModal('importModal');
+  });
+
+  document.getElementById('cancelImportButton').addEventListener('click', function () {
+    closeModal('importModal');
+  });
+
+  document.getElementById('cancelExportButton').addEventListener('click', function () {
+    closeModal('exportModal');
   });
 
 </script>
+
 
 {% endblock %}

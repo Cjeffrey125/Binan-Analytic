@@ -40,7 +40,7 @@
             </button>
           </form>
         
-          <button onclick="openImport()" id="openModal" type="button" class="flex items-center py-1 px-1 mx-1">
+          <button  id="openModal" type="button" class="flex items-center py-1 px-1 mx-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
               class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round"
@@ -103,6 +103,7 @@
               </thead>
 
               <tbody>
+                {% for item in page_obj %}
                 {% for applicant_record, requirement_record in records %}
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" onclick="window.location='{% url 'inb_applicant_info' applicant_record.id %}';"
                   style="cursor: pointer;">
@@ -117,9 +118,12 @@
                   <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.school }}</td>
                   <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.course }}</td>
                 </tr>
+                  {% endfor %}
                 {% endfor %}
               </tbody>
             </table>
+
+            
           {% else %}
           <div
             class="flex items-center justify-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
@@ -129,16 +133,12 @@
           </div>
         </div>   
 
+        
      
         {% include 'INB/export_form.html' %}
 
         {% include 'INB/import.html' %}
 
-        
-       
-      
- 
- 
 
 {% endif %}
 
@@ -146,9 +146,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var schoolForm = document.getElementById("schoolForm");
-
+document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('addButton').addEventListener('click', function () {
       window.location.href = "{% url 'add_inb_applicant' %}";
     });
@@ -179,8 +177,8 @@
     });
 
     document.getElementById('cancelImportButton').addEventListener('click', function () {
-      closeModal('importModal');
-    });
+        closeModal('importModal');
+      });
 
     document.getElementById('cancelExportButton').addEventListener('click', function () {
       closeModal('exportModal');
