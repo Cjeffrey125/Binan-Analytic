@@ -43,6 +43,7 @@ from import_export import resources
 from django.db.models import Q
 import datetime
 from django.utils import timezone
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class CollegeStudentApplicationResource(resources.ModelResource):
@@ -59,7 +60,6 @@ def home(request):
 # problem fk nan&update
 from django.db import IntegrityError
 from django.contrib import messages
-
 
 
 def import_excel(request):
@@ -297,38 +297,45 @@ def register_user(request):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
 def chart_view(request):
-    school_years = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year']
+    school_years = ["1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"]
     datasets = []
 
     # Define a list of colors for the bars
-    colors = ['pink', 'blue', 'green', 'violet', 'red']
+    colors = ["pink", "blue", "green", "violet", "red"]
 
     for i, year in enumerate(school_years):
         # Replace this with your actual data retrieval logic
-        data_points_count = CollegeStudentAccepted.objects.filter(school_year=year).count()
+        data_points_count = CollegeStudentAccepted.objects.filter(
+            school_year=year
+        ).count()
 
-        datasets.append({
-            'label': f'{year}',
-            'data': [data_points_count],
-            'backgroundColor': colors[i],
-            'borderColor': 'black',
-            'borderWidth': 0.5,
-        })
+        datasets.append(
+            {
+                "label": f"{year}",
+                "data": [data_points_count],
+                "backgroundColor": colors[i],
+                "borderColor": "black",
+                "borderWidth": 0.5,
+            }
+        )
 
     chart_data = {
-        'labels': school_years,
-        'datasets': datasets,
+        "labels": school_years,
+        "datasets": datasets,
     }
 
-    return render(request, 'inb-dashboard.html', {'chart_data': chart_data})
+    return render(request, "inb-dashboard.html", {"chart_data": chart_data})
 
 
 def fa_data_visualization(request):
+    return render(
+        request,
+        "fa-dashboard.html",
+    )
 
-    return render(request, 'fa-dashboard.html',)
-    
-    
+
 def inb_data_visualization(request):
     course_list = INBCourse.objects.all()
     school_counts = (
@@ -612,6 +619,7 @@ def iskolar_ng_bayan_list(request):
 
 def financial_assistance_list(request):
     if request.user.is_authenticated:
+        import_form = ApplicantUploadForm(request.POST, request.FILES)
         form = AddFinancialAssistanceForm()
         all_applicants = FinancialAssistanceApplication.objects.all()
 
@@ -635,7 +643,11 @@ def financial_assistance_list(request):
     return render(
         request,
         "FA/applicant_list.html",
-        {"records": zip(filtered_applicants, requirement_records), "form": form},
+        {
+            "records": zip(filtered_applicants, requirement_records),
+            "form": form,
+            "import_form": import_form,
+        },
     )
 
 
@@ -1429,4 +1441,18 @@ def test1(request, form_type):
     else:
         messages.error(request, "You need to be logged in for this process.")
         return redirect("home")
- 
+
+
+def pagination(request):
+    data_list = CollegeStudentApplication.objects.all()
+    paginator = Paginator(data_list, 20)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    return render(
+        request,
+        "INB/applicants_info.html",
+        {
+            "page_obj": page_obj,
+        },
+    )
