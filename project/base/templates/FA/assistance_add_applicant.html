@@ -10,6 +10,11 @@
 <form method="POST" action="{% url 'add_fa_applicant' %}">
     {% csrf_token %}
 
+        <div class="py-3 ml-96 mb-12">
+            <h1 class="text-4xl">FINANCIAL ASSISTANCE</h1>
+            <h3 class="text-cyan-400">ADD NEW APPLICANT</h3>
+        </div>
+
         <div class="container mt-4 mx-auto max-w-5xl">
 
             <div class="col mb-4">
@@ -105,16 +110,21 @@
                 {{ form.mother_employer |add_class:"block p-2 w-6/12 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
 
         </div>
-        {{ form.sibling_count }}
+    
         <div class="flex space-x-4 mb-4">
             <ul class="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200  sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-                <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                
+                <li class="w-24 border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                    {{ form.sibling_count|add_class:"block p-2 w-16 ml-2  text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+                </li>
+
+                <li class="w-72 border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                     <div class="flex items-center ps-3">
                         <label class="w-36 py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Name</label>
                     </div>
                 </li>
 
-                <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                <li class="w-96 border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
                     <div class="flex items-center ps-3">
                         <label class="w-36 py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Address</label>
                     </div>
@@ -130,24 +140,63 @@
                     </div>
                 </li>
 
-                
             </ul>
         </div>
         
         <div class="flex space-x-4 mb-4">
-            {{ form.sibling_name |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+            {{ form.a_sibling_name |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
             
-            {{ form.sibling_address |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+            {{ form.a_sibling_address |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
 
-            {{ form.sibling_DOB |add_class:"block p-2 w-28 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+            {{ form.a_sibling_DOB |add_class:"block p-2 w-32 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
         
-            {{ form.sibling_age |add_class:"block p-2 w-24 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+            {{ form.a_sibling_age |add_class:"block p-2 w-32 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+        </div>
+
+        <div class="flex space-x-4 mb-4">
+            {{ form.b_sibling_name |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+            
+            {{ form.b_sibling_address |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+
+            {{ form.b_sibling_DOB |add_class:"block p-2 w-32 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
         
-                    </div>
+            {{ form.b_sibling_age |add_class:"block p-2 w-32 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+        </div>
+
+        <div class="flex space-x-4 mb-4">
+            {{ form.c_sibling_name |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+            
+            {{ form.c_sibling_address |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+
+            {{ form.c_sibling_DOB |add_class:"block p-2 w-32 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
         
+            {{ form.c_sibling_age |add_class:"block p-2 w-32 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+        </div>
+
+        <div class="flex space-x-4 mb-4">
+            {{ form.d_sibling_name |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+            
+            {{ form.d_sibling_address |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+
+            {{ form.d_sibling_DOB |add_class:"block p-2 w-32 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
         
-        <div class = "text-center">
-            <button type="submit" class="modal-button">Save Record</button>
+            {{ form.d_sibling_age |add_class:"block p-2 w-32 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+        </div>
+
+        <div class="flex space-x-4 mb-4">
+            {{ form.e_sibling_name |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+            
+            {{ form.e_sibling_address |add_class:"block p-2 w-96 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+
+            {{ form.e_sibling_DOB |add_class:"block p-2 w-32 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+        
+            {{ form.e_sibling_age |add_class:"block p-2 w-32 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+        </div>
+
+        
+
+        <div class="text-center">
+            <button type="submit"  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Save</button>
         </div>
     </div>
 </form>

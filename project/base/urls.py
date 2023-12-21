@@ -8,6 +8,7 @@ urlpatterns = [
     path("SignUp/", views.register_user, name="signup"),
     path("INB-Dashboard/", views.inb_data_visualization, name="inb-dashboard"),
     path("FA-Dashboard/", views.fa_data_visualization, name="fa-dashboard"),
+
     path("CSV_Record", views.csv_record, name="export"),
     
 
@@ -17,10 +18,10 @@ urlpatterns = [
 
     
     path("Applicant_List/", views.iskolar_ng_bayan_list, name="inb_applicant_list"),
-    path("Applicant_List/Add",views.add_information, {"form_type": "applicant"}, name="add_inb_applicant",),
+    path("Iskolar_ng_Binan_List/Add",views.add_information, {"form_type": "applicant"}, name="add_inb_applicant",),
 
     path("Financial_Assistance_List/",views.financial_assistance_list,name="fa_applicant_list",),
-    path("Add_FinancialAssistance_Applicant/",views.add_information,{"form_type": "financial_assistance"},name="add_fa_applicant",),
+    path("Financial_Assistance_List/Add",views.add_information,{"form_type": "financial_assistance"},name="add_fa_applicant",),
 
     path("Update_INB_Record/<int:pk>", views.update_information, name="update_inb_record"),
     path("Update_FA_Record/<int:pk>", views.update_information, name="update_fa_record"),

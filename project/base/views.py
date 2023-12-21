@@ -167,10 +167,30 @@ def import_excel(request):
                             mother_employer=row["Mother Employer"],
                             mother_income=row["Mother Income"],
                             sibling_count=row["Sibling Count"],
-                            sibling_name=row["Sibling Name"],
-                            sibling_DOB=row["Sibling Date of Birth"],
-                            sibling_age=row["Sibling Age"],
-                            sibling_address=row["Sibling Address"],
+                            a_sibling_name=row["Sibling Name"],
+                            a_sibling_DOB=row["Sibling Date of Birth"],
+                            a_sibling_age=row["Sibling Age"],
+                            a_sibling_address=row["Sibling Address"],
+                            
+                            b_sibling_name=row["Sibling Name"],
+                            b_sibling_DOB=row["Sibling Date of Birth"],
+                            b_sibling_age=row["Sibling Age"],
+                            b_sibling_address=row["Sibling Address"],
+                            
+                            c_sibling_name=row["Sibling Name"],
+                            c_sibling_DOB=row["Sibling Date of Birth"],
+                            c_sibling_age=row["Sibling Age"],
+                            c_sibling_address=row["Sibling Address"],
+
+                            d_sibling_name=row["Sibling Name"],
+                            d_sibling_DOB=row["Sibling Date of Birth"],
+                            d_sibling_age=row["Sibling Age"],
+                            d_sibling_address=row["Sibling Address"],
+
+                            e_sibling_name=row["Sibling Name"],
+                            e_sibling_DOB=row["Sibling Date of Birth"],
+                            e_sibling_age=row["Sibling Age"],
+                            e_sibling_address=row["Sibling Address"],
                         )
                     applicant.save()
                     applicant_count += 1
@@ -413,10 +433,31 @@ def fa_filter_applicants(request):
                 mother_employer=applicant.mother_employer,
                 mother_income=applicant.mother_income,
                 sibling_count=applicant.sibling_count,
-                sibling_name=applicant.sibling_name,
-                sibling_DOB=applicant.sibling_DOB,
-                sibling_age=applicant.sibling_age,
-                sibling_address=applicant.sibling_address,
+                a_sibling_name=applicant.a_sibling_name,
+                a_sibling_DOB=applicant.a_sibling_DOB,
+                a_sibling_age=applicant.a_sibling_age,
+                a_sibling_address=applicant.a_sibling_address,
+
+                b_sibling_name=applicant.a_sibling_name,
+                b_sibling_DOB=applicant.a_sibling_DOB,
+                b_sibling_age=applicant.a_sibling_age,
+                b_sibling_address=applicant.a_sibling_address,
+
+                c_sibling_name=applicant.a_sibling_name,
+                c_sibling_DOB=applicant.a_sibling_DOB,
+                c_sibling_age=applicant.a_sibling_age,
+                c_sibling_address=applicant.a_sibling_address,
+
+                d_sibling_name=applicant.a_sibling_name,
+                d_sibling_DOB=applicant.a_sibling_DOB,
+                d_sibling_age=applicant.a_sibling_age,
+                d_sibling_address=applicant.a_sibling_address,
+
+                e_sibling_name=applicant.a_sibling_name,
+                e_sibling_DOB=applicant.a_sibling_DOB,
+                e_sibling_age=applicant.a_sibling_age,
+                e_sibling_address=applicant.a_sibling_address,
+                
             )
 
         accepted_applicants = FinancialAssistanceApplication.objects.filter(
