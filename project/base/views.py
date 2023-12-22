@@ -171,22 +171,18 @@ def import_excel(request):
                             a_sibling_DOB=row["Sibling Date of Birth"],
                             a_sibling_age=row["Sibling Age"],
                             a_sibling_address=row["Sibling Address"],
-                            
                             b_sibling_name=row["Sibling Name"],
                             b_sibling_DOB=row["Sibling Date of Birth"],
                             b_sibling_age=row["Sibling Age"],
                             b_sibling_address=row["Sibling Address"],
-                            
                             c_sibling_name=row["Sibling Name"],
                             c_sibling_DOB=row["Sibling Date of Birth"],
                             c_sibling_age=row["Sibling Age"],
                             c_sibling_address=row["Sibling Address"],
-
                             d_sibling_name=row["Sibling Name"],
                             d_sibling_DOB=row["Sibling Date of Birth"],
                             d_sibling_age=row["Sibling Age"],
                             d_sibling_address=row["Sibling Address"],
-
                             e_sibling_name=row["Sibling Name"],
                             e_sibling_DOB=row["Sibling Date of Birth"],
                             e_sibling_age=row["Sibling Age"],
@@ -437,27 +433,22 @@ def fa_filter_applicants(request):
                 a_sibling_DOB=applicant.a_sibling_DOB,
                 a_sibling_age=applicant.a_sibling_age,
                 a_sibling_address=applicant.a_sibling_address,
-
                 b_sibling_name=applicant.a_sibling_name,
                 b_sibling_DOB=applicant.a_sibling_DOB,
                 b_sibling_age=applicant.a_sibling_age,
                 b_sibling_address=applicant.a_sibling_address,
-
                 c_sibling_name=applicant.a_sibling_name,
                 c_sibling_DOB=applicant.a_sibling_DOB,
                 c_sibling_age=applicant.a_sibling_age,
                 c_sibling_address=applicant.a_sibling_address,
-
                 d_sibling_name=applicant.a_sibling_name,
                 d_sibling_DOB=applicant.a_sibling_DOB,
                 d_sibling_age=applicant.a_sibling_age,
                 d_sibling_address=applicant.a_sibling_address,
-
                 e_sibling_name=applicant.a_sibling_name,
                 e_sibling_DOB=applicant.a_sibling_DOB,
                 e_sibling_age=applicant.a_sibling_age,
                 e_sibling_address=applicant.a_sibling_address,
-                
             )
 
         accepted_applicants = FinancialAssistanceApplication.objects.filter(
@@ -640,6 +631,14 @@ def iskolar_ng_bayan_list(request):
         schools = INBSchool.objects.all()
         courses = INBCourse.objects.all()
 
+        # list ng  pagination
+        records = list(zip(filtered_applicants, requirement_records))
+
+        # Paginator object
+        paginator = Paginator(records, 20)  # Show 20 records per page
+        page_number = request.GET.get("page")
+        page = paginator.get_page(page_number)
+
     if not request.session.get("login_message_displayed", False):
         messages.success(request, "You have logged in successfully!")
         request.session["login_message_displayed"] = True
@@ -648,7 +647,7 @@ def iskolar_ng_bayan_list(request):
         request,
         "INB/applicant_list.html",
         {
-            "records": zip(filtered_applicants, requirement_records),
+            "records": page,
             "schools": schools,
             "courses": courses,
             "form": form,
@@ -677,6 +676,14 @@ def financial_assistance_list(request):
 
         requirement_records = FinancialAssistanceRequirement.objects.all()
 
+        # list ng  pagination
+        records = list(zip(filtered_applicants, requirement_records))
+
+        # Paginator object
+        paginator = Paginator(records, 20)  # Show 20 records per page
+        page_number = request.GET.get("page")
+        page = paginator.get_page(page_number)
+
     if not request.session.get("login_message_displayed", False):
         messages.success(request, "You have logged in successfully!")
         request.session["login_message_displayed"] = True
@@ -685,7 +692,7 @@ def financial_assistance_list(request):
         request,
         "FA/applicant_list.html",
         {
-            "records": zip(filtered_applicants, requirement_records),
+            "records": page,
             "form": form,
             "import_form": import_form,
         },
@@ -1482,18 +1489,3 @@ def test1(request, form_type):
     else:
         messages.error(request, "You need to be logged in for this process.")
         return redirect("home")
-
-
-def pagination(request):
-    data_list = CollegeStudentApplication.objects.all()
-    paginator = Paginator(data_list, 20)
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
-
-    return render(
-        request,
-        "INB/applicants_info.html",
-        {
-            "page_obj": page_obj,
-        },
-    )
