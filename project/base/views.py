@@ -43,6 +43,7 @@ from import_export import resources
 from django.db.models import Q
 import datetime
 from django.utils import timezone
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 class CollegeStudentApplicationResource(resources.ModelResource):
@@ -59,7 +60,6 @@ def home(request):
 # problem fk nan&update
 from django.db import IntegrityError
 from django.contrib import messages
-
 
 
 def import_excel(request):
@@ -171,22 +171,18 @@ def import_excel(request):
                             a_sibling_DOB=row["Sibling Date of Birth"],
                             a_sibling_age=row["Sibling Age"],
                             a_sibling_address=row["Sibling Address"],
-                            
                             b_sibling_name=row["Sibling Name"],
                             b_sibling_DOB=row["Sibling Date of Birth"],
                             b_sibling_age=row["Sibling Age"],
                             b_sibling_address=row["Sibling Address"],
-                            
                             c_sibling_name=row["Sibling Name"],
                             c_sibling_DOB=row["Sibling Date of Birth"],
                             c_sibling_age=row["Sibling Age"],
                             c_sibling_address=row["Sibling Address"],
-
                             d_sibling_name=row["Sibling Name"],
                             d_sibling_DOB=row["Sibling Date of Birth"],
                             d_sibling_age=row["Sibling Age"],
                             d_sibling_address=row["Sibling Address"],
-
                             e_sibling_name=row["Sibling Name"],
                             e_sibling_DOB=row["Sibling Date of Birth"],
                             e_sibling_age=row["Sibling Age"],
@@ -317,38 +313,45 @@ def register_user(request):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
 def chart_view(request):
-    school_years = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year']
+    school_years = ["1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"]
     datasets = []
 
     # Define a list of colors for the bars
-    colors = ['pink', 'blue', 'green', 'violet', 'red']
+    colors = ["pink", "blue", "green", "violet", "red"]
 
     for i, year in enumerate(school_years):
         # Replace this with your actual data retrieval logic
-        data_points_count = CollegeStudentAccepted.objects.filter(school_year=year).count()
+        data_points_count = CollegeStudentAccepted.objects.filter(
+            school_year=year
+        ).count()
 
-        datasets.append({
-            'label': f'{year}',
-            'data': [data_points_count],
-            'backgroundColor': colors[i],
-            'borderColor': 'black',
-            'borderWidth': 0.5,
-        })
+        datasets.append(
+            {
+                "label": f"{year}",
+                "data": [data_points_count],
+                "backgroundColor": colors[i],
+                "borderColor": "black",
+                "borderWidth": 0.5,
+            }
+        )
 
     chart_data = {
-        'labels': school_years,
-        'datasets': datasets,
+        "labels": school_years,
+        "datasets": datasets,
     }
 
-    return render(request, 'inb-dashboard.html', {'chart_data': chart_data})
+    return render(request, "inb-dashboard.html", {"chart_data": chart_data})
 
 
 def fa_data_visualization(request):
+    return render(
+        request,
+        "fa-dashboard.html",
+    )
 
-    return render(request, 'fa-dashboard.html',)
-    
-    
+
 def inb_data_visualization(request):
     course_list = INBCourse.objects.all()
     school_counts = (
@@ -430,27 +433,22 @@ def fa_filter_applicants(request):
                 a_sibling_DOB=applicant.a_sibling_DOB,
                 a_sibling_age=applicant.a_sibling_age,
                 a_sibling_address=applicant.a_sibling_address,
-
                 b_sibling_name=applicant.a_sibling_name,
                 b_sibling_DOB=applicant.a_sibling_DOB,
                 b_sibling_age=applicant.a_sibling_age,
                 b_sibling_address=applicant.a_sibling_address,
-
                 c_sibling_name=applicant.a_sibling_name,
                 c_sibling_DOB=applicant.a_sibling_DOB,
                 c_sibling_age=applicant.a_sibling_age,
                 c_sibling_address=applicant.a_sibling_address,
-
                 d_sibling_name=applicant.a_sibling_name,
                 d_sibling_DOB=applicant.a_sibling_DOB,
                 d_sibling_age=applicant.a_sibling_age,
                 d_sibling_address=applicant.a_sibling_address,
-
                 e_sibling_name=applicant.a_sibling_name,
                 e_sibling_DOB=applicant.a_sibling_DOB,
                 e_sibling_age=applicant.a_sibling_age,
                 e_sibling_address=applicant.a_sibling_address,
-                
             )
 
         accepted_applicants = FinancialAssistanceApplication.objects.filter(
@@ -633,6 +631,14 @@ def iskolar_ng_bayan_list(request):
         schools = INBSchool.objects.all()
         courses = INBCourse.objects.all()
 
+        # list ng  pagination
+        records = list(zip(filtered_applicants, requirement_records))
+
+        # Paginator object
+        paginator = Paginator(records, 20)  # Show 20 records per page
+        page_number = request.GET.get("page")
+        page = paginator.get_page(page_number)
+
     if not request.session.get("login_message_displayed", False):
         messages.success(request, "You have logged in successfully!")
         request.session["login_message_displayed"] = True
@@ -641,7 +647,7 @@ def iskolar_ng_bayan_list(request):
         request,
         "INB/applicant_list.html",
         {
-            "records": zip(filtered_applicants, requirement_records),
+            "records": page,
             "schools": schools,
             "courses": courses,
             "form": form,
@@ -653,6 +659,7 @@ def iskolar_ng_bayan_list(request):
 
 def financial_assistance_list(request):
     if request.user.is_authenticated:
+        import_form = ApplicantUploadForm(request.POST, request.FILES)
         form = AddFinancialAssistanceForm()
         all_applicants = FinancialAssistanceApplication.objects.all()
 
@@ -669,6 +676,14 @@ def financial_assistance_list(request):
 
         requirement_records = FinancialAssistanceRequirement.objects.all()
 
+        # list ng  pagination
+        records = list(zip(filtered_applicants, requirement_records))
+
+        # Paginator object
+        paginator = Paginator(records, 20)  # Show 20 records per page
+        page_number = request.GET.get("page")
+        page = paginator.get_page(page_number)
+
     if not request.session.get("login_message_displayed", False):
         messages.success(request, "You have logged in successfully!")
         request.session["login_message_displayed"] = True
@@ -676,7 +691,11 @@ def financial_assistance_list(request):
     return render(
         request,
         "FA/applicant_list.html",
-        {"records": zip(filtered_applicants, requirement_records), "form": form},
+        {
+            "records": page,
+            "form": form,
+            "import_form": import_form,
+        },
     )
 
 
@@ -1470,4 +1489,3 @@ def test1(request, form_type):
     else:
         messages.error(request, "You need to be logged in for this process.")
         return redirect("home")
- 

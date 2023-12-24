@@ -16,7 +16,9 @@
                 </div>
 
                 <div class="flex justify-end pt-2">
-                    <button id="cancelButton" class="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg  hover:bg-gray-300">Cancel</button>
+                    <button type="button" id="cancelImportButton"
+                        class="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg  hover:bg-gray-300">Cancel</button>
+
 
                     <button type="submit" class="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400">Confirm</button>
                 </div>
@@ -27,7 +29,7 @@
 
 <script>
    
-    function openModal() {
+    function openImport() {
         const modal = document.getElementById('importModal');
         modal.style.display = 'flex';
     }
