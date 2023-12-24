@@ -1,120 +1,256 @@
 {% extends 'base.html' %}
+{% load static tailwind_tags %}
 
-{% load static %}
+{% load widget_tweaks %}
 
-{% block content %}
+    {% tailwind_css %}
 
-<link rel="stylesheet" href="{% static 'css/update.css' %}">
+    {% block content %}
 
-<div>
-    <h1 style="display: inline-block;">Student Records</h1>
-    <form action="{% url 'inb_requirements_list' control_number=records.control_number %}" method="get">
-        <button class="btn btn-primary">View INB Requirements</button>
-      </form>
 
-      <button type="button" id="openSchoolForm" class="modal-button">
-              Update
-    </button>
-
-</div>
-
-<div class="card">
-    <div class="card-header text-center align-middle">
-        Personal Data
+  
+    <div class="flex justify-between">
+      <div class="py-3 ml-96 mb-12">
+          <h1 class="text-4xl">ISKOLAR NG BIÑAN</h1>
+          <h3 class="text-cyan-400">ISKOLAR NG BINAN STUDENT APPLICANT DETAILS</h3>
+      </div>
+  
+        <div class="flex space-x-2 mr-96">
+            <a href="{% url 'inb_applicant_list' %}" class="text-white h-10 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800">Back</a>
+            
+            <form action="{% url 'inb_requirements_list' control_number=records.control_number %}" method="get">
+                <button type="submit" class="text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-700 dark:border-purple-700">View INB Requirements</button>
+            </form>
+        </div>
     </div>
-    <div class = "card-body">
-        <p class ="card-text">
-        {{ records.control_number }}<br/>
-        <!-- personal data -->
-        <p>Name : {{ records }} </p>
+  
+  
+        <div class="container mt-4 mx-auto max-w-5xl">
+          <div class="grid grid-cols-2 gap-4 mb-5">
+          
+            <div class="sm:text-sm">
+                <div>
+                  <label class="text-gray-500 sm:text-sm">Control Number:</label>
+                  <label class="sm:text-sm font-bold">{{ records.control_number }}</label>
+                </div>
+                <div>
+                  <label class="text-gray-500 sm:text-sm">Name:</label>
+                  <label class="sm:text-sm font-bold">{{ records }}</label>
+                </div>
+            </div>
+        
+          
+            <div class="text-right">
+                <a href= "{% url 'update_inb_record' records.id %}" class="text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-600 dark:border-green-600">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block align-middle" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 19l-7-7 7-7M19 14v6a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"></path>
+                  </svg>
+                </a>
+                <a href="{% url 'delete_applicant_id' records.id 'application' %}" class="text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600 dark:border-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block align-middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 6h18M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8zm9 8v4"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <div class="text-left text-2xl text-gray-300 font-bold mb-2">
+          Personal Details
+        </div>
+
+        <div class="ml-2">
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+            <div>
+              <label class="text-gray-500 sm:text-sm">Preferred School : </label> <label class="sm:text-sm font-bold">{{ records.school }}</label>
+            </div> 
+            <div>
+              <label class="text-gray-500 sm:text-sm">Prefered Course : </label> <label class="sm:text-sm font-bold">{{ records.course }}</label>
+            </div> 
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+            <div>
+              <label class="text-gray-500 sm:text-sm">General Weighted Average : </label> <label class="sm:text-sm font-bold">{{ records.gwa }}</label>
+            </div> 
+            <div>
+              <label class="text-gray-500 sm:text-sm">Rank : </label> <label class="sm:text-sm font-bold">{{ records.rank }}</label>
+            </div> 
+        </div> 
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+            <label class="text-gray-500 sm:text-sm">Date of Birth : </label> <label class="sm:text-sm font-bold">{{ records.date_of_birth }}</label>
+          </div> 
+          <div>
+            <label class="text-gray-500 sm:text-sm">Place of Birth : </label> <label class="sm:text-sm font-bold">{{ records.place_of_birth }}</label>
+          </div> 
+      </div>
     
-        <p>Blk Street : {{ records.blkstr }} </p>
-        <p>Barangay : {{ records.barangay }} </p>
-        <p>Province : {{ records.province }} </p>
-        <p>City : {{ records.city }} </p>
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+            <div>
+              <label class="text-gray-500 sm:text-sm">Blk Street : </label> <label class="sm:text-sm font-bold">{{ records.blkstr }} </label>
+            </div> 
+            <div>
+              <label class="text-gray-500 sm:text-sm">Barangay : </label> <label class="sm:text-sm font-bold">{{ records.barangay }} </label>
+            </div> 
+        </div>
+       
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+            <div>
+              <label class="text-gray-500 sm:text-sm">Province : </label> <label class="sm:text-sm font-bold">{{ records.province }} </label>
+            </div> 
+            <div>
+              <label class="text-gray-500 sm:text-sm">City : </label> <label class="sm:text-sm font-bold">{{ records.city }} </label>
+            </div> 
+        </div>
 
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+            <div>
+              <label class="text-gray-500 sm:text-sm">Gender : </label> <label class="sm:text-sm font-bold">{{ records.gender }}</label>
+            </div> 
+        </div>
+      
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+            <div>
+              <label class="text-gray-500 sm:text-sm">Contact No : </label> <label class="sm:text-sm font-bold">{{ records.contact_no }}</label>
+            </div> 
+            <div>
+              <label class="text-gray-500 sm:text-sm">Email Address : </label> <label class="sm:text-sm font-bold">{{ records.email_address }}</label>
+            </div> 
+        </div>
 
-        <p>Gender : {{ records.gender }}</p>
-        <p>Date of Birth : {{ records.date_of_birth }}</p>
-        <p>Place of Birth : {{ records.place_of_birth }}</p>
-        <p>Contact No : {{ records.contact_no }}</p>
+        </div>
+      
+
+    
+        <div class="text-left text-2xl text-gray-300 font-bold mb-2">
+          Previous School
+        </div>
+  
         
-        <p>Email Address : {{ records.email_address }}</p>
-        <p>School : {{ records.school }}</p>
-
-        <p>Course : {{ records.course }}</p>
-        <p>General Weighted Average : {{ records.gwa }}</p>
-        <p>Rank : {{ records.rank }}</p>
-
-        <p>Junior High School : {{ records.jhs }}</p>
-        <p>Junior High School Address : {{ records.jhs_address }}</p>
-        <p>Educational Provider : {{ records.jhs_educational_provider }}</p>
-
-        <p>Senior High School : {{ records.shs }}<br/>
-        <p>Senior High School Address: {{ records.shs_address }}<br/>
-        <p>Educational Provider : {{ records.shs_educational_provider }}<br/>
-
-        </p>
-    </div>
-
-    <div class="card-header text-center align-middle">
-        Family Data
-    </div>
-
-    <div class = "card-body">
-        <p>
+    <div class="ml-2">
+      <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+      <div>
+        <label class="text-gray-500 sm:text-sm">Junior High School : </label> <label class="sm:text-sm font-bold">{{ records.jhs }}</label>
+      </div>
+      <div>
+        <label class="text-gray-500 sm:text-sm">Senior High School : </label> <label class="sm:text-sm font-bold">{{ records.shs }}</label>
+      </div>
         
-            <p>Voter Status : {{ records.father_voter_status }}</p>
-            <p>Father Name : {{ records.father_name }}</p>
-            <p>Educational Attainment : {{ records.father_educational_attainment }}</p>
-            <p>Occupation : {{ records.father_occupation }}</p>
-            <p>Employer Name : {{ records.father_employer }}</p>
+      </div>
+      <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+        <div>
+          <label class="text-gray-500 sm:text-sm">Junior High School Address : </label> <label class="sm:text-sm font-bold">{{ records.jhs_address }}</label>
+        </div>
+        <div>
+          <label class="text-gray-500 sm:text-sm">Senior High School Address: </label> <label class="sm:text-sm font-bold">{{ records.shs_address }}</label>
+        </div>
+        
+      </div>
 
-            <p>Voter Status : {{ records.mother_voter_status }}</p>
-            <p>Mother Name : {{ records.mother_name }}</p>
-            <p>Educational Attainment : {{ records.mother_educational_attainment }}</p>
-            <p>Occupation : {{ records.mother_occupation }}</p>
-            <p>Employer Name : {{ records.mother_employer }}</p>
+      <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+        <div>
+          <label class="text-gray-500 sm:text-sm">Educational Provider : </label> <label class="sm:text-sm font-bold">{{ records.jhs_educational_provider }}</label>
+        </div>
+        <div>
+          <label class="text-gray-500 sm:text-sm">Educational Provider : </label> <label class="sm:text-sm font-bold">{{ records.shs_educational_provider }}</label>
+        </div>
+        
+      </div>
 
-            <p>Voter Status : {{ records.guardian_voter_status }}</p>
-            <p>Guardian Name : {{ records.guardian_name }}</p>
-            <p>Educational Attainment : {{ records.guardian_educational_attainment }}</p>
-            <p>Occupation : {{ records.guardian_occupation }}</p>
-            <p>Employer Name : {{ records.guardian_employer }}</p>
-        </p>
+    </div>
+    
+
+     
+
+    <div class="text-left text-2xl text-gray-300 font-bold mb-2">
+      Family Data
+    </div>
+  
+
+    <div class="ml-2">
+    <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+      <div>
+          <label class="text-gray-500 sm:text-sm">Father:</label>  <label class="sm:text-sm font-bold">{{ records.father_voter_status }}</label>
+      </div>
+      <div>
+        <label class="text-gray-500 sm:text-sm">Mother:  </label> <label class="sm:text-sm font-bold">{{ records.mother_voter_status }}</label>
+      </div>
+  </div>
+  
+
+    <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+      <div>
+        <label class="text-gray-500 sm:text-sm">Fullname : </label>{{ records.father_name }}
+      </div>
+      <div>
+        <label class="text-gray-500 sm:text-sm">FullName : </label>{{ records.mother_name }}
+      </div>
     </div>
 
+    <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+      <div>
+        <label class="text-gray-500 sm:text-sm">Educational Attainment : </label> <label class="sm:text-sm font-bold">{{ records.father_educational_attainment }}</label>
+      </div>
+      <div>
+        <label class="text-gray-500 sm:text-sm">Educational Attainment : </label> <label class="sm:text-sm font-bold">{{ records.mother_educational_attainment }}</label>
+      </div>
+    </div>
+
+    <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+      <div>
+        <label class="text-gray-500 sm:text-sm">Occupation : </label> <label class="sm:text-sm font-bold">{{ records.father_occupation }}</label>
+      </div>
+      <div>
+        <label class="text-gray-500 sm:text-sm">Occupation : </label> <label class="sm:text-sm font-bold">{{ records.mother_occupation }}</label>
+      </div>      
+    </div>
+
+    <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+      <div>
+        <label class="text-gray-500 sm:text-sm">Name of Employer : </label> <label class="sm:text-sm font-bold">{{ records.father_employer }}</label>
+      </div>
+      <div>
+        <label class="text-gray-500 sm:text-sm">Name of Employer : </label> <label class="sm:text-sm font-bold">{{ records.mother_employer }}</label>
+      </div>
+    </div>
+    
+
+    <div class="grid gap-4 grid-cols-2 mb-5 mt-12 border-b border-gray-300">
+      <div>
+        <label class="text-gray-500 sm:text-sm">Guardian : </label><label class="sm:text-sm font-bold">{{ records.guardian_voter_status }} </label>
+      </div>
+    </div>
+
+      <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+        <div>
+          <label class="text-gray-500 sm:text-sm">Guardian Name : </label><label class="sm:text-sm font-bold">{{ records.guardian_name }} </label>
+        </div>
+      </div>
+
+      <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+        <div>
+          <label class="text-gray-500 sm:text-sm">Educational Attainment : </label><label class="sm:text-sm font-bold">{{ records.guardian_educational_attainment }} </label>
+        </div>
+      </div>
+
+      <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+        <div>
+          <label class="text-gray-500 sm:text-sm">Occupation : </label><label class="sm:text-sm font-bold">{{ records.guardian_occupation }} </label>
+        </div>
+      </div>
+
+      <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+        <div>
+          <label class="text-gray-500 sm:text-sm">Employer Name : </label><label class="sm:text-sm font-bold">{{ records.guardian_employer }} </label>
+        </div>
+      </div>
+      
+
+      </div>
   </div>
 
-<br/> <br/>
-<a href = "{% url 'inb_applicant_list' %}" class="btn btn-secondary">Back</a>
-<a href="{% url 'delete_applicant_id' records.id 'application' %}" class="btn btn-danger">Delete Application</a>
 
-<div id="schoolFormContainer" class="modal-container">
-    <div class="modal-box">
-        <form method="POST" action="{% url 'update_inb_record' pk=records.id %}">
-
-            {% include 'INB/update_record.html' %}
-        </form>
-    </div>
-  </div>
-
-
-  <script src="{% static 'js/modals.js' %}"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    var dateOfBirthSelect = document.getElementById("id_date_of_birth");
-    dateOfBirthSelect.addEventListener("change", function () {
-      dateOfBirthSelect.classList.remove("placeholder");
-    });
-
-    var schoolForm = document.getElementById("schoolForm");
-
-    document.getElementById('openSchoolForm').addEventListener('click', function () {
-      document.getElementById('schoolFormContainer').style.display = 'flex';
-      initializeInputBox();
-    });
-  });
-</script>
 
 {% endblock %}
