@@ -1037,6 +1037,10 @@ select {
   height: 0.625rem;
 }
 
+.h-12 {
+  height: 3rem;
+}
+
 .w-11\/12 {
   width: 91.666667%;
 }
@@ -2069,6 +2073,11 @@ select {
   .dark\:focus\:ring-blue-500:focus {
     --tw-ring-opacity: 1;
     --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
+  }
+
+  .dark\:focus\:ring-gray-700:focus {
+    --tw-ring-opacity: 1;
+    --tw-ring-color: rgb(55 65 81 / var(--tw-ring-opacity));
   }
 }
 
