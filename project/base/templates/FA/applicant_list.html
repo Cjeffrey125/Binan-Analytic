@@ -9,6 +9,26 @@
 {% block content %}
 {% if user.is_authenticated %}
 
+<style>
+  ::-webkit-scrollbar {
+
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+</style>
+
 
 
 <!-- EXPORT NOT YET FIX -->
@@ -28,8 +48,6 @@
             
                 </button>
             
-                <form method="post" action="{% url 'fa_filter_applicants' %}" class="inline-form">
-                  {% csrf_token %}
                   <button type="submit" class="flex items-center py-1 px-1 mx-1">
                     <svg width="22" height="22" viewBox="0 0 22 11" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path
@@ -38,9 +56,8 @@
                     </svg>
                     <span class="mx-2 text-sm font-normal">FILTERS</span>
                   </button>
-                </form>
             
-                <button id="openModal" type="button" class="flex items-center py-1 px-1 mx-1">
+                <button id="openImport" type="button" class="flex items-center py-1 px-1 mx-1">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                     class="w-6 h-6">
                     <path stroke-linecap="round" stroke-linejoin="round"
@@ -89,7 +106,7 @@
                   </div>
                 </div>
              
-                <button onclick="confirmEndSY()"
+                <button type="button" id="openFilter"
                   class="text-sm bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-400 ml-4 w-32 shadow-md">
                   End Sem
                 </button>
@@ -188,14 +205,22 @@
   </nav>
 </div>
     
+{% include 'FA/fa_filter_applicants.html' %}
+
 {% include 'FA/import.html' %}
+
+
+
+
 
 {% endif %}
 
 
 <script>
+document.addEventListener('DOMContentLoaded', function () {
 
-  document.getElementById('addButton').addEventListener('click', function () {
+  document.getElementById('addButton').addEventListener('click', function () 
+  {
     window.location.href = "{% url 'add_fa_applicant' %}";
   });
 
@@ -214,8 +239,8 @@
     }, 50);
   }
 
-  document.getElementById('openModal').addEventListener('click', function () {
-    openModal('importModal');
+  document.getElementById('openImport').addEventListener('click', function () {
+    openImport('importModal');
     closeModal('exportModal');
   });
 
@@ -232,7 +257,17 @@
     closeModal('exportModal');
   });
 
-</script>
+  document.getElementById('openFilter').addEventListener('click', function () {
+    openFilter('filterModal');
+    closeModal('exportModal');
+  });
 
+  document.getElementById('cancelFilterButton').addEventListener('click', function () {
+    closeModal('filterModal');
+  });
+
+});
+
+</script>
 
 {% endblock %}

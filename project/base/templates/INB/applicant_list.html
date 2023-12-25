@@ -11,7 +11,7 @@
 
 <style>
   ::-webkit-scrollbar {
-    
+    width: 2px;
     height: 5px;
   }
   ::-webkit-scrollbar-track {
@@ -35,7 +35,7 @@
   
   <div class="flex my-1 relative justify-between">
           <div style="display: flex; justify-content: space-between; align-items: center;">
-          <button class="bg-green-400 hover:bg-green-700 text-white font-bold py-1 px-4 rounded" id="addButton">
+          <button class="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 bg-green-400 hover:bg-green-700 text-white font-bold py-1 px-4 rounded" id="addButton">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
               class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
@@ -102,12 +102,11 @@
         </div>
       </div>
       
-      <form method="post" action="{% url 'inb_filter_applicants' %}" class="inline-form">
-        {% csrf_token %}
-      <button onclick="confirmEndSY()" class="text-sm bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-400 ml-4 w-32 shadow-md">
+      
+      <button type="button" id="openFilter" class="text-sm transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 bg-purple-700 text-white px-6 py-2 rounded-full hover:bg-purple-400 ml-4 w-32 shadow-sm shadow-gray-700 ">
         End Sem
       </button>
-      </form>
+
       </div>
         </div>
 
@@ -136,7 +135,7 @@
                     {{requirement_record.requirement}}/13
                     {% endif %}
                   </td>
-                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.control_number }}</td>
+                  <td scope="row" class=" px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.control_number }}</td>
                   <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record }}</td>
                   <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.school }}</td>
                   <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.course }}</td>
@@ -196,10 +195,12 @@
 </nav>
 </div>
         
+        {% include 'INB/inb_filter_applicants.html' %}
      
         {% include 'INB/export_form.html' %}
 
         {% include 'INB/import.html' %}
+
 
 
 {% endif %}
@@ -239,17 +240,27 @@ document.addEventListener('DOMContentLoaded', function () {
       closeModal('importModal'); 
     });
 
+    
     document.getElementById('cancelImportButton').addEventListener('click', function () {
-        closeModal('importModal');
-      });
-
+      closeModal('importModal');
+    });
+    
+    
     document.getElementById('cancelExportButton').addEventListener('click', function () {
       closeModal('exportModal');
     });
+    
+    document.getElementById('openFilter').addEventListener('click', function () {
+    openFilter('filterModal');
+    closeModal('exportModal');
   });
+
+      document.getElementById('cancelFilterButton').addEventListener('click', function () {
+      closeModal('filterModal');
+    });
+
+  });
+
 </script>
-
-
-
 
 {% endblock %}
