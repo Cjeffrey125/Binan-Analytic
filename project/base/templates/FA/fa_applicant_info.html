@@ -1,43 +1,314 @@
 {% extends 'base.html' %}
+{% load static tailwind_tags %}
 
-{% block content %}
-  {% if user.is_authenticated %}
-    <div class="main-content">
-      <h1>Financial Assistance Applicant Details</h1>
+{% load widget_tweaks %}
 
-      <form action="{% url 'fa_requirements_list' control_number=records.control_number %}" method="get">
-        <button class="btn btn-primary">View FA Requirements</button>
-      </form>
+    {% tailwind_css %}
 
-      <a href = "{% url 'update_fa_record' records.id  %}" class="btn btn-secondary">Update Record</a>
-      <a href="{% url 'delete_applicant_id' records.id 'fa_application' %}" class="btn btn-danger">Delete Application</a>
+    {% block content %}
 
+    <div class="flex justify-between">
+      <div class="py-3 ml-96 mb-12">
+          <h1 class="text-4xl">Financial Assistance</h1>
+          <h3 class="text-cyan-400">FINANCIAL ASSISTANCE APPLICANT DETAILS</h3>
+      </div>
 
-
-      <div>
-        <a style="display: inline-block;">Student Records</a>
-       
+    <div class="flex space-x-2 mr-96">
+        <a href="{% url 'fa_applicant_list' %}" class="text-white h-10 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800">Back</a>
+      
+        <form action="{% url 'fa_requirements_list' control_number=records.control_number %}" method="get">
+          <button class="text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-700 dark:border-purple-700">View INB Requirements</button>
+        </form>
+      </div>
     </div>
 
-      <table class="table table-light">
-        <tr>
-          <th>Control Number</th>
-          <td>{{ records.control_number }}</td>
-        </tr>
-        <tr>
-          <th>Name</th>
-          <td>{{ records.first_name }} {{ records.last_name }}</td>
-        </tr>
-        <tr>
-          <th>School</th>
-          <td>{{ records.school }}</td>
-        </tr>
-        <tr>
-          <th>Strand</th>
-          <td>{{ records.strand }}</td>
-        </tr>
-      </table>
+    <div class="container mt-4 mx-auto max-w-5xl">
+      <div class="grid grid-cols-2 gap-4 mb-5">
+        <div class="sm:text-sm">
+          <div>
+            <label class="text-gray-500 sm:text-sm">Control Number:</label>
+            <label class="sm:text-sm font-bold">{{ records.control_number }}</label>
+          </div>
+          <div>
+            <label class="text-gray-500 sm:text-sm">Name:</label>
+            <label class="sm:text-sm font-bold">{{ records }}</label>
+          </div>
+      </div>
+
+      <div class="text-right">
+          <a href = "{% url 'update_fa_record' records.id  %}"  class="text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-600 dark:border-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block align-middle" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 19l-7-7 7-7M19 14v6a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"></path>
+            </svg>
+          </a>
+          <a href="{% url 'delete_applicant_id' records.id 'fa_application' %}" class="text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600 dark:border-red-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block align-middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 6h18M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8zm9 8v4"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="text-left text-2xl text-gray-300 font-bold mb-2">
+        Personal Details
+      </div>
+
+      <div class="ml-2"> 
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+            <label class="text-gray-500 sm:text-sm">General Average : </label> <label class="sm:text-sm font-bold">{{ records.general_average }}</label>
+          </div> 
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+            <label class="text-gray-500 sm:text-sm">Preferred School : </label> <label class="sm:text-sm font-bold">{{ records.school }}</label>
+          </div> 
+
+          <div>
+            <label class="text-gray-500 sm:text-sm">Address : </label> <label class="sm:text-sm font-bold">{{ records.school_address }}</label>
+          </div> 
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+            <label class="text-gray-500 sm:text-sm">Track : </label> <label class="sm:text-sm font-bold">{{ records.track }}</label>
+          </div> 
+
+          <div>
+            <label class="text-gray-500 sm:text-sm">Strand : </label> <label class="sm:text-sm font-bold">{{ records.strand }}</label>
+          </div> 
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+            <label class="text-gray-500 sm:text-sm">Gender : </label> <label class="sm:text-sm font-bold">{{ records.gender }}</label>
+          </div> 
+
+          <div>
+            <label class="text-gray-500 sm:text-sm">Religion : </label> <label class="sm:text-sm font-bold">{{ records.religion }}</label>
+          </div> 
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+            <label class="text-gray-500 sm:text-sm">Date of Birth : </label> <label class="sm:text-sm font-bold">{{ records.date_of_birth }}</label>
+          </div> 
+
+          <div>
+            <label class="text-gray-500 sm:text-sm">Place of Birth : </label> <label class="sm:text-sm font-bold">{{ records.place_of_birth }}</label>
+          </div> 
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+            <label class="text-gray-500 sm:text-sm">Blk Street : </label> <label class="sm:text-sm font-bold">{{ records.blkstr }} </label>
+          </div> 
+
+          <div>
+            <label class="text-gray-500 sm:text-sm">Barangay : </label> <label class="sm:text-sm font-bold">{{ records.barangay }} </label>
+          </div> 
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+            <label class="text-gray-500 sm:text-sm">Province : </label> <label class="sm:text-sm font-bold">{{ records.province }} </label>
+          </div> 
+          <div>
+            <label class="text-gray-500 sm:text-sm">City : </label> <label class="sm:text-sm font-bold">{{ records.city }} </label>
+          </div> 
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+            <label class="text-gray-500 sm:text-sm">Contact No : </label> <label class="sm:text-sm font-bold">{{ records.contact_no }}</label>
+          </div> 
+          <div>
+            <label class="text-gray-500 sm:text-sm">Email Address : </label> <label class="sm:text-sm font-bold">{{ records.email_address }}</label>
+          </div> 
+        </div>
+
+      </div>
+
+      <div class="text-left text-2xl text-gray-300 font-bold mb-2">
+        Family Data
+      </div>
+
+      <div class="ml-2"> 
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+              <label class="text-gray-500 sm:text-sm">Father:</label>  <label class="sm:text-sm font-bold">{{ records.father_name }}</label>
+          </div>
+          <div>
+            <label class="text-gray-500 sm:text-sm">Mother:  </label> <label class="sm:text-sm font-bold">{{ records.mother_name }}</label>
+          </div>
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+              <label class="text-gray-500 sm:text-sm">Age:</label>  <label class="sm:text-sm font-bold">{{ records.father_age }}</label>
+          </div>
+          <div>
+            <label class="text-gray-500 sm:text-sm">Age:  </label> <label class="sm:text-sm font-bold">{{ records.mother_age }}</label>
+          </div>
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+              <label class="text-gray-500 sm:text-sm">Occupation:</label>  <label class="sm:text-sm font-bold">{{ records.father_occupation }}</label>
+          </div>
+          <div>
+            <label class="text-gray-500 sm:text-sm">Occupation:  </label> <label class="sm:text-sm font-bold">{{ records.mother_occupation }}</label>
+          </div>
+        </div>
+
+        <div class="grid gap-4 grid-cols-2 mb-5 border-b border-gray-300">
+          <div>
+              <label class="text-gray-500 sm:text-sm">Employer:</label>  <label class="sm:text-sm font-bold">{{ records.father_employer }}</label>
+          </div>
+          <div>
+            <label class="text-gray-500 sm:text-sm">Employer:  </label> <label class="sm:text-sm font-bold">{{ records.mother_employer }}</label>
+          </div>
+        </div>
+
+        <div class="grid gap-4 grid-cols-4 border-b border-gray-300">
+          <div>
+              <label class="text-gray-500 sm:text-sm">Income:</label>  <label class="sm:text-sm font-bold">{{ records.father_income }}</label>
+          </div>
+          <div>
+            <label class="text-gray-500 sm:text-sm">Income:  </label> <label class="sm:text-sm font-bold">{{ records.mother_income }}</label>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-5">
+          <ul class="grid gap-4 grid-cols-4 mb-5 border-b border-gray-300 items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                <div class="flex items-center ps-3">
+                    <label class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Name</label>
+                </div>
+            </li>
+        
+            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                <div class="flex items-center ps-3">
+                    <label class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Address</label>
+                </div>
+            </li>
+        
+            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                <div class="flex items-center ps-3">
+                    <label class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Date of Birth</label>
+                </div>
+            </li>
+        
+            <li class="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+                <div class="flex items-center ps-3">
+                    <label class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Age</label>
+                </div>
+            </li>
+        </ul>
+      </div>
+
+        <div class="grid gap-4 grid-cols-4 mb-5 border-b border-gray-300">
+         
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.a_sibling_name }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.a_sibling_address }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.a_sibling_DOB }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.a_sibling_age }}</label>
+          </div>
+        </div>
+
+        <div class="grid gap-4 grid-cols-4 mb-5 border-b border-gray-300">
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.b_sibling_name }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.b_sibling_address }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.b_sibling_DOB }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.b_sibling_age }}</label>
+          </div>
+        </div>
+
+        <div class="grid gap-4 grid-cols-4 mb-5 border-b border-gray-300">
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.c_sibling_name }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.c_sibling_address }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.c_sibling_DOB }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.c_sibling_age }}</label>
+          </div>
+        </div>
+
+        <div class="grid gap-4 grid-cols-4 mb-5 border-b border-gray-300">
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.d_sibling_name }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.d_sibling_address }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.d_sibling_DOB }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.d_sibling_age }}</label>
+          </div>
+        </div>
+
+        <div class="grid gap-4 grid-cols-4 mb-5 border-b border-gray-300">
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.e_sibling_name }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.e_sibling_address }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.e_sibling_DOB }}</label>
+          </div>
+
+          <div>
+            <label class="sm:text-sm font-bold">{{ records.e_sibling_age }}</label>
+          </div>
+        </div>
+      
+
+
+
+      
+      </div>
     </div>
-  {% endif %}
+
+   
+
 
 {% endblock %}
