@@ -771,14 +771,11 @@ def inb_applicant_list(request, status):
 
         applicants_list = model_class.objects.all()
         paginator = Paginator(applicants_list, 10)
-        page_number = request.GET.get('page')
+        page_number = request.GET.get("page")
         applicants = paginator.get_page(page_number)
 
         form = GradeUploadForm(request.POST, request.FILES)
-        return render(request, template, {
-            "applicants": applicants, 
-            "form": form
-            })
+        return render(request, template, {"applicants": applicants, "form": form})
     else:
         messages.error(request, "You don't have permission.")
         return redirect("home")
