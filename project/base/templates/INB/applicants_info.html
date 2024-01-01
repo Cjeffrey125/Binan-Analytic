@@ -9,13 +9,13 @@
 
 
   
-    <div class="flex justify-between">
-      <div class="py-3 ml-96 mb-12">
-          <h1 class="text-4xl">ISKOLAR NG BIÑAN</h1>
+    <div class="flex justify-start items-start px-10 mx-40">
+      <div class="py-3 mb-3 mr-10">
+          <h1 class="text-4xl">Iskolar Ng Biñan</h1>
           <h3 class="text-cyan-400">ISKOLAR NG BINAN STUDENT APPLICANT DETAILS</h3>
       </div>
   
-        <div class="flex space-x-2 mr-96">
+        <div class="flex space-x-4 mt-1 ml-auto">
             <a href="{% url 'inb_applicant_list' %}" class="text-white h-10 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800">Back</a>
             
             <form action="{% url 'inb_requirements_list' control_number=records.control_number %}" method="get">
@@ -31,26 +31,32 @@
             <div class="sm:text-sm">
                 <div>
                   <label class="text-gray-500 sm:text-sm">Control Number:</label>
-                  <label class="sm:text-sm font-bold">{{ records.control_number }}</label>
+                  <label class="sm:text-lg font-bold">{{ records.control_number }}</label>
                 </div>
                 <div>
                   <label class="text-gray-500 sm:text-sm">Name:</label>
-                  <label class="sm:text-sm font-bold">{{ records }}</label>
+                  <label class="sm:text-lg font-bold">{{ records }}</label>
                 </div>
             </div>
         
           
             <div class="text-right">
-                <a href= "{% url 'update_inb_record' records.id %}" class="text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-600 dark:border-green-600">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block align-middle" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M12 19l-7-7 7-7M19 14v6a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"></path>
+                <button onclick="location.href='{% url 'update_inb_record' records.id %}'"
+                 class="text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium text-sm px-6 py-1 me-2 mb-2 dark:bg-green-500 dark:hover:bg-green-600 dark:focus:ring-green-600 dark:border-green-600 rounded-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
                   </svg>
-                </a>
-                <a href="{% url 'delete_applicant_id' records.id 'application' %}" class="text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600 dark:border-red-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block align-middle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 6h18M4 8h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8zm9 8v4"></path>
-                    </svg>
-                </a>
+                </button>
+                <button onclick="location.href='{% url 'delete_applicant_id' records.id 'application' %}'"
+                  class="text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium text-sm px-6 py-1 me-2 mb-2 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600 dark:border-red-600 rounded-lg">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                    class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                  </svg>
+                </button>
             </div>
         </div>
 

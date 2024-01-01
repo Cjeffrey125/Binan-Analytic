@@ -1,19 +1,98 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container">
-    <h1>Applicant Information</h1>
 
-    <p>Control Number: {{ passed_applicant.control_number }}</p>
-    <p>Name: {{ passed_applicant.fullname }}</p>
-    <p>School: {{ passed_applicant.school }}</p>
-    <p>Course: {{ passed_applicant.course }}</p>
 
-    <br>
-    <h1>Grades</h1>
+<div class="flex justify-start items-start px-10 mx-40">
+    <div class="py-3 mb-3 mr-10">
+        <h1 class="text-4xl">Passed</h1>
+        <h3 class="text-cyan-400">PASSED ISKOLAR STUDENT APPLICANT DETAILS</h3>
+    </div>
+    <div class="flex space-x-4 mt-1 ml-auto">
+        <a href="{% url 'inb_passed_applicant' %}"
+            class="text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800">Back</a>
 
-    <a href="{% url 'delete_applicant' passed_applicant.control_number 'inb_passed' %}" class="btn btn-danger">Delete Application</a>
+        <button onclick="window.location=''" style="cursor: pointer;"
+            class="text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">View
+            Details</button>
+    </div>
+    </div>
 
-    <a href="{% url 'inb_passed_applicant' %}" class="btn btn-secondary">Back to Applicant List</a>
+<div class="container mt-4 mx-auto max-w-5xl">
+    
+    <div class="flex justify-between">
+        <div>
+            <div class="mb-5 border-b border-gray-300 max-w-lg mx-auto">
+    
+                <div class="flex">
+                    <label class="text-gray-500 sm:text-lg mr-5">Control Number: </label>
+                    <label class="sm:text-xl font-bold">{{ passed_applicant.control_number }}</label>
+                </div>
+            </div>
+    
+            <div class="mb-5 border-b border-gray-300 max-w-lg mx-auto">
+    
+                <div class="flex">
+                    <label class="text-gray-500 sm:text-lg mr-5">Name: </label>
+                    <label class="sm:text-xl font-bold">{{ passed_applicant.fullname }}</label>
+                </div>
+            </div>
+    
+            <div class="mb-5 border-b border-gray-300 max-w-lg mx-auto">
+    
+                <div class="flex">
+                    <label class="text-gray-500 sm:text-lg mr-5">School: </label>
+                    <label class="sm:text-xl font-bold">{{ passed_applicant.school }}</label>
+                </div>
+            </div>
+    
+            <div class="mb-5 border-b border-gray-300 max-w-lg mx-auto">
+    
+                <div class="flex">
+                    <label class="text-gray-500 sm:text-lg mr-5">Course: </label>
+                    <label class="sm:text-xl font-bold">{{ passed_applicant.course }}</label>
+                </div>
+            </div>
+        </div>
+    <div class="relative bottom-10 w-[400px]">
+        <div class="relative right-10">
+    <div class="mb-10">
+        <h1 class="text-gray-500 sm:text-lg mb-2">Grades</h1>
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+            <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0">
+                <tr>
+                    <th scope="col" class="px-3 py-3">#</th>
+                    <th scope="col" class="px-3 py-3">Subject Code</th>
+                    <th scope="col" class="px-3 py-3">Sect Code</th>
+                    <th scope="col" class="px-3 py-3">Grade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td scope="row" class="px-3 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">1</td>
+                <td scope="row" class="px-4 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">COMP 20333
+                </td>
+                <td scope="row" class="px-4 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">BSIT-BN 4-1
+                </td>
+                <td scope="row" class="px-4 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">1.75
+                </td>
+            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+
+    
+   
+    
+
 </div>
+<button onclick="location.href='{% url 'delete_applicant' passed_applicant.control_number 'inb_passed' %}';"
+    class="text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium text-sm px-6 py-1 me-2 mb-2 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600 dark:border-red-600 rounded-lg mt-10">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+        class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+    </svg>
+</button>
 {% endblock %}

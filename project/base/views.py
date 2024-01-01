@@ -461,6 +461,10 @@ def fa_filter_applicants(request):
             control_number__in=accepted_applicants.values("control_number")
         ).distinct()
 
+        pending_applicants = FinancialAssistanceApplication.objects.exclude(
+            collegerequirements__requirement=8
+        ).distinct()
+
         for applicant in accepted_applicants:
             FinancialAssistanceInfoRepository.objects.filter(
                 control_number=applicant.control_number
@@ -470,6 +474,18 @@ def fa_filter_applicants(request):
                 fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}. {applicant.suffix}",
             )
 
+        for applicant in pending_applicants:
+            FinancialAssistanceInfoRepository.objects.filter(
+                control_number=applicant.control_number
+            ).update(status="For Assesment")
+            FinancialAssistanceAssesment.objects.create(
+                control_number=applicant.control_number,
+                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}. {applicant.suffix}",
+            )
+            FinancialAssistanceApplication.objects.filter(
+                control_number=applicant.control_number
+            ).delete()
+
         for applicant in rejected_applicants:
             FinancialAssistanceInfoRepository.objects.filter(
                 control_number=applicant.control_number
@@ -478,10 +494,14 @@ def fa_filter_applicants(request):
                 control_number=applicant.control_number,
                 fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
             )
+            FinancialAssistanceApplication.objects.filter(
+                control_number=applicant.control_number
+            ).delete()
 
         FinancialAssistanceApplication.objects.filter(
             Q(control_number__in=accepted_applicants.values("control_number"))
             | Q(control_number__in=rejected_applicants.values("control_number"))
+            | Q(control_number__in=pending_applicants.values("control_number"))
         ).delete()
 
         messages.success(request, "Applicants have been successfully filtered.")

@@ -7,12 +7,10 @@
             <div class="flex justify-center items-center pb-3 border-b">
                 <h1 class="text-2xl font-bold ">END SEMESTER</h1>
             </div>
-
-
             <div class="my-5 flex justify-center text-lg">
                 <h1>Are you sure you want to end this semester?</h1>
-            </div>
 
+            </div>
             <div class="flex justify-end pt-2">
                 <button type="button" id="cancelFilterButton"
                     class="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg  hover:bg-gray-300">Cancel</button>
@@ -21,9 +19,9 @@
                     {% csrf_token %}
                     <button type="submit"
                         class="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400">Confirm</button>
-                </form>
+                    </form>
+                    
             </div>
-
         </div>
     </div>
 </div>
@@ -43,7 +41,7 @@
 
     if (document.getElementById('filterModal')) {
 
-        document.getElementById('filterModal').addEventListener('click', filterModal);
+        document.getElementById('openModal').addEventListener('click', openModal);
 
         document.getElementById('cancelButton').addEventListener('click', function () {
             closeModal();

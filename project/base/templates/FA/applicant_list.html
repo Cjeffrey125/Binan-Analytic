@@ -11,7 +11,7 @@
 
 <style>
   ::-webkit-scrollbar {
-
+    width: 2px;
     height: 5px;
   }
 
@@ -28,8 +28,6 @@
     background: #555;
   }
 </style>
-
-
 
 <!-- EXPORT NOT YET FIX -->
 <div class="px-10 mx-5">
@@ -78,7 +76,7 @@
               </div>
           <div class="flex justify-between">
             <div class="relative flex-grow">
-            <label for="table-search" class="sr-only">Search</label>
+              <label for="table-search" class="sr-only">Search</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
                   <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
@@ -88,12 +86,11 @@
                       clip-rule="evenodd"></path>
                   </svg>
                 </div>
-            
                 <div class="relative">
                   <label for="table-search" class="sr-only">Search</label>
                   <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor"
+                      viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd"
                         d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                         clip-rule="evenodd"></path>
@@ -103,16 +100,17 @@
                     class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Search">
                 </div>
-                  </div>
-                </div>
-             
-                <button type="button" id="openFilter"
-                  class="text-sm bg-purple-700 text-white px-6 py-2 rounded-lg hover:bg-purple-400 ml-4 w-32 shadow-md">
-                  End Sem
-                </button>
-
               </div>
             </div>
+          
+          
+            <button type="button" id="openFilter"
+              class="text-sm transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 bg-purple-700 text-white px-3 py-2 rounded-sm hover:bg-purple-400 ml-4 w-40 shadow-sm shadow-gray-700 ">
+              End Application
+            </button>
+          
+          </div>
+          </div>
             
           {% if records %}
             <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -216,60 +214,66 @@
 
 
 {% endif %}
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
+  document.addEventListener('DOMContentLoaded', function () {
 
-  document.getElementById('addButton').addEventListener('click', function () 
-  {
-    window.location.href = "{% url 'add_fa_applicant' %}";
+    console.log('Page loaded successfully!');
+
+    document.getElementById('addButton').addEventListener('click', function () {
+      console.log('Add button clicked!');
+      window.location.href = "{% url 'add_fa_applicant' %}";
+    });
+
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.classList.remove('fadeOut');
+      modal.classList.add('fadeIn');
+      modal.style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 50);
+    }
+
+    function openFilter(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.style.display = 'flex';
+    }
+
+    document.getElementById('openImport').addEventListener('click', function () {
+      openImport('importModal');
+      closeModal('exportModal');
+    });
+
+    document.getElementById('openExport').addEventListener('click', function () {
+      openModal('exportModal');
+      closeModal('importModal');
+    });
+
+    document.getElementById('cancelImportButton').addEventListener('click', function () {
+      closeModal('importModal');
+    });
+
+    document.getElementById('cancelExportButton').addEventListener('click', function () {
+      closeModal('exportModal');
+    });
+
+    document.getElementById('openFilter').addEventListener('click', function () {
+      openFilter('filterModal');
+      closeModal('exportModal');
+    });
+
+    document.getElementById('cancelFilterButton').addEventListener('click', function () {
+      closeModal('filterModal');
+    });
+
   });
-
-  function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    modal.classList.remove('fadeOut');
-    modal.classList.add('fadeIn');
-    modal.style.display = 'flex';
-  }
-
-  function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-
-    setTimeout(() => {
-      modal.style.display = 'none';
-    }, 50);
-  }
-
-  document.getElementById('openImport').addEventListener('click', function () {
-    openImport('importModal');
-    closeModal('exportModal');
-  });
-
-  document.getElementById('openExport').addEventListener('click', function () {
-    openModal('exportModal');
-    closeModal('importModal');
-  });
-
-  document.getElementById('cancelImportButton').addEventListener('click', function () {
-    closeModal('importModal');
-  });
-
-  document.getElementById('cancelExportButton').addEventListener('click', function () {
-    closeModal('exportModal');
-  });
-
-  document.getElementById('openFilter').addEventListener('click', function () {
-    openFilter('filterModal');
-    closeModal('exportModal');
-  });
-
-  document.getElementById('cancelFilterButton').addEventListener('click', function () {
-    closeModal('filterModal');
-  });
-
-});
 
 </script>
-
 {% endblock %}
