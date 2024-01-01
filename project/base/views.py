@@ -646,6 +646,18 @@ def iskolar_ng_bayan_list(request):
             control_number__in=list(accepted_applicants) + list(rejected_applicants)
         )
 
+        # the search functionality
+        query = request.GET.get("q")
+        if query:
+            filtered_applicants = filtered_applicants.filter(
+                Q(control_number__icontains=query)
+                | Q(first_name__icontains=query)
+                | Q(middle_name__icontains=query)
+                | Q(last_name__icontains=query)
+                | Q(course__icontains=query)
+                | Q(school__icontains=query)
+            )
+
         requirement_records = CollegeRequirements.objects.all()
 
         schools = INBSchool.objects.all()
@@ -693,6 +705,18 @@ def financial_assistance_list(request):
         filtered_applicants = all_applicants.exclude(
             control_number__in=list(accepted_applicants) + list(rejected_applicants)
         )
+
+        # the search functionality
+        query = request.GET.get("q")
+        if query:
+            filtered_applicants = filtered_applicants.filter(
+                Q(control_number__icontains=query)
+                | Q(first_name__icontains=query)
+                | Q(middle_name__icontains=query)
+                | Q(last_name__icontains=query)
+                | Q(strand__icontains=query)
+                | Q(school__icontains=query)
+            )
 
         requirement_records = FinancialAssistanceRequirement.objects.all()
 
@@ -790,6 +814,17 @@ def inb_applicant_list(request, status):
             return redirect("home")
 
         applicants_list = model_class.objects.all()
+
+        # the search functionality
+        query = request.GET.get("q")
+        if query:
+            applicants_list = applicants_list.filter(
+                Q(control_number__icontains=query)
+                | Q(fullname__icontains=query)
+                | Q(course__icontains=query)
+                | Q(school__icontains=query)
+            )
+
         paginator = Paginator(applicants_list, 10)
         page_number = request.GET.get("page")
         applicants = paginator.get_page(page_number)
@@ -869,6 +904,17 @@ def fa_applicant_list(request, status):
             return redirect("home")
 
         applicants = model_class.objects.all()
+
+        # the search functionality
+        query = request.GET.get("q")
+        if query:
+            applicants = applicants.filter(
+                Q(control_number__icontains=query)
+                | Q(fullname__icontains=query)
+                | Q(strand__icontains=query)
+                | Q(school__icontains=query)
+            )
+
         return render(request, template, {"applicants": applicants})
     else:
         messages.error(request, "You don't have permission.")
