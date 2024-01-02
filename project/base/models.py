@@ -1,11 +1,12 @@
 from django.db import models
-from datetime import date
+
 
 class CollegeStudentApplication(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     control_number = models.CharField(unique=True, max_length=50)
 
+    requirement = models.CharField(max_length=50, default="Incomplete")
     # personal data
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -63,57 +64,28 @@ class CollegeStudentApplication(models.Model):
         super().save(*args, **kwargs)
 
         if created:
-            CollegeRequirements.objects.create(control=self)
+            requirements = INBRequirementRepository.objects.all()
+            for requirement in requirements:
+                INBApplicationRequirements.objects.create(
+                    applicant=self, requirement=requirement
+                )
 
 
-class CollegeRequirements(models.Model):
-    control = models.ForeignKey(CollegeStudentApplication, on_delete=models.CASCADE)
-    control_number = models.CharField(max_length=50, default="")
-    requirement = models.IntegerField(default=0)
-
-    req_a = models.CharField(max_length=100, default="False")
-    req_b = models.CharField(max_length=100, default="False")
-    req_c = models.CharField(max_length=100, default="False")
-    req_d = models.CharField(max_length=100, default="False")
-    req_e = models.CharField(max_length=100, default="False")
-    req_f = models.CharField(max_length=100, default="False")
-    req_g = models.CharField(max_length=100, default="False")
-    req_h = models.CharField(max_length=100, default="False")
-    req_i = models.CharField(max_length=100, default="False")
-    req_j = models.CharField(max_length=100, default="False")
-    req_k = models.CharField(max_length=100, default="False")
-    req_l = models.CharField(max_length=100, default="False")
-    req_m = models.CharField(max_length=100, default="False")
-
-    approved = models.BooleanField(default=False)
+class INBRequirementRepository(models.Model):
+    id = models.AutoField(primary_key=True)
+    requirement = models.CharField(max_length=500, default="")
 
     def __str__(self):
-        return f"Requirements for Application {self.control, self.control_number}"
+        return f"{self.requirement}"
 
-    def save(self, *args, **kwargs):
-        if not self.control_number:
-            self.control_number = self.control.control_number
 
-        requirement_fields = [
-            self.req_a,
-            self.req_b,
-            self.req_c,
-            self.req_d,
-            self.req_e,
-            self.req_f,
-            self.req_g,
-            self.req_h,
-            self.req_i,
-            self.req_j,
-            self.req_k,
-            self.req_l,
-            self.req_m,
-        ]
-        self.requirement = sum(
-            1 for field in requirement_fields if field.strip() == "True"
-        )
+class INBApplicationRequirements(models.Model):
+    applicant = models.ForeignKey(CollegeStudentApplication, on_delete=models.CASCADE)
+    requirement = models.ForeignKey(INBRequirementRepository, on_delete=models.CASCADE)
+    is_met = models.BooleanField(default=False)
 
-        super().save(*args, **kwargs)
+    def __str__(self):
+        return f"{self.applicant.control_number} - {self.requirement.requirement} - {'Met' if self.is_met else 'Not Met'}"
 
 
 class CollegeStudentAccepted(models.Model):
@@ -201,6 +173,8 @@ class ApplicantInfoRepositoryINB(models.Model):
 class FinancialAssistanceApplication(models.Model):
     control_number = models.CharField(unique=True, max_length=50)
 
+    requirement = models.CharField(max_length=50, default="Incomplete")
+
     # personal data
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -267,8 +241,6 @@ class FinancialAssistanceApplication(models.Model):
     e_sibling_age = models.SmallIntegerField(default=0)
     e_sibling_address = models.CharField(max_length=100, default="")
 
-  
-
     def __str__(self):
         return f"{self.last_name}, {self.first_name} {self.middle_name}"
 
@@ -277,49 +249,30 @@ class FinancialAssistanceApplication(models.Model):
         super().save(*args, **kwargs)
 
         if created:
-            FinancialAssistanceRequirement.objects.create(control=self)
+            requirements = FARequirementRepository.objects.all()
+            for requirement in requirements:
+                FAApplicationRequirements.objects.create(
+                    applicant=self, requirement=requirement
+                )
 
 
-class FinancialAssistanceRequirement(models.Model):
-    control = models.ForeignKey(
-        FinancialAssistanceApplication, on_delete=models.CASCADE
-    )
-    control_number = models.CharField(max_length=50, default="")
-    requirement = models.IntegerField(default=0)
-
-    req_a = models.CharField(max_length=100, default="False")
-    req_b = models.CharField(max_length=100, default="False")
-    req_c = models.CharField(max_length=100, default="False")
-    req_d = models.CharField(max_length=100, default="False")
-    req_e = models.CharField(max_length=100, default="False")
-    req_f = models.CharField(max_length=100, default="False")
-    req_g = models.CharField(max_length=100, default="False")
-    req_h = models.CharField(max_length=100, default="False")
-
-    approved = models.BooleanField(default=False)
+class FARequirementRepository(models.Model):
+    id = models.AutoField(primary_key=True)
+    requirement = models.CharField(max_length=500, default="")
 
     def __str__(self):
-        return f"Requirements for Application {self.control, self.control_number}"
+        return f"{self.requirement}"
 
-    def save(self, *args, **kwargs):
-        if not self.control_number:
-            self.control_number = self.control.control_number
 
-        requirement_fields = [
-            self.req_a,
-            self.req_b,
-            self.req_c,
-            self.req_d,
-            self.req_e,
-            self.req_f,
-            self.req_g,
-            self.req_h,
-        ]
-        self.requirement = sum(
-            1 for field in requirement_fields if field.strip() == "True"
-        )
+class FAApplicationRequirements(models.Model):
+    applicant = models.ForeignKey(
+        FinancialAssistanceApplication, on_delete=models.CASCADE
+    )
+    requirement = models.ForeignKey(FARequirementRepository, on_delete=models.CASCADE)
+    is_met = models.BooleanField(default=False)
 
-        super().save(*args, **kwargs)
+    def __str__(self):
+        return f"{self.applicant.control_number} - {self.requirement.requirement} - {'Met' if self.is_met else 'Not Met'}"
 
 
 class FinancialAssistanceAccepted(models.Model):
@@ -418,18 +371,6 @@ class FinancialAssistanceInfoRepository(models.Model):
 
 # ---------------------------------------------------------------
 # admin
-
-
-class INBRequirementRepository(models.Model):
-    id = models.AutoField(primary_key=True)
-    requirement = models.CharField(max_length=500, default="")
-
-
-class FARequirementRepository(models.Model):
-    id = models.AutoField(primary_key=True)
-    requirement = models.CharField(max_length=500, default="")
-
-
 class INBSchool(models.Model):
     school = models.CharField(max_length=100)
 
@@ -451,18 +392,9 @@ class INBCourse(models.Model):
         return self.course
 
 
-class Student_Monitoring(models.Model):
-    control_number = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    first_name = models.CharField(max_length=255)
-    middle_initial = models.CharField(max_length=50)
-    course = models.CharField(max_length=255)
-    gwa = models.FloatField(null=True, blank=True)
-
-
 class StudentGrade(models.Model):
     student = models.ForeignKey(
-        Student_Monitoring, on_delete=models.CASCADE, related_name="grades"
+        CollegeStudentAccepted, on_delete=models.CASCADE, related_name="grades"
     )
     subject = models.CharField(max_length=255)
     grade = models.CharField(max_length=255)

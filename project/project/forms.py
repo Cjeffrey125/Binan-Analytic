@@ -8,6 +8,8 @@ from base.models import (
     FARequirementRepository,
     INBSchool,
     INBCourse,
+    INBApplicationRequirements,
+    FAApplicationRequirements,
 )
 
 
@@ -42,6 +44,15 @@ class INBRequirementList(forms.ModelForm):
         }
 
 
+class INBRequirementForm(forms.ModelForm):
+    class Meta:
+        model = INBApplicationRequirements
+        fields = ["is_met"]
+        widgets = {
+            "is_met": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+        }
+
+
 class FARequirementList(forms.ModelForm):
     class Meta:
         model = FARequirementRepository
@@ -53,11 +64,26 @@ class FARequirementList(forms.ModelForm):
         }
 
 
+class FARequirementForm(forms.ModelForm):
+    class Meta:
+        model = FAApplicationRequirements
+        fields = ["is_met"]
+        widgets = {
+            "is_met": forms.CheckboxInput(attrs={"class": "form-check-input"}),
+        }
+
+
 class ApplicantUploadForm(forms.Form):
-    file = forms.FileField(label='Choose Excel file', widget=forms.FileInput(attrs={'accept': '.xlsx'}))
+    file = forms.FileField(
+        label="Choose Excel file", widget=forms.FileInput(attrs={"accept": ".xlsx"})
+    )
+
 
 class GradeUploadForm(forms.Form):
-    file = forms.FileField(label='Choose Excel file', widget=forms.FileInput(attrs={'accept': '.xlsx'}))
+    file = forms.FileField(
+        label="Choose Excel file", widget=forms.FileInput(attrs={"accept": ".xlsx"})
+    )
+
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -143,8 +169,8 @@ class ExportForm(forms.Form):
 
 class AddINBForm(forms.ModelForm):
     GENDER_CHOICES = [
-        ('Male', 'Male'),
-        ('Female', 'Female'),
+        ("Male", "Male"),
+        ("Female", "Female"),
     ]
 
     EDUCATIONAL_PROVIDERS = [
@@ -154,7 +180,6 @@ class AddINBForm(forms.ModelForm):
 
     VOTER_STATUS = [
         ("Registered Voter", ""),
-      
     ]
 
     control_number = forms.CharField(
@@ -165,44 +190,61 @@ class AddINBForm(forms.ModelForm):
         label="",
     )
 
+    requirement = forms.CharField(
+        required=False,
+    )
     # Personal Data
     first_name = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "name-input", "placeholder":"First name"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "name-input", "placeholder": "First name"}
+        ),
         label="",
     )
     last_name = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "name-input", "placeholder":"Last name"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "name-input", "placeholder": "Last name"}
+        ),
         label="",
     )
     middle_name = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "name-input", "placeholder":"Middle Name"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "name-input", "placeholder": "Middle Name"}
+        ),
         label="",
     )
 
     blkstr = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "address-input-1", "placeholder":"Number/Block/Street"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "address-input-1", "placeholder": "Number/Block/Street"}
+        ),
         help_text='<span class="subscript">Blk Street</span>',
         label="",
     )
     barangay = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "address-input-2", "placeholder":"Barangay"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "address-input-2", "placeholder": "Barangay"}
+        ),
         help_text='<span class="subscript">Barangay</span>',
         label="",
     )
     province = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "address-input-2", "placeholder":"Province"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "address-input-2", "placeholder": "Province"}
+        ),
         help_text='<span class="subscript">Province</span>',
         label="",
     )
     city = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "address-input-2", "placeholder":"City"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "address-input-2", "placeholder": "City"}
+        ),
         help_text='<span class="subscript">City</span>',
         label="",
     )
@@ -213,25 +255,26 @@ class AddINBForm(forms.ModelForm):
         widget=forms.RadioSelect(attrs={"class": "radio-container"}),
         label="",
     )
-    
 
     date_of_birth = forms.DateField(
         required=True,
-        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        widget=forms.DateInput(
+            attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}
+        ),
         label="Date of Birth",
     )
 
     place_of_birth = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"class":"place-birth-input", "placeholder":"Place of Birth"}
+            attrs={"class": "place-birth-input", "placeholder": "Place of Birth"}
         ),
         label="",
     )
     contact_no = forms.IntegerField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"class":"contact-input", "placeholder":"Contact Number"}
+            attrs={"class": "contact-input", "placeholder": "Contact Number"}
         ),
         label="",
     )
@@ -239,7 +282,7 @@ class AddINBForm(forms.ModelForm):
     email_address = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"class":"half-input", "placeholder":"Email Address"}
+            attrs={"class": "half-input", "placeholder": "Email Address"}
         ),
         label="",
     )
@@ -286,7 +329,7 @@ class AddINBForm(forms.ModelForm):
         ),
         label="",
     )
-    
+
     jhs_educational_provider = forms.ChoiceField(
         required=True,
         choices=EDUCATIONAL_PROVIDERS,
@@ -442,8 +485,8 @@ class AddINBForm(forms.ModelForm):
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 class AddFinancialAssistanceForm(forms.ModelForm):
     GENDER_CHOICES = [
-        ('Male', 'Male'),
-        ('Female', 'Female'),
+        ("Male", "Male"),
+        ("Female", "Female"),
     ]
 
     SCHOOL_CHOICES = [
@@ -500,32 +543,45 @@ class AddFinancialAssistanceForm(forms.ModelForm):
         label="",
     )
 
+    requirement = forms.CharField(
+        required=False,
+    )
+
     # Personal Data
     first_name = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "name-input", "placeholder":"First name"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "name-input", "placeholder": "First name"}
+        ),
         label="",
     )
     last_name = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "name-input", "placeholder":"Last name"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "name-input", "placeholder": "Last name"}
+        ),
         label="",
     )
     middle_name = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "name-input", "placeholder":"Middle Name"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "name-input", "placeholder": "Middle Name"}
+        ),
         label="",
     )
     suffix = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"class": "form-control", "placeholder":"Suffix"}),
-       
+        widget=forms.widgets.TextInput(
+            attrs={"class": "form-control", "placeholder": "Suffix"}
+        ),
         label="",
     )
 
     date_of_birth = forms.DateField(
         required=True,
-        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        widget=forms.DateInput(
+            attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}
+        ),
         label="Date of Birth",
     )
 
@@ -534,8 +590,7 @@ class AddFinancialAssistanceForm(forms.ModelForm):
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Place of Birth", "class": "form-control"}
         ),
-        label=
-        "",
+        label="",
     )
     gender = forms.ChoiceField(
         required=True,
@@ -554,25 +609,33 @@ class AddFinancialAssistanceForm(forms.ModelForm):
 
     blkstr = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "address-input-1", "placeholder":"Number/Block/Street"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "address-input-1", "placeholder": "Number/Block/Street"}
+        ),
         help_text='<span class="subscript">Blk Street</span>',
         label="",
     )
     barangay = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "address-input-2", "placeholder":"Barangay"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "address-input-2", "placeholder": "Barangay"}
+        ),
         help_text='<span class="subscript">Barangay</span>',
         label="",
     )
     province = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "address-input-2", "placeholder":"Province"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "address-input-2", "placeholder": "Province"}
+        ),
         help_text='<span class="subscript">Province</span>',
         label="",
     )
     city = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(attrs={"class": "address-input-2", "placeholder":"City"}),
+        widget=forms.widgets.TextInput(
+            attrs={"class": "address-input-2", "placeholder": "City"}
+        ),
         help_text='<span class="subscript">City</span>',
         label="",
     )
@@ -709,13 +772,16 @@ class AddFinancialAssistanceForm(forms.ModelForm):
 
     a_sibling_name = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"placeholder": "Name", "class": "form-control"}),
-    
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Name", "class": "form-control"}
+        ),
         label="",
     )
     a_sibling_DOB = forms.DateField(
         required=False,
-        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        widget=forms.DateInput(
+            attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}
+        ),
         label="Date of Birth",
     )
     a_sibling_age = forms.IntegerField(
@@ -727,18 +793,24 @@ class AddFinancialAssistanceForm(forms.ModelForm):
     )
     a_sibling_address = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"placeholder": "Address", "class": "form-control"}),
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Address", "class": "form-control"}
+        ),
         label="",
     )
 
     b_sibling_name = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"placeholder": "Name", "class": "form-control"}),
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Name", "class": "form-control"}
+        ),
         label="",
     )
     b_sibling_DOB = forms.DateField(
         required=False,
-        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        widget=forms.DateInput(
+            attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}
+        ),
         label="Date of Birth",
     )
     b_sibling_age = forms.IntegerField(
@@ -750,19 +822,24 @@ class AddFinancialAssistanceForm(forms.ModelForm):
     )
     b_sibling_address = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"placeholder": "Address", "class": "form-control"}),
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Address", "class": "form-control"}
+        ),
         label="",
     )
 
     c_sibling_name = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"placeholder": "Name", "class": "form-control"}),
-    
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Name", "class": "form-control"}
+        ),
         label="",
     )
     c_sibling_DOB = forms.DateField(
         required=False,
-        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        widget=forms.DateInput(
+            attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}
+        ),
         label="Date of Birth",
     )
     c_sibling_age = forms.IntegerField(
@@ -774,19 +851,24 @@ class AddFinancialAssistanceForm(forms.ModelForm):
     )
     c_sibling_address = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"placeholder": "Address", "class": "form-control"}),
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Address", "class": "form-control"}
+        ),
         label="",
     )
 
     d_sibling_name = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"placeholder": "Name", "class": "form-control"}),
-    
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Name", "class": "form-control"}
+        ),
         label="",
     )
     d_sibling_DOB = forms.DateField(
         required=False,
-        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        widget=forms.DateInput(
+            attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}
+        ),
         label="Date of Birth",
     )
     d_sibling_age = forms.IntegerField(
@@ -798,19 +880,24 @@ class AddFinancialAssistanceForm(forms.ModelForm):
     )
     d_sibling_address = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"placeholder": "Address", "class": "form-control"}),
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Address", "class": "form-control"}
+        ),
         label="",
     )
 
     e_sibling_name = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"placeholder": "Name", "class": "form-control"}),
-    
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Name", "class": "form-control"}
+        ),
         label="",
     )
     e_sibling_DOB = forms.DateField(
         required=False,
-        widget=forms.DateInput(attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}),
+        widget=forms.DateInput(
+            attrs={"class": "date-input", "type": "date", "value": "yyyy-mm-dd"}
+        ),
         label="Date of Birth",
     )
     e_sibling_age = forms.IntegerField(
@@ -822,16 +909,13 @@ class AddFinancialAssistanceForm(forms.ModelForm):
     )
     e_sibling_address = forms.CharField(
         required=False,
-        widget=forms.widgets.TextInput(attrs={"placeholder": "Address", "class": "form-control"}),
+        widget=forms.widgets.TextInput(
+            attrs={"placeholder": "Address", "class": "form-control"}
+        ),
         label="",
     )
-
-
-
 
     class Meta:
         model = FinancialAssistanceApplication
 
         exclude = ("user",)
-
-

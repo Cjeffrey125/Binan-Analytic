@@ -120,107 +120,110 @@
           </div>
             
           {% if records %}
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-              <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
-                <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0">
-                  <tr>
-                    <th scope="col" class="px-6 py-3">Requirements</th>
-                    <th scope="col" class="px-6 py-3">Control Number</th>
-                    <th scope="col" class="px-6 py-3">Name</th>
-                    <th scope="col" class="px-6 py-3">School</th>
-                    <th scope="col" class="px-6 py-3 ">Strand</th>
-                  </tr>
-                </thead>
-            
-                <tbody>
-
-                  {% for applicant_record, requirement_record in records %}
-                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                    onclick="window.location='{% url 'fa_applicant_info' applicant_record.id %}';" style="cursor: pointer;">
-                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{% if requirement_record.requirement == 8 %}
+          <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+              <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0">
+                <tr>
+                  <th scope="col" class="px-6 py-3">Requirements</th>
+                  <th scope="col" class="px-6 py-3">Control Number</th>
+                  <th scope="col" class="px-6 py-3">Name</th>
+                  <th scope="col" class="px-6 py-3">School</th>
+                  <th scope="col" class="px-6 py-3 ">Strand</th>
+                </tr>
+              </thead>
+          
+              <tbody>
+          
+                {% for applicant_record, completed_requirements_count, total_requirements in records %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  onclick="window.location='{% url 'fa_applicant_info' applicant_record.id %}';" style="cursor: pointer;">
+                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                    {% if completed_requirements_count == total_requirements and completed_requirements_count > 0 %}
                     Complete
                     {% else %}
-                    {{requirement_record.requirement}}/8
+                    Incomplete
                     {% endif %}
-                    </td>
-                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.control_number }}</td>
-                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record }}</td>
-                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.school }}</td>
-                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.strand }}</td>
-                  </tr>
+                  </td>
+                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.control_number }}</td>
+                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record }}</td>
+                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.school }}</td>
+                  <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant_record.strand }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          
+            <div class="flex justify-between mt-3 mr-16 px-5 py-5">
+              <div class="text-sm leading-5 ml-10">
+                Showing {{ records.start_index }} to {{ records.end_index }} of {{ records.paginator.count }} results
+              </div>
+              <nav aria-label="Page navigation example">
+                <ul class="flex items-center -space-x-px h-8 text-sm">
+                  {% if records.has_previous %}
+                  <li>
+                    <a href="?page={{ records.previous_page_number }}"
+                      class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                      <span class="sr-only">Previous</span>
+                      <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M5 1 1 5l4 4" />
+                      </svg>
+                    </a>
+                  </li>
+                  {% endif %}
+          
+                  {% for page_num in records.paginator.page_range %}
+                  <li>
+                    {% if records.number == page_num %}
+                    <a href="?page={{ page_num }}" aria-current="page"
+                      class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{ page_num }}</a>
+                    {% else %}
+                    <a href="?page={{ page_num }}"
+                      class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{ page_num }}</a>
+                    {% endif %}
+                  </li>
                   {% endfor %}
-                </tbody>
-              </table>
-
-              <div class="flex justify-between mt-3 mr-16 px-5 py-5">
-                <div class="text-sm leading-5 ml-10">
-                  Showing {{ records.start_index }} to {{ records.end_index }} of {{ records.paginator.count }} results
-                </div>
-                <nav aria-label="Page navigation example">
-                  <ul class="flex items-center -space-x-px h-8 text-sm">
-                    {% if records.has_previous %}
-                    <li>
-                      <a href="?page={{ records.previous_page_number }}"
-                        class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <span class="sr-only">Previous</span>
-                        <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                          viewBox="0 0 6 10">
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M5 1 1 5l4 4" />
-                        </svg>
-                      </a>
-                    </li>
-                    {% endif %}
-              
-                    {% for page_num in records.paginator.page_range %}
-                    <li>
-                      {% if records.number == page_num %}
-                      <a href="?page={{ page_num }}" aria-current="page"
-                        class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">{{ page_num }}</a>
-                      {% else %}
-                      <a href="?page={{ page_num }}"
-                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{ page_num }}</a>
-                      {% endif %}
-                    </li>
-                    {% endfor %}
-              
-                    {% if records.has_next %}
-                    <li>
-                      <a href="?page={{ records.next_page_number }}"
-                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <span class="sr-only">Next</span>
-                        <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                          viewBox="0 0 6 10">
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="m1 9 4-4-4-4" />
-                        </svg>
-                      </a>
-                    </li>
-                    {% endif %}
-                  </ul>
-                </nav>
-              </div>
-
-              {% else %}
-              <div
-                class="flex items-center justify-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                <h1>No student records found.</h1>
-              </div>
-              {% endif %}
-              </div>
+          
+                  {% if records.has_next %}
+                  <li>
+                    <a href="?page={{ records.next_page_number }}"
+                      class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                      <span class="sr-only">Next</span>
+                      <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="m1 9 4-4-4-4" />
+                      </svg>
+                    </a>
+                  </li>
+                  {% endif %}
+                </ul>
+              </nav>
             </div>
+          
+            {% else %}
+            <div
+              class="flex items-center justify-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+              <h1>No student records found.</h1>
+            </div>
+            {% endif %}
+          </div>
+          </div>
+          
+          
+          
+          {% include 'FA/fa_filter_applicants.html' %}
+          
+          {% include 'FA/import.html' %}
+          
+          
+          
+          
+          
+          {% endif %}
 
 
-    
-{% include 'FA/fa_filter_applicants.html' %}
-
-{% include 'FA/import.html' %}
-
-
-
-
-
-{% endif %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>

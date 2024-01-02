@@ -49,9 +49,8 @@ urlpatterns = [
     path("fa_filter_applicants/", views.fa_filter_applicants, name="fa_filter_applicants"),
     path("FA_Requirements/<str:control_number>/",views.fa_requirement_list,name="fa_requirements_list",),
 
-    path("fa/<str:status>/applicant_info/<str:control_number>/",views.fa_applicant_info,name="fa_applicant_info",),
-    
     path("fa/pending/applicant/",views.fa_applicant_list,{"status": "pending"},name="fa_pending_applicant",),
+    path("fa/pending/applicant/<str:control_number>/", views.fa_applicant_info, {"status": "pending"}, name="fa_pending_applicant_info"),
 
     path("fa/passed/applicant/",views.fa_applicant_list,{"status": "passed"},name="fa_passed_applicant",),
     path("fa/passed/applicant_info/<str:control_number>/",views.fa_applicant_info,{"status": "passed"},name="fa_passed_applicant_info",),
@@ -90,5 +89,5 @@ urlpatterns = [
    path('chart/', views.chart_view, name='chart_view'),
 
 
-   path("test1", views.test1, {"form_type": "financial_assistance"},  name="forms",),
+   path("test1", views.test1,  name="forms",),
 ]

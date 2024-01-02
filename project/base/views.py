@@ -16,13 +16,11 @@ from project.forms import (
 )
 from .models import (
     CollegeStudentApplication,
-    CollegeRequirements,
     CollegeStudentAccepted,
     CollegeStudentAssesment,
     CollegeStudentRejected,
     ApplicantInfoRepositoryINB,
     FinancialAssistanceApplication,
-    FinancialAssistanceRequirement,
     FinancialAssistanceAccepted,
     FinancialAssistanceAssesment,
     FinancialAssistanceRejected,
@@ -31,9 +29,10 @@ from .models import (
     FARequirementRepository,
     INBSchool,
     INBCourse,
-    Student_Monitoring,
     Subject,
     StudentGrade,
+    INBApplicationRequirements,
+    FAApplicationRequirements,
 )
 from django.db.models import Count
 from django.http import HttpResponse
@@ -44,6 +43,9 @@ from django.db.models import Q
 import datetime
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db import transaction
+from django.db import IntegrityError
+from django.contrib import messages
 
 
 class CollegeStudentApplicationResource(resources.ModelResource):
@@ -58,8 +60,6 @@ def home(request):
 
 # import ----------------------------------------------------------------------------------------------------------------------------------
 # problem fk nan&update
-from django.db import IntegrityError
-from django.contrib import messages
 
 
 def import_excel(request):
@@ -398,111 +398,94 @@ def fa_filter_applicants(request):
     if FinancialAssistanceApplication.objects.exists():
         applicants_to_transfer = FinancialAssistanceApplication.objects.all()
 
-        for applicant in applicants_to_transfer:
-            FinancialAssistanceInfoRepository.objects.get_or_create(
-                control_number=applicant.control_number,
-                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}. {applicant.suffix}",
-                date_of_birth=applicant.date_of_birth,
-                place_of_birth=applicant.place_of_birth,
-                gender=applicant.gender,
-                religion=applicant.religion,
-                blkstr=applicant.blkstr,
-                barangay=applicant.barangay,
-                city=applicant.city,
-                province=applicant.province,
-                email_address=applicant.email_address,
-                contact_no=applicant.contact_no,
-                general_average=applicant.general_average,
-                school=applicant.school,
-                school_address=applicant.school_address,
-                track=applicant.track,
-                strand=applicant.strand,
-                # family data
-                father_name=applicant.father_name,
-                father_age=applicant.father_age,
-                father_occupation=applicant.father_occupation,
-                father_employer=applicant.father_employer,
-                father_income=applicant.father_income,
-                mother_name=applicant.mother_name,
-                mother_age=applicant.mother_age,
-                mother_occupation=applicant.mother_occupation,
-                mother_employer=applicant.mother_employer,
-                mother_income=applicant.mother_income,
-                sibling_count=applicant.sibling_count,
-                a_sibling_name=applicant.a_sibling_name,
-                a_sibling_DOB=applicant.a_sibling_DOB,
-                a_sibling_age=applicant.a_sibling_age,
-                a_sibling_address=applicant.a_sibling_address,
-                b_sibling_name=applicant.a_sibling_name,
-                b_sibling_DOB=applicant.a_sibling_DOB,
-                b_sibling_age=applicant.a_sibling_age,
-                b_sibling_address=applicant.a_sibling_address,
-                c_sibling_name=applicant.a_sibling_name,
-                c_sibling_DOB=applicant.a_sibling_DOB,
-                c_sibling_age=applicant.a_sibling_age,
-                c_sibling_address=applicant.a_sibling_address,
-                d_sibling_name=applicant.a_sibling_name,
-                d_sibling_DOB=applicant.a_sibling_DOB,
-                d_sibling_age=applicant.a_sibling_age,
-                d_sibling_address=applicant.a_sibling_address,
-                e_sibling_name=applicant.a_sibling_name,
-                e_sibling_DOB=applicant.a_sibling_DOB,
-                e_sibling_age=applicant.a_sibling_age,
-                e_sibling_address=applicant.a_sibling_address,
-            )
+        with transaction.atomic():
+            for applicant in applicants_to_transfer:
+                FinancialAssistanceInfoRepository.objects.get_or_create(
+                    control_number=applicant.control_number,
+                    fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}. {applicant.suffix}",
+                    date_of_birth=applicant.date_of_birth,
+                    place_of_birth=applicant.place_of_birth,
+                    gender=applicant.gender,
+                    religion=applicant.religion,
+                    blkstr=applicant.blkstr,
+                    barangay=applicant.barangay,
+                    city=applicant.city,
+                    province=applicant.province,
+                    email_address=applicant.email_address,
+                    contact_no=applicant.contact_no,
+                    general_average=applicant.general_average,
+                    school=applicant.school,
+                    school_address=applicant.school_address,
+                    track=applicant.track,
+                    strand=applicant.strand,
+                    # family data
+                    father_name=applicant.father_name,
+                    father_age=applicant.father_age,
+                    father_occupation=applicant.father_occupation,
+                    father_employer=applicant.father_employer,
+                    father_income=applicant.father_income,
+                    mother_name=applicant.mother_name,
+                    mother_age=applicant.mother_age,
+                    mother_occupation=applicant.mother_occupation,
+                    mother_employer=applicant.mother_employer,
+                    mother_income=applicant.mother_income,
+                    sibling_count=applicant.sibling_count,
+                    a_sibling_name=applicant.a_sibling_name,
+                    a_sibling_DOB=applicant.a_sibling_DOB,
+                    a_sibling_age=applicant.a_sibling_age,
+                    a_sibling_address=applicant.a_sibling_address,
+                    b_sibling_name=applicant.a_sibling_name,
+                    b_sibling_DOB=applicant.a_sibling_DOB,
+                    b_sibling_age=applicant.a_sibling_age,
+                    b_sibling_address=applicant.a_sibling_address,
+                    c_sibling_name=applicant.a_sibling_name,
+                    c_sibling_DOB=applicant.a_sibling_DOB,
+                    c_sibling_age=applicant.a_sibling_age,
+                    c_sibling_address=applicant.a_sibling_address,
+                    d_sibling_name=applicant.a_sibling_name,
+                    d_sibling_DOB=applicant.a_sibling_DOB,
+                    d_sibling_age=applicant.a_sibling_age,
+                    d_sibling_address=applicant.a_sibling_address,
+                    e_sibling_name=applicant.a_sibling_name,
+                    e_sibling_DOB=applicant.a_sibling_DOB,
+                    e_sibling_age=applicant.a_sibling_age,
+                    e_sibling_address=applicant.a_sibling_address,
+                )
 
-        accepted_applicants = FinancialAssistanceApplication.objects.filter(
-            control_number__in=FinancialAssistanceRequirement.objects.filter(
-                requirement=8
-            ).values("control_number")
-        ).distinct()
+            is_met_list = [
+                req.is_met
+                for req in FAApplicationRequirements.objects.filter(applicant=applicant)
+            ]
 
-        rejected_applicants = FinancialAssistanceApplication.objects.exclude(
-            control_number__in=accepted_applicants.values("control_number")
-        ).distinct()
+            if all(is_met_list):
+                applicant.requirement = "Complete"
 
-        pending_applicants = FinancialAssistanceApplication.objects.exclude(
-            collegerequirements__requirement=8
-        ).distinct()
+                FinancialAssistanceInfoRepository.objects.filter(
+                    control_number=applicant.control_number
+                ).update(status="Accepted")
+                FinancialAssistanceAccepted.objects.create(
+                    control_number=applicant.control_number,
+                    fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                    school=applicant.school,
+                    course=applicant.course,
+                )
+                FinancialAssistanceApplication.objects.filter(
+                    control_number=applicant.control_number
+                ).delete()
+            else:
+                applicant.requirement = "Incomplete"
 
-        for applicant in accepted_applicants:
-            FinancialAssistanceInfoRepository.objects.filter(
-                control_number=applicant.control_number
-            ).update(status="Accepted")
-            FinancialAssistanceAccepted.objects.create(
-                control_number=applicant.control_number,
-                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}. {applicant.suffix}",
-            )
-
-        for applicant in pending_applicants:
-            FinancialAssistanceInfoRepository.objects.filter(
-                control_number=applicant.control_number
-            ).update(status="For Assesment")
-            FinancialAssistanceAssesment.objects.create(
-                control_number=applicant.control_number,
-                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}. {applicant.suffix}",
-            )
-            FinancialAssistanceApplication.objects.filter(
-                control_number=applicant.control_number
-            ).delete()
-
-        for applicant in rejected_applicants:
-            FinancialAssistanceInfoRepository.objects.filter(
-                control_number=applicant.control_number
-            ).update(status="Rejected")
-            FinancialAssistanceRejected.objects.create(
-                control_number=applicant.control_number,
-                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-            )
-            FinancialAssistanceApplication.objects.filter(
-                control_number=applicant.control_number
-            ).delete()
-
-        FinancialAssistanceApplication.objects.filter(
-            Q(control_number__in=accepted_applicants.values("control_number"))
-            | Q(control_number__in=rejected_applicants.values("control_number"))
-            | Q(control_number__in=pending_applicants.values("control_number"))
-        ).delete()
+                FinancialAssistanceInfoRepository.objects.filter(
+                    control_number=applicant.control_number
+                ).update(status="Incomplete")
+                FinancialAssistanceAssesment.objects.create(
+                    control_number=applicant.control_number,
+                    fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                    school=applicant.school,
+                )
+                FinancialAssistanceApplication.objects.filter(
+                    control_number=applicant.control_number
+                ).delete()
 
         messages.success(request, "Applicants have been successfully filtered.")
     else:
@@ -515,106 +498,86 @@ def inb_filter_applicants(request):
     if CollegeStudentApplication.objects.exists():
         applicants_to_transfer = CollegeStudentApplication.objects.all()
 
-        for applicant in applicants_to_transfer:
-            ApplicantInfoRepositoryINB.objects.get_or_create(
-                control_number=applicant.control_number,
-                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                blkstr=applicant.blkstr,
-                barangay=applicant.barangay,
-                province=applicant.province,
-                city=applicant.city,
-                gender=applicant.gender,
-                date_of_birth=applicant.date_of_birth,
-                place_of_birth=applicant.place_of_birth,
-                contact_no=applicant.contact_no,
-                email_address=applicant.email_address,
-                school=applicant.school,
-                course=applicant.course,
-                gwa=applicant.gwa,
-                rank=applicant.rank,
-                jhs=applicant.jhs,
-                jhs_address=applicant.jhs_address,
-                jhs_educational_provider=applicant.jhs_educational_provider,
-                shs=applicant.shs,
-                shs_address=applicant.shs_address,
-                shs_educational_provider=applicant.shs_educational_provider,
-                father_name=applicant.father_name,
-                father_voter_status=applicant.father_voter_status,
-                father_educational_attainment=applicant.father_educational_attainment,
-                father_employer=applicant.father_employer,
-                father_occupation=applicant.father_occupation,
-                mother_name=applicant.mother_name,
-                mother_voter_status=applicant.mother_voter_status,
-                mother_educational_attainment=applicant.mother_educational_attainment,
-                mother_employer=applicant.mother_employer,
-                mother_occupation=applicant.mother_occupation,
-                guardian_name=applicant.guardian_name,
-                guardian_voter_status=applicant.guardian_voter_status,
-                guardian_educational_attainment=applicant.guardian_educational_attainment,
-                guardian_employer=applicant.guardian_employer,
-                guardian_occupation=applicant.guardian_occupation,
-            )
+        with transaction.atomic():
+            for applicant in applicants_to_transfer:
+                ApplicantInfoRepositoryINB.objects.get_or_create(
+                    control_number=applicant.control_number,
+                    fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                    blkstr=applicant.blkstr,
+                    barangay=applicant.barangay,
+                    province=applicant.province,
+                    city=applicant.city,
+                    gender=applicant.gender,
+                    date_of_birth=applicant.date_of_birth,
+                    place_of_birth=applicant.place_of_birth,
+                    contact_no=applicant.contact_no,
+                    email_address=applicant.email_address,
+                    school=applicant.school,
+                    course=applicant.course,
+                    gwa=applicant.gwa,
+                    rank=applicant.rank,
+                    jhs=applicant.jhs,
+                    jhs_address=applicant.jhs_address,
+                    jhs_educational_provider=applicant.jhs_educational_provider,
+                    shs=applicant.shs,
+                    shs_address=applicant.shs_address,
+                    shs_educational_provider=applicant.shs_educational_provider,
+                    father_name=applicant.father_name,
+                    father_voter_status=applicant.father_voter_status,
+                    father_educational_attainment=applicant.father_educational_attainment,
+                    father_employer=applicant.father_employer,
+                    father_occupation=applicant.father_occupation,
+                    mother_name=applicant.mother_name,
+                    mother_voter_status=applicant.mother_voter_status,
+                    mother_educational_attainment=applicant.mother_educational_attainment,
+                    mother_employer=applicant.mother_employer,
+                    mother_occupation=applicant.mother_occupation,
+                    guardian_name=applicant.guardian_name,
+                    guardian_voter_status=applicant.guardian_voter_status,
+                    guardian_educational_attainment=applicant.guardian_educational_attainment,
+                    guardian_employer=applicant.guardian_employer,
+                    guardian_occupation=applicant.guardian_occupation,
+                )
 
-        accepted_applicants = CollegeStudentApplication.objects.filter(
-            collegerequirements__requirement=13
-        ).distinct()
+                is_met_list = [
+                    req.is_met
+                    for req in INBApplicationRequirements.objects.filter(
+                        applicant=applicant
+                    )
+                ]
 
-        rejected_applicants = CollegeStudentApplication.objects.exclude(
-            collegerequirements__requirement=13
-        ).distinct()
+                if all(is_met_list):
+                    applicant.requirement = "Complete"
 
-        pending_applicants = CollegeStudentApplication.objects.exclude(
-            collegerequirements__requirement=13
-        ).distinct()
+                    ApplicantInfoRepositoryINB.objects.filter(
+                        control_number=applicant.control_number
+                    ).update(status="Accepted")
+                    CollegeStudentAccepted.objects.create(
+                        control_number=applicant.control_number,
+                        fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                        school=applicant.school,
+                        course=applicant.course,
+                    )
+                    CollegeStudentApplication.objects.filter(
+                        control_number=applicant.control_number
+                    ).delete()
+                else:
+                    applicant.requirement = "Incomplete"
 
-        for applicant in accepted_applicants:
-            ApplicantInfoRepositoryINB.objects.filter(
-                control_number=applicant.control_number
-            ).update(status="Accepted")
-            CollegeStudentAccepted.objects.create(
-                control_number=applicant.control_number,
-                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                school=applicant.school,
-                course=applicant.course,
-            )
-            Student_Monitoring.objects.create(
-                control_number=applicant.control_number,
-                last_name=applicant.last_name,
-                first_name=applicant.first_name,
-                middle_initial=applicant.middle_name,
-                course=applicant.course,
-            )
-            CollegeStudentApplication.objects.filter(
-                control_number=applicant.control_number
-            ).delete()
+                    ApplicantInfoRepositoryINB.objects.filter(
+                        control_number=applicant.control_number
+                    ).update(status="Incomplete")
+                    CollegeStudentAssesment.objects.create(
+                        control_number=applicant.control_number,
+                        fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                        school=applicant.school,
+                        course=applicant.course,
+                    )
+                    CollegeStudentApplication.objects.filter(
+                        control_number=applicant.control_number
+                    ).delete()
 
-        for applicant in pending_applicants:
-            ApplicantInfoRepositoryINB.objects.filter(
-                control_number=applicant.control_number
-            ).update(status="For Assesment")
-            CollegeStudentAssesment.objects.create(
-                control_number=applicant.control_number,
-                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                school=applicant.school,
-                course=applicant.course,
-            )
-            CollegeStudentApplication.objects.filter(
-                control_number=applicant.control_number
-            ).delete()
-
-        for applicant in rejected_applicants:
-            ApplicantInfoRepositoryINB.objects.filter(
-                control_number=applicant.control_number
-            ).update(status="Rejected")
-            CollegeStudentRejected.objects.create(
-                control_number=applicant.control_number,
-                fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-            )
-            CollegeStudentApplication.objects.filter(
-                control_number=applicant.control_number
-            ).delete()
-
-        messages.success(request, "Applicants have been successfully filtered.")
+            messages.success(request, "Applicants have been successfully filtered.")
     else:
         messages.warning(request, "There are no applicants to filter.")
 
@@ -646,7 +609,7 @@ def iskolar_ng_bayan_list(request):
             control_number__in=list(accepted_applicants) + list(rejected_applicants)
         )
 
-        # the search functionality
+        # Search functionality
         query = request.GET.get("q")
         if query:
             filtered_applicants = filtered_applicants.filter(
@@ -658,35 +621,47 @@ def iskolar_ng_bayan_list(request):
                 | Q(school__icontains=query)
             )
 
-        requirement_records = CollegeRequirements.objects.all()
+        records = []
 
-        schools = INBSchool.objects.all()
-        courses = INBCourse.objects.all()
+        with transaction.atomic():
+            for applicant in filtered_applicants:
+                applicant_requirements = INBApplicationRequirements.objects.filter(
+                    applicant=applicant
+                )
 
-        # list ng  pagination
-        records = list(zip(filtered_applicants, requirement_records))
+                completed_requirements_count = applicant_requirements.filter(
+                    is_met=True
+                ).count()
+
+                total_requirements = INBRequirementRepository.objects.count()
+
+                records.append(
+                    (applicant, completed_requirements_count, total_requirements)
+                )
+
+                if completed_requirements_count == total_requirements:
+                    applicant.requirement = "Complete"
+                    applicant.save()
 
         # Paginator object
         paginator = Paginator(records, 20)  # Show 20 records per page
         page_number = request.GET.get("page")
         page = paginator.get_page(page_number)
 
-    if not request.session.get("login_message_displayed", False):
-        messages.success(request, "You have logged in successfully!")
-        request.session["login_message_displayed"] = True
+        if not request.session.get("login_message_displayed", False):
+            messages.success(request, "You have logged in successfully!")
+            request.session["login_message_displayed"] = True
 
-    return render(
-        request,
-        "INB/applicant_list.html",
-        {
-            "records": page,
-            "schools": schools,
-            "courses": courses,
-            "form": form,
-            "import_form": import_form,
-            "export_form": export_form,
-        },
-    )
+        return render(
+            request,
+            "INB/applicant_list.html",
+            {
+                "records": page,
+                "form": form,
+                "import_form": import_form,
+                "export_form": export_form,
+            },
+        )
 
 
 def financial_assistance_list(request):
@@ -706,7 +681,7 @@ def financial_assistance_list(request):
             control_number__in=list(accepted_applicants) + list(rejected_applicants)
         )
 
-        # the search functionality
+        # Search functionality
         query = request.GET.get("q")
         if query:
             filtered_applicants = filtered_applicants.filter(
@@ -714,33 +689,48 @@ def financial_assistance_list(request):
                 | Q(first_name__icontains=query)
                 | Q(middle_name__icontains=query)
                 | Q(last_name__icontains=query)
-                | Q(strand__icontains=query)
-                | Q(school__icontains=query)
             )
 
-        requirement_records = FinancialAssistanceRequirement.objects.all()
+        records = []
 
-        # list ng  pagination
-        records = list(zip(filtered_applicants, requirement_records))
+        with transaction.atomic():
+            for applicant in filtered_applicants:
+                applicant_requirements = FAApplicationRequirements.objects.filter(
+                    applicant=applicant
+                )
+
+                completed_requirements_count = applicant_requirements.filter(
+                    is_met=True
+                ).count()
+
+                total_requirements = FARequirementRepository.objects.count()
+
+                records.append(
+                    (applicant, completed_requirements_count, total_requirements)
+                )
+
+                if completed_requirements_count == total_requirements:
+                    applicant.requirement = "Complete"
+                    applicant.save()
 
         # Paginator object
         paginator = Paginator(records, 20)  # Show 20 records per page
         page_number = request.GET.get("page")
         page = paginator.get_page(page_number)
 
-    if not request.session.get("login_message_displayed", False):
-        messages.success(request, "You have logged in successfully!")
-        request.session["login_message_displayed"] = True
+        if not request.session.get("login_message_displayed", False):
+            messages.success(request, "You have logged in successfully!")
+            request.session["login_message_displayed"] = True
 
-    return render(
-        request,
-        "FA/applicant_list.html",
-        {
-            "records": page,
-            "form": form,
-            "import_form": import_form,
-        },
-    )
+        return render(
+            request,
+            "FA/applicant_list.html",
+            {
+                "records": page,
+                "form": form,
+                "import_form": import_form,
+            },
+        )
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -930,7 +920,7 @@ def inb_applicant_information(request, pk):
         form_inb = AddINBForm(request.POST or None, instance=current_record_inb)
         try:
             records = CollegeStudentApplication.objects.get(id=pk)
-            requirements = CollegeRequirements.objects.filter(control=records)
+            requirements = INBApplicationRequirements.objects.filter(applicant=records)
 
         except CollegeStudentApplication.DoesNotExist:
             records = None
@@ -950,9 +940,8 @@ def fa_applicant_information(request, pk):
     if request.user.is_authenticated:
         try:
             records = FinancialAssistanceApplication.objects.get(id=pk)
-            requirements = FinancialAssistanceRequirement.objects.filter(
-                control=records
-            )
+            requirements = FAApplicationRequirements.objects.filter(applicant=records)
+
         except FinancialAssistanceApplication.DoesNotExist:
             records = None
             requirements = []
@@ -1078,88 +1067,45 @@ def update_information(request, pk):
 
 # Requirements~~
 def inb_requirements_list(request, control_number):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            requirements = CollegeRequirements.objects.filter(
-                control__control_number=control_number
-            )
-            for requirement in requirements:
-                for requirement_field in (
-                    "req_a",
-                    "req_b",
-                    "req_c",
-                    "req_d",
-                    "req_e",
-                    "req_f",
-                    "req_g",
-                    "req_h",
-                    "req_i",
-                    "req_j",
-                    "req_k",
-                    "req_l",
-                    "req_m",
-                ):
-                    checkbox_name = f"{requirement_field}_{requirement.id}"
-                    approved = checkbox_name in request.POST
-                    setattr(
-                        requirement, requirement_field, "True" if approved else "False"
-                    )
-                requirement.save()
+    student = CollegeStudentApplication.objects.get(control_number=control_number)
+    requirements = INBApplicationRequirements.objects.filter(applicant=student)
 
-            messages.success(request, "Requirements have been updated!!")
-            return redirect("inb_applicant_list")
+    if request.method == "POST":
+        selected_requirements = request.POST.getlist("requirements")
 
-        requirements = CollegeRequirements.objects.filter(
-            control__control_number=control_number
+        INBApplicationRequirements.objects.filter(applicant=student).update(
+            is_met=False
         )
-        return render(
-            request,
-            "INB/requirement.html",
-            {"requirements": requirements, "control_number": control_number},
+        INBApplicationRequirements.objects.filter(id__in=selected_requirements).update(
+            is_met=True
         )
-    else:
-        messages.error(request, "You need to be logged in for this process.")
-        return redirect("home")
+
+    context = {
+        "student": student,
+        "requirements": requirements,
+    }
+
+    return render(request, "INB/requirement.html", context)
 
 
 def fa_requirement_list(request, control_number):
-    if request.user.is_authenticated:
-        if request.method == "POST":
-            requirements = FinancialAssistanceRequirement.objects.filter(
-                control__control_number=control_number
-            )
-            for requirement in requirements:
-                for requirement_field in (
-                    "req_a",
-                    "req_b",
-                    "req_c",
-                    "req_d",
-                    "req_e",
-                    "req_f",
-                    "req_g",
-                    "req_h",
-                ):
-                    checkbox_name = f"{requirement_field}_{requirement.id}"
-                    approved = checkbox_name in request.POST
-                    setattr(
-                        requirement, requirement_field, "True" if approved else "False"
-                    )
-                requirement.save()
+    student = FinancialAssistanceApplication.objects.get(control_number=control_number)
+    requirements = FAApplicationRequirements.objects.filter(applicant=student)
 
-            messages.success(request, "Requirements have been updated!!")
-            return redirect("fa_applicant_list")
+    if request.method == "POST":
+        selected_requirements = request.POST.getlist("requirements")
 
-        requirements = FinancialAssistanceRequirement.objects.filter(
-            control__control_number=control_number
+        FAApplicationRequirements.objects.filter(applicant=student).update(is_met=False)
+        FAApplicationRequirements.objects.filter(id__in=selected_requirements).update(
+            is_met=True
         )
-        return render(
-            request,
-            "FA/requirement.html",
-            {"requirements": requirements, "control_number": control_number},
-        )
-    else:
-        messages.error(request, "You need to be logged in for this process.")
-        return redirect("home")
+
+    context = {
+        "student": student,
+        "requirements": requirements,
+    }
+
+    return render(request, "FA/requirement.html", context)
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -1444,15 +1390,15 @@ def update_fa_requirement(request, requirement_id):
 
 def delete_requirement(request, item_type, item_id):
     if item_type == "inb":
-        model_class = INBRequirementList
+        model_class = INBRequirementRepository
         success_message = "Requirement Deleted Successfully"
         redirect_site = "inb_requirement"
     elif item_type == "fa":
-        model_class = FARequirementList
+        model_class = FARequirementRepository
         success_message = "Requirement Deleted Successfully"
         redirect_site = "fa_requirement"
     else:
-        return redirect(redirect_site)
+        return redirect("sc_list")
 
     if request.method == "POST":
         item = get_object_or_404(model_class, pk=item_id)
@@ -1460,7 +1406,7 @@ def delete_requirement(request, item_type, item_id):
         messages.success(request, success_message)
         return redirect(redirect_site)
 
-    return redirect("sc_list")
+    return redirect("home")
 
 
 def import_grade(request):
@@ -1482,13 +1428,13 @@ def import_grade(request):
                 student = student_grades_dict.get(student_key)
 
                 if student is None:
-                    students = Student_Monitoring.objects.filter(
+                    students = CollegeStudentAccepted.objects.filter(
                         control_number=control_number
                     )
                     if students.exists():
                         student = students.first()
                     else:
-                        student = Student_Monitoring.objects.create(
+                        student = CollegeStudentAccepted.objects.create(
                             control_number=control_number,
                             last_name=row["LASTNAME"],
                             first_name=row["FIRSTNAME"],
@@ -1535,27 +1481,19 @@ def import_grade(request):
     return render(request, "modal/import_grades.html", {"form": form})
 
 
-def test1(request, form_type):
-    if request.user.is_authenticated:
-        if form_type == "applicant":
-            form = AddINBForm(request.POST or None)
-            template = "INB/add_record.html"
-            success_url = "inb_applicant_list"
-        elif form_type == "financial_assistance":
-            form = AddFinancialAssistanceForm(request.POST or None)
-            template = "test-template.html"
-            success_url = "fa_applicant_list"
-        else:
-            messages.error(request, "Invalid form type.")
-            return redirect("home")
+def test1(request):
+    inb_requirements_list = INBRequirementRepository.objects.all()
 
-        if request.method == "POST":
-            if form.is_valid():
-                add_record = form.save()
-                messages.success(request, "Record Successfully Added")
-                return redirect(success_url)
-
-        return render(request, template, {"form": form})
+    if request.method == "POST":
+        form = ChecklistForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("test1")
     else:
-        messages.error(request, "You need to be logged in for this process.")
-        return redirect("home")
+        form = ChecklistForm()
+
+    return render(
+        request,
+        "test-template.html",
+        {"inb_requirements_list": inb_requirements_list, "form": form},
+    )

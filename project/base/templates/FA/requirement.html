@@ -42,156 +42,71 @@
 </div>
 
 
-    <form method="post">
-        {% csrf_token %}
-        
-<div class="container mt-4 mx-auto max-w-5xl">
-
-        {% for requirement in requirements %}
-
-        <div class="mb-5 border-b border-gray-300 max-w-sm">
-            <div class="flex">
-                <label class="text-gray-500 sm:text-lg mr-5">Control Number: </label>
-                <label class="sm:text-xl font-bold">{{ requirement.control_number }}</label>
-            </div>
+<form method="post" action="{% url 'fa_requirements_list' student.control_number %}">
+    {% csrf_token %}
+  <div class="container mt-4 mx-auto max-w-5xl">
+    <div class="mb-5 border-b border-gray-300 max-w-sm">
+        <div class="flex">
+            <label class="text-gray-500 sm:text-lg mr-5">Requirements for: </label>
+            <label class="sm:text-xl font-bold">{{ student.control_number }}</label>
         </div>
+    </div>
 
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg"
-            style="scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
-                <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0">
-                    <tr>
-        
-                        <th scope="col" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">
-                            <input type="checkbox" class="" id="selectAll">
-        
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-center">Requirements</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input mx-5" 
-                                    type="checkbox" 
-                                    {% if requirement.req_a == 'True' %} checked="checked" {% endif %}
-                                    name="req_a_{{ requirement.id }}">
-                            </div>
-                        </td>
-                        <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">A. Recent 2x2 ID Photo (2 copies)</td>
-                       
-                    </tr>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg"
+        style="scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+            <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0">
+                <tr>
 
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input mx-5" 
-                                    type="checkbox" 
-                                    {% if requirement.req_b == 'True' %} checked="checked" {% endif %}
-                                    name="req_b_{{ requirement.id }}">
-                            </div>
-                        </td>
-                        <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">B. PSA Certified Birth Certificate (2 copies)</td>
-                    </tr>
+                    <th scope="col" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                        <input type="checkbox" class="" id="selectAll">
 
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input mx-5" 
-                                    type="checkbox" 
-                                    {% if requirement.req_c == 'True' %} checked="checked" {% endif %}
-                                    name="req_c_{{ requirement.id }}">
-                            </div>
-                        </td>
-                        <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">C. Photocopy of Latest Grade 10 Report Card (2 copies)</td>
-                    </tr>
+                    </th>
+                    <th scope="col" class="px-6 py-3  pr-2">Requirements</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for requirement in requirements %}
+                <tr
+                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="requirements"
+                                value="{{ requirement.id }}" {% if requirement.is_met %}checked{% endif %}>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-white">
+                        {{ requirement.requirement }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input mx-5" 
-                                    type="checkbox" 
-                                    {% if requirement.req_d == 'True' %} checked="checked" {% endif %}
-                                    name="req_d_{{ requirement.id }}">
-                            </div>
-                        </td>
-                        <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">D. Certificate of Academic Standing (2 copies)</td>
-                    </tr>
+    </div>
 
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input mx-5" 
-                                    type="checkbox" 
-                                    {% if requirement.req_e == 'True' %} checked="checked" {% endif %}
-                                    name="req_e_{{ requirement.id }}">
-                            </div>
-                        </td>
-                        <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">E. Voter's Certification Parents / Guardians (2 copies)</td>
-                    </tr>
 
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input mx-5" 
-                                    type="checkbox" 
-                                    {% if requirement.req_f == 'True' %} checked="checked" {% endif %}
-                                    name="req_f_{{ requirement.id }}">
-                            </div>
-                        </td>
-                        <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">F. Letter of Recommendation (if applicable)</td>
-                    </tr>
+    <div class="flex justify-end">
+        <button type="submit"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mt-5">Save</button>
+    </div>
 
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input mx-5" 
-                                    type="checkbox" 
-                                    {% if requirement.req_g == 'True' %} checked="checked" {% endif %}
-                                    name="req_g_{{ requirement.id }}">
-                            </div>
-                        </td>
-                        <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">G. Certificate of Employment of Parent /  Guardians (if possible)</td>
-                    </tr>
+</div>
+</form>
 
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input mx-5"
-                                    type="checkbox" 
-                                    {% if requirement.req_h == 'True' %} checked="checked" {% endif %}
-                                    name="req_h_{{ requirement.id }}">
-                            </div>
-                        </td>
-                        <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">H. Certificate of Indigency</td>
-                    </tr>
-
-                </tbody>
-            </table>
-            {% endfor %}
-   
-            </div>
-        <div class="flex justify-end">
-            <button type="submit"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mt-5">Save</button>
-        </div>
-              
-        </div>
-    </form>
 
 <script>
-function goBack() {
-    window.history.back();
-}
+    function goBack() {
+        window.history.back();
+    }
 
-        document.getElementById('selectAll').addEventListener('click', function () {
-            var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            var selectAllChecked = document.getElementById('selectAll').checked;
-            checkboxes.forEach(function (checkbox) {
-                checkbox.checked = selectAllChecked;
-            });
+    document.getElementById('selectAll').addEventListener('click', function () {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        var selectAllChecked = document.getElementById('selectAll').checked;
+        checkboxes.forEach(function (checkbox) {
+            checkbox.checked = selectAllChecked;
         });
-    </script>
+    });
+</script>
 
 {% endblock %}
