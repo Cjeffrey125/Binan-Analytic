@@ -8,170 +8,216 @@
 {% block content %}
 {% if user.is_authenticated %}
 
+
 <div class="px-10 mx-5">
     <div class="py-3">
         <h1 class="text-4xl">Pending</h1>
         <h3 class="text-cyan-400">ISKOLAR NG BAYAN PENDING LIST</h3>
     </div>
-    
-    
-    
-    
+
+
     <div class="flex my-1 relative justify-between">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-        <!-- <button id="importButton" class="flex items-center py-1 px-1 mx-1">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-            class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round"
-            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-        </svg>
-        <span class="mx-2 text-sm font-normal">IMPORT</span>
-    </button> -->
-    
-    
-    <button id="exportButton" class="flex items-center py-1 px-1 mx-1">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-        class="w-6 h-6">
-        <path stroke-linecap="round" stroke-linejoin="round"
-        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-    </svg>
-    <span class="mx-2 text-sm font-normal">EXPORT</span>
-</button>
 
-</div>
-<div class="flex justify-between">
-    <form method="GET" action="" id="searchForm">
-        <div class="relative flex-grow">
-            <label for="table-search" class="sr-only">Search</label>
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor"
-                        viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-                <div class="relative">
-                    <label for="table-search" class="sr-only">Search</label>
-                    <div
-                        class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">
-                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor"
-                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                    </div>
-                    <button type="button"
-                        class="absolute top-1/2 right-2 transform -translate-y-1/2 text-xs text-white opacity-50 hover:opacity-100 hover:text-red-700"
-                        onclick="document.getElementById('table-search').value = ''; document.getElementById('searchForm').submit();">Clear</button>
-    
-                    <input type="text" id="table-search" name="q" value="{{ request.GET.q }}"
-                        class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Search">
-                </div>
-            </div>
+            <button id="exportButton" class="flex items-center py-1 px-1 mx-1">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                <span class="mx-2 text-sm font-normal">EXPORT</span>
+            </button>
+
+            <button type="button" id="endApplicant"
+                class="text-sm transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 bg-purple-700 text-white px-3 py-2 rounded-sm hover:bg-purple-400 ml-4 w-40 shadow-sm shadow-gray-700 ">
+                End Application
+            </button>
+
         </div>
-    </form>
-</div>
+        <div class="flex justify-between">
+            <form method="GET" action="" id="searchForm">
+                <div class="relative flex-grow">
+                    <label for="table-search" class="sr-only">Search</label>
+                    <div class="relative">
+                        <div
+                            class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true" fill="currentColor"
+                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd"
+                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                    clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <div class="relative">
+                            <label for="table-search" class="sr-only">Search</label>
+                            <div
+                                class="absolute inset-y-0 left-0 rtl:inset-r-0 rtl:right-0 flex items-center ps-3 pointer-events-none ">
+                                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                    fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <button type="button"
+                                class="absolute top-1/2 right-2 transform -translate-y-1/2 text-xs text-white opacity-50 hover:opacity-100 hover:text-red-700"
+                                onclick="document.getElementById('table-search').value = ''; document.getElementById('searchForm').submit();">Clear</button>
 
-</div>
-{% if applicants %}
+                            <input type="text" id="table-search" name="q" value="{{ request.GET.q }}"
+                                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Search">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    {% if applicants %}
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white">
                 <tr>
                     <th scope="col" class="px-6 py-3">Control Number</th>
-                            <th scope="col" class="px-6 py-3">Name</th>
-                            <th scope="col" class="px-6 py-3">Course</th>
-                            <th scope="col" class="px-6 py-3">Remarks</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody class="scrollable-container">
-                        {% for applicant in applicants %}
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" onclick="window.location='{% url 'inb_pending_applicant_info' applicant.control_number %}';"
-                            style="cursor: pointer;">
-                            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.control_number }}</td>
-                            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.fullname }}</td>
-                            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.course }}</td>
-                            <td></td>
+                    <th scope="col" class="px-6 py-3">Name</th>
+                    <th scope="col" class="px-6 py-3">Course</th>
+                    <th scope="col" class="px-6 py-3">Assessment</th>
+                </tr>
+            </thead>
 
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                    </table>
+            <tbody class="scrollable-container">
+                {% for applicant in applicants %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                    onclick="window.location='{% url 'inb_pending_applicant_info' applicant.control_number %}';"
+                    style="cursor: pointer;">
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.control_number }}</td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.fullname }}</td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.course }}</td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.status }}</td>
 
-                    <div class="flex justify-between mt-3 mr-16 px-5 py-5">
-                        <div class="text-sm leading-5 ml-10">
-                            Showing {{ applicants.start_index }} to {{ applicants.end_index }} of {{ applicants.paginator.count }} results
-                        </div>
-                        <nav aria-label="Page navigation">
-                            <ul class="flex items-center -space-x-px h-8 text-sm">
-                                {% if applicants.has_previous %}
-                                <li>
-                                    <a href="?page={{ applicants.previous_page_number }}"
-                                        class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                        <span class="sr-only">Previous</span>
-                                        <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                            fill="none" viewBox="0 0 6 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M5 1 1 5l4 4" />
-                                        </svg>
-                                    </a>
-                                </li>
-                                {% endif %}
-                    
-                                {% for page_num in applicants.paginator.page_range %}
-                                <li>
-                                    {% if applicants.number == page_num %}
-                                    <a href="?page={{ page_num }} " aria-current="page"
-                                        class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
-                                        {{ page_num }}</a>
-                                    {% else %}
-                                    <a href="?page={{ page_num }}"
-                                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{ page_num }}</a>
-                                    {% endif %}
-                                </li>
-                                {% endfor %}
-                    
-                                {% if applicants.has_next %}
-                                <li>
-                                    <a href="?page={{ applicants.next_page_number }}"
-                                        class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                        <span class="sr-only">Next</span>
-                                        <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                            fill="none" viewBox="0 0 6 10">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="m1 9 4-4-4-4" />
-                                        </svg>
-                                    </a>
-                                </li>
-                                {% endif %}
-                            </ul>
-                        </nav>
-                    </div>
-                    {% else %}
-                    <div
-                        class="flex items-center justify-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
-                        <h1>No student records found.</h1>
-                    </div>
-                    {% endif %}
-                    </div>
-                </div>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="flex justify-between mt-3 mr-16 px-5 py-5">
+            <div class="text-sm leading-5 ml-10">
+                Showing {{ applicants.start_index }} to {{ applicants.end_index }} of {{ applicants.paginator.count }}
+                results
             </div>
+            <nav aria-label="Page navigation">
+                <ul class="flex items-center -space-x-px h-8 text-sm">
+                    {% if applicants.has_previous %}
+                    <li>
+                        <a href="?page={{ applicants.previous_page_number }}"
+                            class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Previous</span>
+                            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="M5 1 1 5l4 4" />
+                            </svg>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for page_num in applicants.paginator.page_range %}
+                    <li>
+                        {% if applicants.number == page_num %}
+                        <a href="?page={{ page_num }} " aria-current="page"
+                            class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
+                            {{ page_num }}</a>
+                        {% else %}
+                        <a href="?page={{ page_num }}"
+                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">{{ page_num }}</a>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+
+                    {% if applicants.has_next %}
+                    <li>
+                        <a href="?page={{ applicants.next_page_number }}"
+                            class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            <span class="sr-only">Next</span>
+                            <svg class="w-2.5 h-2.5 rtl:rotate-180" aria-hidden="true"
+                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 9 4-4-4-4" />
+                            </svg>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
+        {% else %}
+        <div
+            class="flex items-center justify-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+            <h1>No student records found.</h1>
+        </div>
+        {% endif %}
     </div>
 </div>
 
+{% include 'INB/inb_assessment_filter.html' %}
+
+{% endif %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.getElementById('addButton').addEventListener('click', function () {
+            window.location.href = "{% url 'add_inb_applicant' %}";
+        });
+
+        function modalOpen(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('fadeOut');
+            modal.classList.add('fadeIn');
+            modal.style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 50);
+        }
+
+        document.getElementById('openImport').addEventListener('click', function () {
+            openImport('importModal');
+            closeModal('exportModal');
+        });
+
+        document.getElementById('openExport').addEventListener('click', function () {
+            modalOpen('exportModal');
+            closeModal('importModal');
+        });
 
 
-            {% endif %}
-            <script>
-                document.getElementById('exportButton').addEventListener('click', function () {
-                        window.location.href = "{% url 'export' %}";
-                    });
-            </script>
+        document.getElementById('cancelImportButton').addEventListener('click', function () {
+            closeModal('importModal');
+        });
 
-    {% endblock %}
+
+        document.getElementById('cancelExportButton').addEventListener('click', function () {
+            closeModal('exportModal');
+        });
+
+        document.getElementById('endApplicant').addEventListener('click', function () {
+            endApplicant('openModal');
+            closeModal('exportModal');
+        });
+
+        document.getElementById('cancelFilterButton').addEventListener('click', function () {
+            closeModal('openModal');
+        });
+
+    });
+
+    document.querySelector('#filterDropdownButton').addEventListener('click', function () {
+        document.querySelector('#filterDropdown').classList.toggle('hidden');
+    });
+</script>
+
+{% endblock %}

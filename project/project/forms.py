@@ -10,6 +10,8 @@ from base.models import (
     INBCourse,
     INBApplicationRequirements,
     FAApplicationRequirements,
+    CollegeStudentAssesment,
+    FinancialAssistanceAssesment,
 )
 
 
@@ -919,3 +921,51 @@ class AddFinancialAssistanceForm(forms.ModelForm):
         model = FinancialAssistanceApplication
 
         exclude = ("user",)
+
+
+class INBPendingApplicants(forms.ModelForm):
+    APPLICANT_STATUS = [
+        ("Accepted", "Accepted"),
+        ("Rejected", "Rejected"),
+    ]
+
+    status = forms.ChoiceField(
+        required=True,
+        choices=APPLICANT_STATUS,
+        widget=forms.Select(attrs={}),
+        label="Status",
+    )
+
+    remarks = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 4, "cols": 40}),
+        label="Remarks",
+        required=True,
+    )
+
+    class Meta:
+        model = CollegeStudentAssesment
+        fields = ["status", "remarks"]
+
+
+class FAPendingApplicants(forms.ModelForm):
+    APPLICANT_STATUS = [
+        ("Accepted", "Accepted"),
+        ("Rejected", "Rejected"),
+    ]
+
+    status = forms.ChoiceField(
+        required=True,
+        choices=APPLICANT_STATUS,
+        widget=forms.Select(attrs={}),
+        label="Status",
+    )
+
+    remarks = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 4, "cols": 40}),
+        label="Remarks",
+        required=True,
+    )
+
+    class Meta:
+        model = FinancialAssistanceAssesment
+        fields = ["status", "remarks"]

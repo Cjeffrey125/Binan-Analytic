@@ -80,27 +80,26 @@
         <tr>
           <th scope="col" class="px-6 py-3">Control Number</th>
           <th scope="col" class="px-6 py-3">Name</th>
-          <th scope="col" class="px-6 py-3">Course</th>
           <th scope="col" class="px-6 py-3">Remarks</th>
         </tr>
       </thead>
 
       <tbody>
         <div class="scrollable-container">
-          {% for applicant_record, requirement_record in records %}
+          {% for applicant in applicants %}
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
             onclick="window.location='{% url 'inb_failed_applicant_info' applicant.control_number %}';"
             style="cursor: pointer;">
-            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{
-              applicant.control_number }}</td>
-            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{
-              applicant.fullname }}</td>
-            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{
-              applicant.course }}</td>
+            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.control_number }}</td>
+            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.fullname }}</td>
+            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.status }}
+            </td>
+
           </tr>
           {% endfor %}
-      </tbody>
-    </table>
+        </div>
+        </tbody>
+        </table>
     
     <div class="flex justify-between mt-3 mr-16 px-5 py-5">
       <div class="text-sm leading-5 ml-10">

@@ -13,6 +13,7 @@ from project.forms import (
     INBSchoolForm,
     INBCourseForm,
     GradeUploadForm,
+    INBPendingApplicants,
 )
 from .models import (
     CollegeStudentApplication,
@@ -584,6 +585,55 @@ def inb_filter_applicants(request):
     return redirect("inb_applicant_list")
 
 
+def filter_assessment(request):
+    applicants_to_transfer = CollegeStudentAssesment.objects.filter(
+        status__in=["Accepted", "Rejected"]
+    )
+
+    if applicants_to_transfer.exists():
+        for applicant in applicants_to_transfer:
+            try:
+                (
+                    applicant_info,
+                    created,
+                ) = ApplicantInfoRepositoryINB.objects.get_or_create(
+                    control_number=applicant.control_number
+                )
+
+                if created:
+                    if applicant.status == "Accepted":
+                        applicant_info.status = "Accepted"
+                    elif applicant.status == "Rejected":
+                        applicant_info.status = "Rejected"
+                    applicant_info.save()
+
+                if applicant.status == "Accepted":
+                    CollegeStudentAccepted.objects.create(
+                        control_number=applicant.control_number,
+                        school=applicant.school,
+                        course=applicant.course,
+                    )
+                elif applicant.status == "Rejected":
+                    CollegeStudentRejected.objects.create(
+                        control_number=applicant.control_number,
+                        fullname=applicant.fullname,
+                        remarks=applicant.remarks,
+                    )
+
+                applicant.delete()
+
+                messages.success(request, "Applicants have been successfully filtered.")
+            except Exception as e:
+                messages.error(request, f"An error occurred: {str(e)}")
+    else:
+        messages.warning(
+            request,
+            "There are no applicants with status 'Accepted' or 'Rejected' to filter.",
+        )
+
+    return redirect("inb_pending_applicant")
+
+
 # ---------------------------------------------
 
 
@@ -735,6 +785,8 @@ def financial_assistance_list(request):
 
 # ------------------------------------------------------------------------------------------------------------------------
 # done refactoring
+
+
 def inb_applicant_info(request, status, control_number):
     if request.user.is_authenticated:
         if status == "passed":
@@ -743,7 +795,8 @@ def inb_applicant_info(request, status, control_number):
         elif status == "pending":
             model_class = CollegeStudentAssesment
             template = "INB/inb_pending_info.html"
-        elif status == "pending":
+            form_class = INBPendingApplicants
+        elif status == "failed":
             model_class = CollegeStudentRejected
             template = "INB/failed_info.html"
         else:
@@ -751,34 +804,58 @@ def inb_applicant_info(request, status, control_number):
             return redirect("home")
 
         try:
-            if status == "passed":
-                passed_applicant = get_object_or_404(
-                    model_class, control_number=control_number
-                )
-                return render(
-                    request,
-                    template,
-                    {"passed_applicant": passed_applicant, "status": status},
-                )
+            if request.method == "GET":
+                if status == "passed":
+                    passed_applicant = get_object_or_404(
+                        model_class, control_number=control_number
+                    )
+                    return render(
+                        request,
+                        template,
+                        {"passed_applicant": passed_applicant, "status": status},
+                    )
+                elif status == "pending":
+                    pending_applicant = get_object_or_404(
+                        model_class, control_number=control_number
+                    )
+                    form = form_class()
+                    return render(
+                        request,
+                        template,
+                        {
+                            "pending_applicant": pending_applicant,
+                            "status": status,
+                            "form": form,
+                            "control_number": control_number,
+                        },
+                    )
+                elif status == "failed":
+                    failed_applicant = get_object_or_404(
+                        model_class, control_number=control_number
+                    )
+                    return render(
+                        request,
+                        template,
+                        {"failed_applicant": failed_applicant, "status": status},
+                    )
 
-            elif status == "pending":
-                pending_applicant = get_object_or_404(
-                    model_class, control_number=control_number
-                )
-                return render(
-                    request,
-                    template,
-                    {"pending_applicant": pending_applicant, "status": status},
-                )
-            elif status == "failed":
-                failed_applicant = get_object_or_404(
-                    model_class, control_number=control_number
-                )
-                return render(
-                    request,
-                    template,
-                    {"failed_applicant": failed_applicant, "status": status},
-                )
+            elif request.method == "POST":
+                form = form_class(request.POST)
+                if form.is_valid():
+                    if status == "pending":
+                        pending_applicant = get_object_or_404(
+                            model_class, control_number=control_number
+                        )
+                        pending_applicant.status = form.cleaned_data["status"]
+                        pending_applicant.remarks = form.cleaned_data["remarks"]
+                        pending_applicant.save()
+
+                    messages.success(
+                        request,
+                        f"{status.capitalize()} applicant information updated successfully.",
+                    )
+                    return redirect("inb_pending_applicant")
+
         except model_class.DoesNotExist:
             messages.error(request, f"{status.capitalize()} applicant not found.")
             return redirect(f"inb_{status}_applicant")

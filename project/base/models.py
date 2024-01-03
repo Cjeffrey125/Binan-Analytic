@@ -102,9 +102,7 @@ class CollegeStudentAssesment(models.Model):
     course = models.CharField(max_length=100, default="")
     school = models.CharField(max_length=200, default="")
     remarks = models.CharField(max_length=200, default="")
-    status = models.CharField(
-        max_length=20, choices=(("Accepted", "Accepted"), ("Rejected", "Rejected"))
-    )
+    status = models.CharField(max_length=200, default="Pending")
 
 
 class CollegeStudentRejected(models.Model):

@@ -1,3 +1,4 @@
+
 from django.urls import path
 from . import views
 
@@ -33,6 +34,10 @@ urlpatterns = [
     path("inb_filter_applicants/",views.inb_filter_applicants,name="inb_filter_applicants",),
 
     path("inb/pending/applicant/",views.inb_applicant_list,{"status": "pending"},name="inb_pending_applicant",),
+
+    path("filter_assessment",views.filter_assessment,name="inb_filter_assessment",),
+
+    path("update_assessment/<str:control_number>/", views.inb_applicant_info, {"status": "pending"}, name="update_assessment"),
     path("inb/pending/applicant/<str:control_number>/", views.inb_applicant_info, {"status": "pending"}, name="inb_pending_applicant_info"),
 
     path("inb/passed/applicant/",views.inb_applicant_list,{"status": "passed"},name="inb_passed_applicant",),

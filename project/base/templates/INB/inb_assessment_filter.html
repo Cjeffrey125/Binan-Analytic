@@ -1,0 +1,55 @@
+
+<div id="openModal"
+    class="main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
+    style="background: rgba(0,0,0,.7); display: none;">
+    <div class="modal-container bg-gray-800 w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+        <div class="modal-content py-4 text-left px-6 ">
+
+            <div class="flex justify-center items-center pb-3 border-b">
+                <h1 class="text-2xl font-bold ">END ASSESSMENT</h1>
+            </div>
+
+
+                <div class="my-5 flex justify-center text-lg">
+
+                    <h1>Are you sure you want to end the assessment?</h1>
+
+                </div>
+
+                <div class="flex justify-end pt-2">
+                    <button type="button" id="cancelFilterButton"
+                        class="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg  hover:bg-gray-300">Cancel</button>
+
+                    <form method="post" action="{% url 'inb_filter_assessment' %}" class="inline-form">
+                        {% csrf_token %}
+                    <button type="submit"
+                        class="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400">Confirm</button>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function endApplicant() {
+        const modal = document.getElementById('openModal');
+        modal.style.display = 'flex';
+    }
+
+
+    function closeModal() {
+        const modal = document.getElementById('openModal');
+        modal.style.display = 'none';
+    }
+
+    if (document.getElementById('openModal')) {
+
+        document.getElementById('modalOpen').addEventListener('click', modalOpen);
+
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            closeModal();
+        });
+    }
+
+</script>
