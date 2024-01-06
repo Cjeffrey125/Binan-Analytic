@@ -78,12 +78,9 @@
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                                     onclick="window.location='{% url 'fa_pending_applicant_info' applicant.control_number %}';"
                                     style="cursor: pointer;">
-                                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{
-                                        applicant.control_number }}</td>
-                                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{
-                                        applicant.fullname }}</td>
-                                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{
-                                        applicant.course }}</td>
+                                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.control_number }}</td>
+                                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.fullname }}</td>
+                                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.course }}</td>
                                     <td></td>
                             
                                 </tr>

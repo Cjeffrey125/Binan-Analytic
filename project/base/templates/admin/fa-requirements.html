@@ -2,62 +2,92 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/req.css' %}">
-
-<h1>Iskolar ng Bayan Requirements</h1>
+<div class="px-10 mx-5">
+    <div class="py-3">
+        <h1 class="text-4xl">Requirements</h1>
+        <h3 class="text-cyan-400">FINANCIAL ASSITANCE REQUIREMENTS EDITOR</h3>
+    </div>
 
 <div>
-    <button class="edit-button" onclick="window.location.href='{% url 'update_req' %}'">Go Back</button>
+    <button class="edit-button text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800" onclick="window.location.href='{% url 'update_req' %}'">Go Back</button>
 </div>
-
-<ul>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-5"
+    style="scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
     {% if requirements %}
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+        <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0 ">
+            <tr>
+                <th scope="col" class="px-6 py-3 left-10 absolute">Actions</th>
+                <th scope="col" class="px-6 py-3 ">Financial Assitance Requirements</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for requirement in requirements %}
-            <p class="req-text">
-                <button class="edit-button update-requirement-link" data-requirement-id="{{ requirement.id }}">
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            <td scope="row" class="req-text px-10 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                <button class="edit-button update-requirement-link bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin mr-5" data-requirement-id="{{ requirement.id }}">
                     <i class="fa-solid fa-pencil"></i>
                 </button>
-
                 
-                <button class="edit-button delete-requirement-link" data-requirement-id="{{ requirement.id }}">
+                <button class="edit-button delete-requirement-link bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin" data-requirement-id="{{ requirement.id }}">
                     <i class="fa-solid fa-trash" id="openDeleteModal"></i>
                 </button>
+            </td>
+            <td class="px-10 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">
                 {{ requirement.requirement }}
-            </p>
+            </td>
+        </tr>
         {% endfor %}
+        </tbody>
+    </table>
     {% else %}
-        <li>No requirements found</li>
+        <div
+            class="flex items-center justify-center mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">
+            <h1>No Requirements found.</h1>
+        </div>
     {% endif %}
-</ul>
-
-<div id="updateRequirementConfirmationContainer" class="update-modal-container">
-    <div class="update-modal">
-        <h1>Edit <span id="editRequirementName"></span> (ID: <span id="editRequirementId"></span>)</h1>
-        <form method="POST" id="updateRequirementForm">
-            {% csrf_token %}
-            <input type="text" name="requirement" id="editRequirementInput" class="form-control">
-            <input type="hidden" name="requirement_id" id="editRequirementIdInput" value="">
-            <div class="inline-flex-container">
-                <button class="modal-button" type="submit">Yes</button>
-                <button class="modal-button" id="updateRequirementNoButton">No</button>
-            </div>
-        </form>
     </div>
 </div>
 
-<div id="deleteRequirementConfirmationContainer" class="delete-modal-container">
-    <div class="delete-modal">
-        <div class="center-course">
-            <h1 class="school-text" id="deleteConfirmationText">Are you sure you want to delete this?</h1>
-            <form method="post" id="deleteForm" action="">
+<div id="updateRequirementConfirmationContainer" class="update-modal-container hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-black bg-opacity-70">
+    <div class="update-modal relative p-4 w-[1200px] max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">Edit <span id="editRequirementName"></span> (ID: <span id="editRequirementId"></span>)</h3>
+            </div>
+            <div class="p-4 md:p-5 space-y-4">
+        <form method="POST" id="updateRequirementForm" class="p-4 md:p-5">
+            {% csrf_token %}
+            <input type="text" name="requirement" id="editRequirementInput" class="form-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+            <input type="hidden" name="requirement_id" id="editRequirementIdInput" value="">
+
+            <div class="inline-flex-container mt-3 items-center text-center">
+                <button class="modal-button text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">Yes</button>
+                <button class="modal-button modal-button ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600" id="updateRequirementNoButton">No</button>
+            </div>
+        </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="deleteRequirementConfirmationContainer" class="delete-modal-container hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-black bg-opacity-70" style="display: none;" style="display: none;">
+    <div class="delete-modal relative p-4 w-[1200px] max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+        <div class="center-course flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 text-center item">
+            <h3 class="school-text text-lg font-semibold text-gray-900 dark:text-white items-center text-center" id="deleteConfirmationText">Are you sure you want to delete this?</h3>
+        </div>
+            <form method="post" id="deleteForm" action="" class="p-4 md:p-5">
                 {% csrf_token %}
-                <div class="inline-flex-container">
-                    <button type="button" class="modal-button" id="deleteYesButton" onclick="confirmDelete()">Yes</button>
-                    <button type="button" class="modal-button" id="deleteNoButton" onclick="closeDeleteModal()">No</button>
+                <div class="inline-flex-container mt-3 items-center text-center">
+                    <button type="button" class="modal-button text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" id="deleteYesButton" onclick="confirmDelete()">Yes</button>
+                    <button type="button" class="modal-button ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600" id="deleteNoButton" onclick="closeDeleteModal()">No</button>
                 </div>
             </form>
         </div>
     </div>
+</div>
 </div>
 
 <script>

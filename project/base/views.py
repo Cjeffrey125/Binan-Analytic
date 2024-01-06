@@ -467,7 +467,7 @@ def fa_filter_applicants(request):
                     control_number=applicant.control_number,
                     fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
                     school=applicant.school,
-                    course=applicant.course,
+                    strand=applicant.strand,
                 )
                 FinancialAssistanceApplication.objects.filter(
                     control_number=applicant.control_number
@@ -492,6 +492,53 @@ def fa_filter_applicants(request):
         messages.warning(request, "There are no applicants to filter.")
 
     return redirect("fa_applicant_list")
+
+
+def filter_assessment(request):
+    applicants_to_transfer = FinancialAssistanceAssesment.objects.filter(
+        status__in=["Accepted", "Rejected"]
+    )
+
+    if applicants_to_transfer.exists():
+        for applicant in applicants_to_transfer:
+            try:
+                (
+                    applicant_info,
+                    created,
+                ) = FinancialAssistanceInfoRepository.objects.get_or_create(
+                    control_number=applicant.control_number
+                )
+
+                if created:
+                    if applicant.status == "Accepted":
+                        applicant_info.status = "Accepted"
+                    elif applicant.status == "Rejected":
+                        applicant_info.status = "Rejected"
+                    applicant_info.save()
+
+                if applicant.status == "Accepted":
+                    FinancialAssistanceAccepted.objects.create(
+                        control_number=applicant.control_number,
+                        school=applicant.school,
+                        strand=applicant.strand,
+                    )
+                elif applicant.status == "Rejected":
+                    FinancialAssistanceRejected.objects.create(
+                        control_number=applicant.control_number,
+                    )
+
+                applicant.delete()
+
+                messages.success(request, "Applicants have been successfully filtered.")
+            except Exception as e:
+                messages.error(request, f"An error occurred: {str(e)}")
+    else:
+        messages.warning(
+            request,
+            "There are no applicants with status 'Accepted' or 'Rejected' to filter.",
+        )
+
+    return redirect("fa_pending_applicant")
 
 
 def inb_filter_applicants(request):
@@ -854,6 +901,7 @@ def inb_applicant_info(request, status, control_number):
                         f"{status.capitalize()} applicant information updated successfully.",
                     )
                     return redirect("inb_pending_applicant")
+                # dito
 
         except model_class.DoesNotExist:
             messages.error(request, f"{status.capitalize()} applicant not found.")
@@ -1312,6 +1360,7 @@ def update_course_list(request, course_id):
     return render(
         request, "Admin/update-school-course.html", {"course": course, "form": form}
     )
+
 
 def delete_item(request, item_type, item_id):
     if item_type == "school":

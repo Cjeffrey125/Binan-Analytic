@@ -33,20 +33,16 @@
         modal.style.display = 'flex';
     }
 
-
     function closeModal() {
         const modal = document.getElementById('filterModal');
         modal.style.display = 'none';
     }
 
     if (document.getElementById('filterModal')) {
-
-        document.getElementById('openModal').addEventListener('click', openModal);
-
-        document.getElementById('cancelButton').addEventListener('click', function () {
+        document.getElementById('openFilter').addEventListener('click', openFilter);
+        document.getElementById('cancelFilterButton').addEventListener('click', function () {
             closeModal();
         });
     }
-
 
 </script>

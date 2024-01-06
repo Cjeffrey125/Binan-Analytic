@@ -35,7 +35,8 @@ urlpatterns = [
 
     path("inb/pending/applicant/",views.inb_applicant_list,{"status": "pending"},name="inb_pending_applicant",),
 
-    path("filter_assessment",views.filter_assessment,name="inb_filter_assessment",),
+    path("inb_filter_assessment",views.filter_assessment,name="inb_filter_assessment",),
+    path("fa_filter_assessment",views.filter_assessment,name="fa_filter_applicants",),
 
     path("update_assessment/<str:control_number>/", views.inb_applicant_info, {"status": "pending"}, name="update_assessment"),
     path("inb/pending/applicant/<str:control_number>/", views.inb_applicant_info, {"status": "pending"}, name="inb_pending_applicant_info"),

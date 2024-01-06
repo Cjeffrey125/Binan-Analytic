@@ -2,75 +2,167 @@
 {% load static %}
 
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/admin-req.css' %}">
 
-<h1>Requirements</h1>
-
-<div class="container">
-
-    <div>
-        <button onclick="toggle('INB')" class="modal-button">Iskolar ng Bayan</button>
-        <button onclick="toggle('FA')" class="modal-button">Financial Assistance</button>
+<div class="px-10 mx-5">
+    <div class="py-3">
+        <h1 class="text-4xl">Requirements</h1>
+        <h3 class="text-cyan-400">WELCOME TO YOUR REQUIREMENTS EDITOR</h3>
     </div>
+<div class="container flex my-1 justify-center mb-5">
+    <div class="flex justify-between items-center">
+        <button id="INBButton" onclick="toggle('INB')"
+            class="modal-button relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+            <span id="INBSpan" class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+            Iskolar ng Bayan
+            </span>
+            </button>
+        <button id="FAButton" onclick="toggle('FA')"
+            class="modal-button relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800">
+            <span id="FASpan" class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">Financial Assistance </span></button>
+    </div>
+</div>
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg"
+    style="scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
 
     <div id="INB" style="display: none;">
-        <ul>
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+            <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-center">Iskolar ng Bayan Requirements</th>
+                </tr>
+            </thead>
+        <tbody>
             {% for requirement in inb_requirements %}
-                <li>{{ requirement.requirement }}</li>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <td scope="row" class="px-10 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ requirement.requirement }}</td>
+            </tr>
             {% endfor %}
-        </ul>
-        <button class="edit-button" onclick="openModal('INBAddFormContainer')">Add</button>
-        <button class="edit-button" onclick="window.location.href='{% url 'inb_requirement' %}'">Edit</button>
-        
+        </tbody>
+        </table>
+        <div class="flex my-1 relative justify-between">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <button class="edit-button text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mt-5 flex items-center" onclick="openModal('INBAddFormContainer')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-6 h-6 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+        </svg> Add 
+        </button>
+
+
+        <button class="edit-button text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mt-5 flex items-center" onclick="window.location.href='{% url 'inb_requirement' %}'">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                class="w-6 h-6 mr-2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+            </svg>Edit</button>
     </div>
+    </div>
+    </div>
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg"
+    style="scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
 
     <div id="FA" style="display: none;">
-        <ul>
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
+            <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-center">Financial Assistance Requirements</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for requirement in fa_requirements %}
-                <li>{{ requirement.requirement }}</li>
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ requirement.requirement }}</td>
+                </tr>
             {% endfor %}
-        </ul>
-        <button class="edit-button" onclick="openModal('FAAddFormContainer')">Add</button>
-        <button class="edit-button" onclick="window.location.href='{% url 'fa_requirement' %}'">Edit</button>
-    </div>
+        </tbody>
+        </table>
 
+<div class="flex my-1 relative justify-between">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <button class="edit-button text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mt-5 flex items-center" onclick="openModal('FAAddFormContainer')"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-6 h-6 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m6-6H6" />
+        </svg>Add</button>
+        <button class="edit-button text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 mt-5 flex items-center" onclick="window.location.href='{% url 'fa_requirement' %}'"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            class="w-6 h-6 mr-2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+        </svg>Edit</button>
+    </div>
+</div>
+</div>
 </div>
 
-<div id="INBAddFormContainer" class="modal-container" style="display: none;">
-    <div class="modal-content">
-        <h1>Add INB Requirement</h1>
-        <form method="post" action="{% url 'add_requirement' form_type='inb' %}">
+
+<div id="INBAddFormContainer" class="modal-container hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-black bg-opacity-70" style="display: none;">
+    <div class="modal-content relative p-4 w-[1200px] max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Add INB Requirement</h3>
+        <button id="closeINBAddForm" class="close-button"><svg class="w-3 h-3" aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+            </svg></button>
+            </div>
+        <form method="post" action="{% url 'add_requirement' form_type='inb' %}" class="p-4 md:p-5">
             {% csrf_token %}
             <label for="inb_requirement">Requirement:</label>
-            <input type="text" id="inb_requirement" name="requirement" required>
-            <button type="submit" class="edit-button">Submit</button>
+            <input type="text" id="inb_requirement" name="requirement" class="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+            <button type="submit" class="edit-button mt-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded block mx-auto">Submit</button>
         </form>
+            </div>
+        </div>
     </div>
 </div>
 
-<div id="FAAddFormContainer" class="modal-container" style="display: none;">
-    <div class="modal-content">
-        <h1>Add FA Requirement</h1>
-        <form method="post" action="{% url 'add_requirement' form_type='fa' %}">
+<div id="FAAddFormContainer" class="modal-container hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full bg-black bg-opacity-70" style="display: none;" style="display: none;">
+    <div class="modal-content relative p-4 w-[1200px] max-w-md max-h-full">
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Add FA Requirement</h3>
+        <button id="closeFAAddForm" class="close-button"><svg class="w-3 h-3" aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+            </svg></button>
+            </div>
+        <form method="post" action="{% url 'add_requirement' form_type='fa' %}" class="p-4 md:p-5">
             {% csrf_token %}
             <label for="fa_requirement">Requirement:</label>
-            <input type="text" id="fa_requirement" name="requirement" required>
-            <button type="submit" class="edit-button">Submit</button>
+            <input type="text" id="fa_requirement" name="requirement" class="bg-gray-50 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required>
+            <button type="submit" class="edit-button mt-3 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded block mx-auto">Submit</button>
         </form>
     </div>
 </div>
-
+</div>
+</div>
 <script>
     function toggle(divId) {
         var divToToggle = document.getElementById(divId);
         var otherDivId = divId === 'INB' ? 'FA' : 'INB';
         var otherDiv = document.getElementById(otherDivId);
 
+        var buttonToToggle = document.getElementById(divId + 'Button');
+        var otherButton = document.getElementById(otherDivId + 'Button');
+
+        var spanToToggle = document.getElementById(divId + 'Span');
+        var otherSpan = document.getElementById(otherDivId + 'Span');
+
         if (divToToggle.style.display === "none") {
             otherDiv.style.display = "none";
             divToToggle.style.display = "block";
+
+            otherButton.className = "modal-button relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800";
+            buttonToToggle.className = "text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2";
+
+            otherSpan.className = "relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0";
+            spanToToggle.className = "";
         } else {
             divToToggle.style.display = "none";
+
+            buttonToToggle.className = "relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-green-400 to-blue-600 group-hover:from-green-400 group-hover:to-blue-600 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800";
+            spanToToggle.className = "relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0";
         }
     }
 
@@ -78,6 +170,13 @@
         var modal = document.getElementById(modalId);
         modal.style.display = "flex";
     }
-</script>
 
+     document.getElementById('closeINBAddForm').addEventListener('click', function () {
+            document.getElementById('INBAddFormContainer').style.display = 'none';
+        });
+
+        document.getElementById('closeFAAddForm').addEventListener('click', function () {
+            document.getElementById('FAAddFormContainer').style.display = 'none';
+        });
+</script>
 {% endblock %}

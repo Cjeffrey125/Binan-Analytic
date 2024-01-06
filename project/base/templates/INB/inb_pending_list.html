@@ -210,6 +210,10 @@
             modal.style.display = 'none';
         }
 
+        document.getElementById('cancelFilterButton').addEventListener('click', function () {
+            closeModal('openModal');
+        });
+
         document.getElementById('openExport').addEventListener('click', function () {
             modalOpen('exportModal');
             closeModal('importModal');
@@ -224,15 +228,9 @@
             closeModal('exportModal');
         });
 
-        document.getElementById('cancelFilterButton').addEventListener('click', function () {
-            closeModal('openModal');
+        document.querySelector('#filterDropdownButton').addEventListener('click', function () {
+            document.querySelector('#filterDropdown').classList.toggle('hidden');
         });
-   
-
-    document.querySelector('#filterDropdownButton').addEventListener('click', function () {
-        document.querySelector('#filterDropdown').classList.toggle('hidden');
-    });
-
     });
 </script>
 
