@@ -13,12 +13,16 @@
                 <p1>test</p1>
             </div>
 
-            <div class="bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 430px; height: 200px">
-                <div class="chart-wrapper" style="width: 200px; position: relative;">
-                    <canvas id="pieGraph"></canvas>
-                    <label class="text-white" style="color: #39B8FF; position: absolute; top: 165px; left: 10%;">Scholar By Gender</label>
+            <a href="{% url 'inb-gender-summary' %}">
+                <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
+                    style="width: 430px; height: 200px" id="chartContainer">
+                    <div class="chart-wrapper" style="width: 200px; position: relative;">
+                        {% include "Graphs/piegraph-m-f.html" %}
+                        <label class="text-white" style="color: #39B8FF; position: absolute; top: 165px; left: 10%;">Scholar By Gender</label>
+                    </div>
                 </div>
-            </div>
+            </a>
+                        
             
         
             <div class="bg-gray-800 rounded" style="width: 430px; height: 200px">
@@ -72,12 +76,14 @@
       
         </div>
     </div>
-      
+
+
+
     
-    <script src="../static/js/Graphs/inb-piegraph-m-f.js"></script>
+    
     <script src="../static/js/Graphs/inb-linechart.js"></script>
     <script src="../static/js/Graphs/inb-stackbar.js"></script>
     <script src="../static/js/Graphs/inb-bargraph.js"></script>
           
-          {% endif %}
-          {% endblock %}
+{% endif %}
+{% endblock %}

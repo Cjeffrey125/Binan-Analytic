@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gender By Year</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-wrapper {
+            margin-right: 100px; /* Adjust the left margin as needed */
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Gender By Year</h1>
+    <div class="chart-wrapper" style="width: 550px;">
+        <canvas id="myChart" width="250" height="400"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var ctx = document.getElementById('myChart').getContext('2d');
+
+            
+            const unique_years = {{ unique_years|safe }};
+            const genderData = {{ gender_table_data_creation_year|safe }};
+
+            const labels = unique_years.map(year => year.toString());
+            const datasets = [];
+
+            const maleData = genderData.map(entry => entry['male_count']);
+            const femaleData = genderData.map(entry => entry['female_count']);
+
+            datasets.push({
+                label: 'Male',
+                data: maleData,
+                borderColor: '#36A2EB',
+                backgroundColor: '#36A2EB',
+            });
+
+            datasets.push({
+                label: 'Female',
+                data: femaleData,
+                borderColor: '#FF639E',
+                backgroundColor: '#FF639E',
+            });
+
+            const data = {
+                labels: labels,
+                datasets: datasets,
+            };
+
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
