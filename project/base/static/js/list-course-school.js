@@ -1,32 +1,24 @@
+
 document.getElementById('openSchoolForm').addEventListener('click', function () {
-    document.getElementById('schoolFormContainer').classList.remove('hidden');
+    document.getElementById('schoolFormContainer').style.display = 'flex';
     initializeInputBox();
 });
 
 document.getElementById('schoolFormContainer').addEventListener('click', function (e) {
     if (e.target === this) {
-        this.classList.add('hidden');
+        this.style.display = 'none';
     }
 });
 
 document.getElementById('openCourseForm').addEventListener('click', function () {
-    document.getElementById('courseFormContainer').classList.remove('hidden');
+    document.getElementById('courseFormContainer').style.display = 'flex';
     initializeInputBox();
 });
 
 document.getElementById('courseFormContainer').addEventListener('click', function (e) {
     if (e.target === this) {
-        this.classList.add('hidden');
+        this.style.display = 'none';
     }
-});
-
-document.getElementById('dropdownButton').addEventListener('click', function (event) {
-    document.getElementById('dropdownMenu').classList.toggle('hidden');
-    event.stopPropagation();
-});
-
-document.addEventListener('click', function () {
-    document.getElementById('dropdownMenu').classList.add('hidden');
 });
 
 var input = document.querySelector(".input-box");
@@ -61,6 +53,7 @@ input.addEventListener("click", function () {
         list.style.boxShadow = null;
     }
 });
+
 
 var checkboxes = document.querySelectorAll(".checkbox");
 checkboxes.forEach((checkbox) => {
@@ -113,13 +106,14 @@ function updateCheckbox(optionId) {
 }
 
 function addSelectedSchools() {
-    var selectedSchools = document.querySelectorAll('input[name="schools"]:checked');
-    var schoolIds = [];
+var selectedSchools = document.querySelectorAll('input[name="schools"]:checked');
+var schoolIds = [];
 
-    selectedSchools.forEach(function(school) {
-        schoolIds.push(school.value);
-    });
+selectedSchools.forEach(function(school) {
+    schoolIds.push(school.value);
+});
 
-    var schoolIdsInput = document.getElementById('id_school_ids');
-    schoolIdsInput.value = JSON.stringify(schoolIds);
+
+var schoolIdsInput = document.getElementById('id_school_ids');
+schoolIdsInput.value = JSON.stringify(schoolIds);
 }
