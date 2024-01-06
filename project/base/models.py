@@ -113,9 +113,7 @@ class CollegeStudentRejected(models.Model):
 
 class ApplicantInfoRepositoryINB(models.Model):
     control_number = models.CharField(unique=True, max_length=50)
-    status = models.CharField(
-        max_length=20, choices=(("Accepted", "Accepted"), ("Rejected", "Rejected"))
-    )
+    status = models.CharField(max_length=20, choices=(("Accepted", "Accepted"), ("Rejected", "Rejected")))
 
     fullname = models.CharField(max_length=250, default="")
 

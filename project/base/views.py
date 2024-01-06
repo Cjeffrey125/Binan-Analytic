@@ -319,7 +319,6 @@ def chart_view(request):
     school_years = ["1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"]
     datasets = []
 
-    # Define a list of colors for the bars
     colors = ["pink", "blue", "green", "violet", "red"]
 
     for i, year in enumerate(school_years):
@@ -1313,7 +1312,6 @@ def update_course_list(request, course_id):
     return render(
         request, "Admin/update-school-course.html", {"course": course, "form": form}
     )
-
 
 def delete_item(request, item_type, item_id):
     if item_type == "school":

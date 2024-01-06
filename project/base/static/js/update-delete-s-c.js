@@ -1,6 +1,3 @@
-
-
-
 document.addEventListener("DOMContentLoaded", function () {
     const editButtons = document.querySelectorAll('.edit-button');
     const updateForm = document.getElementById('updateForm');
@@ -108,32 +105,19 @@ document.querySelectorAll('.delete-button').forEach(function(button) {
         const itemId = this.dataset.itemId;
         const itemName = document.querySelector(`.school-text[data-school-id="${itemId}"]`).innerText;
 
-        let modalContainer;
-        if (itemType === 'school') {
-            modalContainer = document.getElementById('deleteSchoolConfirmationContainer');
-        } else if (itemType === 'course') {
-            modalContainer = document.getElementById('deleteCourseConfirmationContainer');
-        }
+        const modalContainer = document.getElementById('deleteSchoolConfirmationContainer');
+        modalContainer.style.display = 'flex';
 
-        if (modalContainer) {
-            modalContainer.style.display = 'flex';
+        const modalText = modalContainer.querySelector('.school-text');
+        modalText.innerText = `Are you sure you want to delete ${itemName}?`;
 
-            const modalText = modalContainer.querySelector('.school-text');
-            modalText.innerText = `Are you sure you want to delete ${itemName}?`;
-
-            const deleteForm = document.getElementById('deleteForm');
-            deleteForm.action = `/delete_item/${itemType}/${itemId}/`;
-        }
+        const deleteForm = document.getElementById('deleteForm');
+        deleteForm.action = `/delete_item/${itemType}/${itemId}/`;
     });
 });
 
 document.getElementById('deleteNoButton').addEventListener('click', function () {
     document.getElementById('deleteSchoolConfirmationContainer').style.display = 'none';
-});
-
-document.getElementById('deleteCourseYesButton').addEventListener('click', function () {
-    const deleteForm = document.getElementById('deleteForm');
-    deleteForm.submit();  // submit the form
 });
 
 document.getElementById('deleteYesButton').addEventListener('click', function () {
@@ -159,7 +143,7 @@ document.querySelectorAll('.edit-button').forEach(function (editButton) {
     });
 });
 
-document.getElementById('updateSchoolYesButton').addEventListener('click', function () {
+document.getElementById('updateYesButton').addEventListener('click', function () {
     var schoolId = document.querySelector('.school-text').getAttribute('data-school-id');
     var textSpan = document.querySelector('.school-text[data-school-id="' + schoolId + '"]');
     var schoolInput = document.getElementById('schoolInput');
