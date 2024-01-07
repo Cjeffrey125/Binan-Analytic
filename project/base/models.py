@@ -91,12 +91,15 @@ class INBApplicationRequirements(models.Model):
 
 class CollegeStudentAccepted(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
+    status =  models.CharField(max_length=100, default="Ongoing")
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
     school_year = models.CharField(max_length=50, default="1st Year")
     course = models.CharField(max_length=50, default="")
     school = models.CharField(max_length=150, default="")
     gender = models.CharField(max_length=50, default="")
+    barangay = models.CharField(max_length=100, default="Unknown")
+    remarks = models.CharField(max_length=500, default="")
 
 
 class CollegeStudentAssesment(models.Model):
@@ -372,6 +375,14 @@ class FinancialAssistanceInfoRepository(models.Model):
 
 # ---------------------------------------------------------------
 # admin
+    
+class INBScholars(models.Model):
+    year = models.IntegerField(default=0)
+    total_applicants = models.IntegerField(default=0)
+    total_accepted_applicants = models.IntegerField(default=0)
+    total_failed_applicants = models.IntegerField(default=0)
+    total_rejected_applicants = models.IntegerField(default=0)
+
 class INBSchool(models.Model):
     school = models.CharField(max_length=100)
 

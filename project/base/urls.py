@@ -10,6 +10,7 @@ urlpatterns = [
     path("INB-Dashboard/", views.inb_data_visualization, name="inb-dashboard"),
     
     path("INB-Dashboard/Gender", views.gender_summary, name="inb-gender-summary"),
+    path("INB-Dashboard/Barangay", views.barangay_summary, name="inb-barangay-summary"),
 
 
 

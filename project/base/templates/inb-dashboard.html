@@ -8,30 +8,28 @@
     
     <div class="flex justify-center items-center">
         <div class="flex flex-row space-x-4">
-    
-            <div class="bg-gray-800 rounded " style="width: 430px; height: 200px">
-                <p1>test</p1>
+            <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 430px; height: 200px">
+                {% include "Graphs/applicant_tracker.html" %}
+            </div>
+        
+            <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 430px; height: 200px">
+                {% include "Graphs/graduated_tracker.html" %}
+            </div>
+        
+            <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 430px; height: 200px">
+                {% include "Graphs/unsuccessful_tracker.html" %}
             </div>
 
             <a href="{% url 'inb-gender-summary' %}">
                 <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
-                    style="width: 430px; height: 200px" id="chartContainer">
-                    <div class="chart-wrapper" style="width: 200px; position: relative;">
+                    style="width: 430px; height: 200px">
+                    
                         {% include "Graphs/piegraph-m-f.html" %}
-                        <label class="text-white" style="color: #39B8FF; position: absolute; top: 165px; left: 10%;">Scholar By Gender</label>
+                        <label class="text-white" style="color: #39B8FF; font-weight: bold; position: absolute; top: 150px; left: 25%;">Scholar By Gender</label>
+
                     </div>
                 </div>
             </a>
-                        
-            
-        
-            <div class="bg-gray-800 rounded" style="width: 430px; height: 200px">
-                <p1>test2</p1>
-            </div>
-        
-            <div class="bg-gray-800 rounded" style="width: 430px; height: 200px">
-                <p1>test3</p1>
-            </div>
       
         </div>
     </div>
@@ -46,11 +44,8 @@
                 </div>
           </div>
       
-          <div class="bg-gray-800 rounded p-4" style="width: 878px; height: 300px;">
-            <label class="text-white ml-8">Scholar Grantees Per Universities</label>
-            <div class="chart-wrapper" style="width: 850px; height:250px">
-                <canvas id="stackBar"></canvas>
-            </div>
+          <div class="bg-gray-800 rounded p-4 group transition-transform transform hover:scale-105 cursor-pointer" style="width: 878px; height: 300px;">
+                {% include "Graphs/stackhorizontal.html" %}
           </div>
 
         </div>
@@ -59,31 +54,29 @@
     <div class="flex justify-center items-center mt-3">
         <div class="flex flex-row space-x-4">
 
-            <div class="bg-gray-800 rounded" style="width: 580px; height: 280px">
-                <label class="text-white ml-8">Total Grantees Per Year Level</label>
-                <div class="chart-wrapper" style="width: 530px; height:250px">
-                    <canvas id="barGraph"></canvas>
-                </div>
+            <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 580px; height: 280px">
+                {% include "Graphs/bargraph.html" %}
             </div>
 
             <div class="bg-gray-800 rounded" style="width: 580px; height: 280px">
                 <label class="text-white ml-8">Summary of Courses</label>
             </div>
         
-            <div class="bg-gray-800 rounded" style="width: 580px; height: 280px">
-                <label class="text-white ml-8">Scholar Per Barangay</label>
+        <a href="{% url 'inb-barangay-summary' %}">
+            <div class="bg-gray-800 rounded  group transition-transform transform hover:scale-105 cursor-pointer " style="width: 580px; height: 280px">
+                {% include "Graphs/barangay.html" %}
             </div>
+        </a>
       
         </div>
     </div>
 
 
-
     
     
     <script src="../static/js/Graphs/inb-linechart.js"></script>
-    <script src="../static/js/Graphs/inb-stackbar.js"></script>
-    <script src="../static/js/Graphs/inb-bargraph.js"></script>
+
+    
           
 {% endif %}
 {% endblock %}

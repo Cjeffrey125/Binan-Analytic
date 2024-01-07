@@ -30,9 +30,15 @@
                 datasets: [{
                     label: 'Gender Distribution',
                     data: counts,
-                    backgroundColor: ['#36A2EB', '#FF639E'],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 99, 158, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235)',
+                        'rgba(255, 99, 158)'],
                     hoverOffset: 4,
-                    borderWidth: 0,
+                    borderWidth: 1,
                 }],
             };
 
@@ -48,7 +54,7 @@
                             position: 'right',
                             align: 'middle',
                             labels: {
-                                boxWidth: 13,
+                                boxWidth: 15,
                                 color: 'white',
                                 generateLabels: function (chart) {
                                     const data = chart.data;
@@ -57,6 +63,7 @@
                                             const percentage = percentages[i];
                                             return {
                                                 text: label + ' (' + percentage + ')',
+                                                fontColor: 'white', 
                                                 fillStyle: data.datasets[0].backgroundColor[i],
                                                 hidden: isNaN(data.datasets[0].data[i]) || data.datasets[0].data[i] === 0,
                                                 index: i
