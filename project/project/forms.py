@@ -199,6 +199,16 @@ class AddINBForm(forms.ModelForm):
         ("Zapote", "Zapote"),
     ]
 
+    SCHOOL_YEAR_CHOICES = [
+        ("0", "Select Year"),
+        ("1st Year", "1st Year"),
+        ("2nd Year", "2nd Year"),
+        ("3rd Year", "3rd Year"),
+        ("4th Year", "4th Year"),
+        ("5th Year", "5th Year"),
+        ("Graduated", "Graduated"),
+    ]
+
     GENDER_CHOICES = [
         ("Male", "Male"),
         ("Female", "Female"),
@@ -218,6 +228,13 @@ class AddINBForm(forms.ModelForm):
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Control Number", "class": "control-number-input"}
         ),
+        label="",
+    )
+
+    school_year = forms.ChoiceField(
+        required=True,
+        choices=SCHOOL_YEAR_CHOICES,
+        widget=forms.widgets.Select(),
         label="",
     )
 
@@ -255,9 +272,10 @@ class AddINBForm(forms.ModelForm):
         help_text='<span class="subscript">Blk Street</span>',
         label="",
     )
+    
     barangay = forms.ChoiceField(
         choices=BARANGAY_CHOICES,
-        widget=forms.widgets.Select(attrs={"class": "address-input-2"}),
+        widget=forms.widgets.Select(),
         label="",
     )
 
