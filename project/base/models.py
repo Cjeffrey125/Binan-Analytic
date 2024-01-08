@@ -1,12 +1,13 @@
 from django.db import models
-
+from django.utils import timezone
 
 class CollegeStudentApplication(models.Model):
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
     control_number = models.CharField(unique=True, max_length=50)
 
     requirement = models.CharField(max_length=50, default="Incomplete")
+    school_year = models.CharField(max_length=50, default="1st Year")
     # personal data
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -89,11 +90,16 @@ class INBApplicationRequirements(models.Model):
 
 
 class CollegeStudentAccepted(models.Model):
+    created_at = models.DateTimeField(default=timezone.now)
+    status =  models.CharField(max_length=100, default="Ongoing")
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
     school_year = models.CharField(max_length=50, default="1st Year")
     course = models.CharField(max_length=50, default="")
     school = models.CharField(max_length=150, default="")
+    gender = models.CharField(max_length=50, default="")
+    barangay = models.CharField(max_length=100, default="Unknown")
+    remarks = models.CharField(max_length=500, default="")
 
 
 class CollegeStudentAssesment(models.Model):
@@ -116,6 +122,8 @@ class ApplicantInfoRepositoryINB(models.Model):
     status = models.CharField(max_length=20, choices=(("Accepted", "Accepted"), ("Rejected", "Rejected")))
 
     fullname = models.CharField(max_length=250, default="")
+
+    school_year = models.CharField(max_length=50, default="1st Year")
 
     blkstr = models.CharField(max_length=100, default="")
     barangay = models.CharField(max_length=100, default="Unknown")
@@ -367,6 +375,14 @@ class FinancialAssistanceInfoRepository(models.Model):
 
 # ---------------------------------------------------------------
 # admin
+    
+class INBScholars(models.Model):
+    year = models.IntegerField(default=0)
+    total_applicants = models.IntegerField(default=0)
+    total_accepted_applicants = models.IntegerField(default=0)
+    total_failed_applicants = models.IntegerField(default=0)
+    total_rejected_applicants = models.IntegerField(default=0)
+
 class INBSchool(models.Model):
     school = models.CharField(max_length=100)
 

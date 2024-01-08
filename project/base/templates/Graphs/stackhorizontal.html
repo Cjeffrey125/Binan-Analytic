@@ -1,39 +1,61 @@
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<label class="font-bold text-2xl" style="color: #39B8FF;">Total Grantees Per School</label>
 
-<div class="chart-wrapper" style="width: 600px;">
-
-    <canvas id="stackHorizontalChart" width="600" height="400"></canvas>
+<div class="items-center" style="width: 750px; height: 250px; margin: auto;">
+    <canvas id="stackHorizontalChart"></canvas>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var ctx = document.getElementById('stackHorizontalChart').getContext('2d');
 
-        const DATA_COUNT = 9;
-        const NUMBER_CFG = { count: DATA_COUNT, min: 0, max: 100 };
+        const customLabels = {{ customLabels|safe }};
+        const dataCounts = {{ dataCounts|safe }};
 
-        
-        const customLabels = [
-            'Colegio San Agustin',
-            'Citi Global College',
-            'Guardians Bonafide For Hope Foundation Philippines',
-            'La Consolacion College',
-            'Polytechnic University of the Philippines - Biñan Campus',
-            'Trimex Colleges", "Trimex Colleges',
-            'Saint Michaels College of Laguna',
-            'UPH-DR. Jose G. Tamayo Medical University',
-            'University of Perpetual Help System Laguna',];
+        const DATA_COUNT = customLabels.length;
+
+        const backgroundColors = [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(128, 0, 0, 0.2)',
+            'rgba(0, 128, 0, 0.2)',
+            'rgba(0, 0, 128, 0.2)',
+            'rgba(255, 0, 255, 0.2)', 
+            'rgba(0, 255, 255, 0.2)', 
+            'rgba(255, 255, 0, 0.2)', 
+            'rgba(128, 128, 128, 0.2)', 
+            'rgba(255, 165, 0, 0.2)', 
+        ];
+
+        const borderColor = [
+            'rgba(255, 99, 132)',
+            'rgba(255, 159, 64)',
+            'rgba(255, 205, 86)',
+            'rgba(75, 192, 192)',
+            'rgba(54, 162, 235)',
+            'rgba(128, 0, 0)',
+            'rgba(0, 128, 0)',
+            'rgba(0, 0, 128)',
+            'rgba(255, 0, 255)', 
+            'rgba(0, 255, 255)', 
+            'rgba(255, 255, 0)', 
+            'rgba(128, 128, 128)', 
+            'rgba(255, 165, 0)', 
+        ];
 
         const data = {
             labels: customLabels,
             datasets: [
                 {
                     label: 'Dataset 1',
-                    data: Array.from({ length: DATA_COUNT }, () => Math.floor(Math.random() * (NUMBER_CFG.max - NUMBER_CFG.min + 1)) + NUMBER_CFG.min),
-                    borderColor: 'red',
-                    backgroundColor: 'rgba(255, 0, 0, 0.5)',
+                    data: dataCounts,
+                    borderColor: borderColor,
+                    backgroundColor: backgroundColors.slice(0, DATA_COUNT),
+                    borderWidth: 1
                 },
             ]
         };
@@ -48,9 +70,15 @@
                 scales: {
                     x: {
                         stacked: true,
+                        align: 'start',
                     },
                     y: {
                         stacked: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false 
                     }
                 }
             }

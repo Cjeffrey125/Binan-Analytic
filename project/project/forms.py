@@ -170,6 +170,35 @@ class ExportForm(forms.Form):
 
 
 class AddINBForm(forms.ModelForm):
+
+    BARANGAY_CHOICES = [
+        ("0", "Select Barangay"),
+        ("Biñan", "Biñan"),
+        ("Bungahan", "Bungahan"),
+        ("Canlalay", "Canlalay"),
+        ("Casile", "Casile"),
+        ("Dela Paz", "Dela Paz"),
+        ("Ganado", "Ganado"),
+        ("Lankiwa", "Lankiwa"),
+        ("Loma", "Loma"),
+        ("Malaban", "Malaban"),
+        ("Malamig", "Malamig"),
+        ("Mamplasan", "Mamplasan"),
+        ("Platero", "Platero"),
+        ("Poblacion", "Poblacion"),
+        ("San Antonio", "San Antonio"),
+        ("San Francisco", "San Francisco"),
+        ("San Jose", "San Jose"),
+        ("San Vicente", "San Vicente"),
+        ("Santo Domingo", "Santo Domingo"),
+        ("Santo Niño", "Santo Niño"),
+        ("Santo Tomas", "Santo Tomas"),
+        ("Soro Soro", "Soro Soro"),
+        ("Tubigan", "Tubigan"),
+        ("Timbao", "Timbao"),
+        ("Zapote", "Zapote"),
+    ]
+
     GENDER_CHOICES = [
         ("Male", "Male"),
         ("Female", "Female"),
@@ -226,14 +255,12 @@ class AddINBForm(forms.ModelForm):
         help_text='<span class="subscript">Blk Street</span>',
         label="",
     )
-    barangay = forms.CharField(
-        required=True,
-        widget=forms.widgets.TextInput(
-            attrs={"class": "address-input-2", "placeholder": "Barangay"}
-        ),
-        help_text='<span class="subscript">Barangay</span>',
+    barangay = forms.ChoiceField(
+        choices=BARANGAY_CHOICES,
+        widget=forms.widgets.Select(attrs={"class": "address-input-2"}),
         label="",
     )
+
     province = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(

@@ -8,6 +8,12 @@ urlpatterns = [
     path("Logout/", views.logout_user, name="logout"),
     path("SignUp/", views.register_user, name="signup"),
     path("INB-Dashboard/", views.inb_data_visualization, name="inb-dashboard"),
+    
+    path("INB-Dashboard/Gender", views.gender_summary, name="inb-gender-summary"),
+    path("INB-Dashboard/Barangay", views.barangay_summary, name="inb-barangay-summary"),
+
+
+
     path("FA-Dashboard/", views.fa_data_visualization, name="fa-dashboard"),
 
     path("CSV_Record", views.csv_record, name="export"),
@@ -92,8 +98,7 @@ urlpatterns = [
    path('import-grade/', views.import_grade, name='import_excel'),
    path("import_applicant/", views.import_excel, name="import_applicant"),
 
-   path('chart/', views.chart_view, name='chart_view'),
-
+  
 
    path("test1", views.test1,  name="forms",),
 ]
