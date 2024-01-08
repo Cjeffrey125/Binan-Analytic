@@ -111,11 +111,12 @@
                 </div>
                 <form method="post" action="{% url 'create_course' %}" class="p-4 md:p-5">
                     {% csrf_token %}
-                    <div class="dropdown grid gap-4 mb-4 grid-cols-2">
+                    <div class="relative dropdown grid gap-4 mb-4 grid-cols-2">
                         <div type="button" id="toggleButton"
-                            class="input-box inline-flex justify-center w-[375px] rounded-md border border-gray-300 shadow-sm px-4 py-3 bg-gray-600 text-sm font-medium text-white hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 ">,</div>
+                            class="input-box inline-flex justify-center w-[375px] rounded-md border border-gray-300 shadow-sm px-4 py-3 bg-gray-600 text-sm font-medium text-white hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 ">
+                        </div>
                         <div id="toggleList"
-                            class="list hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 w-[375px] p-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 overflow-auto max-h-60 absolute z-10 bottom-[55px]">
+                            class="list hidden bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 w-[375px] p-2 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500 overflow-auto max-h-60 absolute z-10 top-full">
 
                         <div class="py-3" role="menu">
                             {% for school in schools %}

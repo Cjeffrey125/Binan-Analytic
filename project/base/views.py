@@ -433,7 +433,9 @@ def gender_summary(request):
     unique_school_years = [
         "1st Year",
         "2nd Year",
-        "3rd Year","4th Year","5th Year",
+        "3rd Year",
+        "4th Year",
+        "5th Year",
         "Graduated",
     ]
 
@@ -454,8 +456,12 @@ def gender_summary(request):
             }
         )
 
-    total_male_count = sum(entry['counts'][0] for entry in gender_table_data) if gender_table_data else 0
-    total_female_count = sum(entry['counts'][1] for entry in gender_table_data if len(entry['counts']) > 1) if gender_table_data else 0
+    total_male_count = sum(entry['counts'][0] if entry['counts'] else 0 for entry in gender_table_data)
+    total_female_count = sum(entry['counts'][1] if len(entry['counts']) > 1 else 0 for entry in gender_table_data)
+
+    gender_data_creation_year = CollegeStudentAccepted.objects.values(
+        "gender", "created_at__year"
+    ).annotate(count=models.Count("gender"))
 
     unique_years = set(entry["created_at__year"] for entry in gender_data_creation_year)
     unique_years = sorted(unique_years)[-4:]
@@ -594,53 +600,6 @@ def fa_filter_applicants(request):
     return redirect("fa_applicant_list")
 
 
-def filter_assessment(request):
-    applicants_to_transfer = FinancialAssistanceAssesment.objects.filter(
-        status__in=["Accepted", "Rejected"]
-    )
-
-    if applicants_to_transfer.exists():
-        for applicant in applicants_to_transfer:
-            try:
-                (
-                    applicant_info,
-                    created,
-                ) = FinancialAssistanceInfoRepository.objects.get_or_create(
-                    control_number=applicant.control_number
-                )
-
-                if created:
-                    if applicant.status == "Accepted":
-                        applicant_info.status = "Accepted"
-                    elif applicant.status == "Rejected":
-                        applicant_info.status = "Rejected"
-                    applicant_info.save()
-
-                if applicant.status == "Accepted":
-                    FinancialAssistanceAccepted.objects.create(
-                        control_number=applicant.control_number,
-                        school=applicant.school,
-                        strand=applicant.strand,
-                    )
-                elif applicant.status == "Rejected":
-                    FinancialAssistanceRejected.objects.create(
-                        control_number=applicant.control_number,
-                    )
-
-                applicant.delete()
-
-                messages.success(request, "Applicants have been successfully filtered.")
-            except Exception as e:
-                messages.error(request, f"An error occurred: {str(e)}")
-    else:
-        messages.warning(
-            request,
-            "There are no applicants with status 'Accepted' or 'Rejected' to filter.",
-        )
-
-    return redirect("fa_pending_applicant")
-
-
 def inb_filter_applicants(request):
     if CollegeStudentApplication.objects.exists():
         applicants_to_transfer = CollegeStudentApplication.objects.all()
@@ -761,7 +720,6 @@ def filter_assessment(request):
                 if applicant.status == "Accepted":
                     CollegeStudentAccepted.objects.create(
                         control_number=applicant.control_number,
-                        fullname=applicant.fullname,
                         school=applicant.school,
                         course=applicant.course,
                     )
@@ -1007,7 +965,6 @@ def inb_applicant_info(request, status, control_number):
                         f"{status.capitalize()} applicant information updated successfully.",
                     )
                     return redirect("inb_pending_applicant")
-                # dito
 
         except model_class.DoesNotExist:
             messages.error(request, f"{status.capitalize()} applicant not found.")
