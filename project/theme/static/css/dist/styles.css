@@ -1206,6 +1206,18 @@ select {
   margin-top: 6rem;
 }
 
+.ml-6 {
+  margin-left: 1.5rem;
+}
+
+.mt-32 {
+  margin-top: 8rem;
+}
+
+.ml-48 {
+  margin-left: 12rem;
+}
+
 .block {
   display: block;
 }
