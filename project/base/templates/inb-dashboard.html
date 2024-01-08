@@ -7,26 +7,43 @@
     {% if user.is_authenticated %}
     
     <div class="flex justify-center items-center">
+        
         <div class="flex flex-row space-x-4">
-            <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 430px; height: 200px">
-                {% include "Graphs/applicant_tracker.html" %}
-            </div>
-        
-            <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 430px; height: 200px">
-                {% include "Graphs/graduated_tracker.html" %}
-            </div>
-        
-            <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 430px; height: 200px">
-                {% include "Graphs/unsuccessful_tracker.html" %}
-            </div>
+
+            <a href="{% url 'inb-active-scholar-summary' %}">
+                <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
+                    style="width: 430px; height: 200px">
+                    <div class = "mt-32">
+                    {% include "Graphs/applicant_tracker.html" %}
+                    </div>
+                </div>
+            </a>
+            
+            <a href="{% url 'inb-active-scholar-summary' %}">
+                <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
+                    style="width: 430px; height: 200px">
+                    <div class = "mt-32">
+                    {% include "Graphs/graduated_tracker.html" %}
+                    </div>
+                </div>
+            </a>
+            
+            <a href="{% url 'inb-active-scholar-summary' %}">
+                <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
+                    style="width: 430px; height: 200px">
+                    <div class = "mt-32">
+                    {% include "Graphs/unsuccessful_tracker.html" %}
+                    </div>
+                </div>
+            </a>
+            
+            
 
             <a href="{% url 'inb-gender-summary' %}">
                 <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
                     style="width: 430px; height: 200px">
-                    
                         {% include "Graphs/piegraph-m-f.html" %}
-                        <label class="text-white" style="color: #39B8FF; font-weight: bold; position: absolute; top: 150px; left: 25%;">Scholar By Gender</label>
-
+                        <label class="text-white" style="color: #39B8FF; font-weight: bold; position: absolute; top: 155px; left: 30%;">Scholar By Gender</label>
                     </div>
                 </div>
             </a>
@@ -38,10 +55,7 @@
         <div class="flex flex-row space-x-4">
 
           <div class="bg-gray-800 rounded p-4" style="width: 878px; height: 300px;">
-            <label class="text-white ml-8">Admitted Vs Applied</label>
-                <div class="chart-wrapper" style="width: 850px; height:250px">
-                    <canvas id="lineGraph"></canvas>
-                </div>
+                {% include "Graphs/linegraph.html" %}    
           </div>
       
           <div class="bg-gray-800 rounded p-4 group transition-transform transform hover:scale-105 cursor-pointer" style="width: 878px; height: 300px;">

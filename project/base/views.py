@@ -339,7 +339,8 @@ def inb_data_visualization(request):
     total_scholars_count = CollegeStudentAccepted.objects.count()
 
     graduated_scholars_count = CollegeStudentAccepted.objects.filter(school_year='Graduated').count()
-    ongoing_scholars_count = CollegeStudentAccepted.objects.filter(status='Ongoing').count()
+    ongoing_scholars_count = CollegeStudentAccepted.objects.filter(status='Ongoing').exclude(school_year='Graduated').count()
+
 
     rejected_scholars_count = CollegeStudentRejected.objects.count()
     unsuccessful_scholar_count = CollegeStudentAccepted.objects.filter(status='Failed').count()
@@ -375,6 +376,9 @@ def inb_data_visualization(request):
 
 def barangay_summary(request):
     return render(request, "in-depth-charts/barangay/barangay_data.html")
+
+def active_scholar_summary(request):
+    return render(request, "in-depth-charts/active-scholar/active_scholar.html")
 
 
 def gender_summary(request):

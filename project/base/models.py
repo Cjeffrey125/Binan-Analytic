@@ -375,6 +375,10 @@ class FinancialAssistanceInfoRepository(models.Model):
 
 # ---------------------------------------------------------------
 # admin
+class ApplicantTracker(models.Model):
+    year = models.IntegerField(default=0)
+    admitted_applicants = models.IntegerField(default=0)
+    applied_applicants = models.IntegerField(default=0)
     
 class INBScholars(models.Model):
     year = models.IntegerField(default=0)
