@@ -720,6 +720,7 @@ def filter_assessment(request):
                 if applicant.status == "Accepted":
                     CollegeStudentAccepted.objects.create(
                         control_number=applicant.control_number,
+                        fullname=applicant.fullname,
                         school=applicant.school,
                         course=applicant.course,
                     )
