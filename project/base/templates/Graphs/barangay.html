@@ -5,20 +5,19 @@
 {% block content %}
   {% if user.is_authenticated %}
 
-    <div class="flex flex-row space-x-4 items-center">
-
-      <div class="ml-5">
-        <label class="font-bold text-2xl" style="color: #39B8FF;">Scholar Per Barangay</label>
-        <ul>
-          {% for entry in barangay_counts|slice:":8" %}
-            <li>{{ entry.barangay }} {{ entry.count }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-
-      <div class="w-48 h-72 bg-center bg-cover rounded" style="background-image: url('{% static 'images/map.png' %}')"></div>
-
+  <div class="flex justify-between">
+    
+    <div class="  flex flex-col space-y-4">
+      <label class="font-bold text-2xl" style="color: #39B8FF;">Summary of Courses</label>
+      <ul class = "ml-8">
+        {% for entry in barangay_counts|slice:":8" %}
+          <li>{{ entry.barangay }} {{ entry.count }}</li>
+        {% endfor %}
+      </ul>
     </div>
+
+    <div class="w-48 h-72 mr-24 bg-center bg-cover rounded" style="background-image: url('{% static 'images/map.png' %}')"></div>
+  </div>
 
   {% endif %}
 {% endblock %}

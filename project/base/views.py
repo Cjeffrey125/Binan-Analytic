@@ -34,6 +34,7 @@ from .models import (
     StudentGrade,
     INBApplicationRequirements,
     FAApplicationRequirements,
+    INBApplicantTracker,
 )
 from django.db.models import Count
 from django.http import HttpResponse
@@ -327,53 +328,25 @@ def fa_data_visualization(request):
 
 
 def inb_data_visualization(request):
-    school_counts = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
-        .values("school")
-        .annotate(count=Count("school"))
-        .order_by("-count")
-    )
+    applicant_courses = (CollegeStudentAccepted.objects.exclude(status="Graduated").exclude(school_year="Graduated").values("course").annotate(count=Count("course")).order_by("-count"))
 
-    barangay_counts = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
-        .values("barangay")
-        .annotate(count=Count("barangay"))
-        .order_by("-count")
-    )
+    school_counts = (CollegeStudentAccepted.objects.exclude(status="Graduated").exclude(school_year="Graduated").values("school").annotate(count=Count("school")).order_by("-count"))
 
-    first_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="1st Year", status="Ongoing"
-    ).count()
-    second_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="2nd Year", status="Ongoing"
-    ).count()
-    third_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="3rd Year", status="Ongoing"
-    ).count()
-    fourth_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="4th Year", status="Ongoing"
-    ).count()
-    fifth_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="5th Year", status="Ongoing"
-    ).count()
+    barangay_counts = (CollegeStudentAccepted.objects.exclude(status="Graduated").exclude(school_year="Graduated").values("barangay").annotate(count=Count("barangay")).order_by("-count"))
+
+    first_year_count = CollegeStudentAccepted.objects.filter(school_year="1st Year", status="Ongoing").count()
+    second_year_count = CollegeStudentAccepted.objects.filter(school_year="2nd Year", status="Ongoing").count()
+    third_year_count = CollegeStudentAccepted.objects.filter(school_year="3rd Year", status="Ongoing").count()
+    fourth_year_count = CollegeStudentAccepted.objects.filter(school_year="4th Year", status="Ongoing").count()
+    fifth_year_count = CollegeStudentAccepted.objects.filter(school_year="5th Year", status="Ongoing").count()
 
     total_scholars_count = CollegeStudentAccepted.objects.count()
 
-    graduated_scholars_count = CollegeStudentAccepted.objects.filter(
-        school_year="Graduated"
-    ).count()
-    ongoing_scholars_count = (
-        CollegeStudentAccepted.objects.filter(status="Ongoing")
-        .exclude(school_year="Graduated")
-        .count()
-    )
+    graduated_scholars_count = CollegeStudentAccepted.objects.filter(school_year="Graduated").count()
+    ongoing_scholars_count = (CollegeStudentAccepted.objects.filter(status="Ongoing").exclude(school_year="Graduated").count())
 
     rejected_scholars_count = CollegeStudentRejected.objects.count()
-    unsuccessful_scholar_count = CollegeStudentAccepted.objects.filter(
-        status="Failed"
-    ).count()
+    unsuccessful_scholar_count = CollegeStudentAccepted.objects.filter(status="Failed").count()
 
     total_failed_applicants = rejected_scholars_count + unsuccessful_scholar_count
 
@@ -384,15 +357,13 @@ def inb_data_visualization(request):
     )
 
     gender_data = (
-        CollegeStudentAccepted.objects.filter(status="Ongoing")
-        .values("gender")
-        .annotate(count=models.Count("gender"))
-    )
+        CollegeStudentAccepted.objects.filter(status="Ongoing").values("gender").annotate(count=models.Count("gender")))
 
     labels = [entry["gender"] for entry in gender_data]
     counts = [entry["count"] for entry in gender_data]
 
     context = {
+        "applicant_courses": applicant_courses,
         "customLabels": [entry["school"] for entry in school_counts],
         "dataCounts": [entry["count"] for entry in school_counts],
         "barangay_counts": barangay_counts,
@@ -748,16 +719,10 @@ def iskolar_ng_bayan_list(request):
         export_form = ExportForm(request.POST)
         all_applicants = CollegeStudentApplication.objects.all()
 
-        accepted_applicants = CollegeStudentAccepted.objects.values_list(
-            "control_number", flat=True
-        )
-        rejected_applicants = CollegeStudentAssesment.objects.values_list(
-            "control_number", flat=True
-        )
+        accepted_applicants = CollegeStudentAccepted.objects.values_list("control_number", flat=True)
+        rejected_applicants = CollegeStudentAssesment.objects.values_list("control_number", flat=True)
 
-        filtered_applicants = all_applicants.exclude(
-            control_number__in=list(accepted_applicants) + list(rejected_applicants)
-        )
+        filtered_applicants = all_applicants.exclude(control_number__in=list(accepted_applicants) + list(rejected_applicants))
 
         # Search functionality
         query = request.GET.get("q")

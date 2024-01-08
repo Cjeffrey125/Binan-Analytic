@@ -121,10 +121,7 @@ class CollegeStudentRejected(models.Model):
 
 class ApplicantInfoRepositoryINB(models.Model):
     control_number = models.CharField(unique=True, max_length=50)
-    status = models.CharField(
-        max_length=20, choices=(("Accepted", "Accepted"), ("Rejected", "Rejected"))
-    )
-
+    status = models.CharField(max_length=20, default="")
     fullname = models.CharField(max_length=250, default="")
 
     school_year = models.CharField(max_length=50, default="1st Year")
@@ -379,10 +376,10 @@ class FinancialAssistanceInfoRepository(models.Model):
 
 # ---------------------------------------------------------------
 # admin
-class ApplicantTracker(models.Model):
+class INBApplicantTracker(models.Model):
     year = models.IntegerField(default=0)
-    admitted_applicants = models.IntegerField(default=0)
     applied_applicants = models.IntegerField(default=0)
+    admitted_applicants = models.IntegerField(default=0)    
 
 
 class INBScholars(models.Model):
