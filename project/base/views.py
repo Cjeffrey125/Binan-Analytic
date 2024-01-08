@@ -455,11 +455,7 @@ def gender_summary(request):
         )
 
     total_male_count = sum(entry['counts'][0] for entry in gender_table_data) if gender_table_data else 0
-    total_female_count = sum(entry['counts'][1] for entry in gender_table_data if len(entry['counts'])>1) if gender_table_data else 0
-
-    gender_data_creation_year = CollegeStudentAccepted.objects.values(
-        "gender", "created_at__year"
-    ).annotate(count=models.Count("gender"))
+    total_female_count = sum(entry['counts'][1] for entry in gender_table_data if len(entry['counts']) > 1) if gender_table_data else 0
 
     unique_years = set(entry["created_at__year"] for entry in gender_data_creation_year)
     unique_years = sorted(unique_years)[-4:]

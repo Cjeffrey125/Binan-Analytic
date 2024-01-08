@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 class CollegeStudentApplication(models.Model):
-    created_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     control_number = models.CharField(unique=True, max_length=50)
 
@@ -99,7 +99,9 @@ class CollegeStudentAccepted(models.Model):
     school = models.CharField(max_length=150, default="")
     gender = models.CharField(max_length=50, default="")
     barangay = models.CharField(max_length=100, default="Unknown")
+    grant = models.CharField(max_length=500, default="100%")
     remarks = models.CharField(max_length=500, default="")
+    
 
 
 class CollegeStudentAssesment(models.Model):
