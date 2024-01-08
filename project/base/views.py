@@ -380,49 +380,74 @@ def barangay_summary(request):
 def active_scholar_summary(request):
     return render(request, "in-depth-charts/active-scholar/active_scholar.html")
 
-
 def gender_summary(request):
-    gender_data = CollegeStudentAccepted.objects.filter(status='Ongoing').values('gender').annotate(count=models.Count('gender'))
+    gender_data = (CollegeStudentAccepted.objects.filter(status="Ongoing").values("gender").annotate(count=models.Count("gender")))
 
-    labels = [entry['gender'] for entry in gender_data]
-    counts = [entry['count'] for entry in gender_data]
+    labels = [entry["gender"] for entry in gender_data]
+    counts = [entry["count"] for entry in gender_data]
 
-    unique_school_years = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Graduated']
+    unique_school_years = ["1st Year","2nd Year","3rd Year","4th Year","5th Year","Graduated",]
 
     gender_table_data = []
 
     for year in unique_school_years:
-        year_data = CollegeStudentAccepted.objects.filter(status='Ongoing', school_year=year).values('gender').annotate(count=Count('gender')).order_by('gender')
-        gender_table_data.append({'year': year, 'labels': [entry['gender'] for entry in year_data], 'counts': [entry['count'] for entry in year_data]})
+        year_data = (
+            CollegeStudentAccepted.objects.filter(status="Ongoing", school_year=year)
+            .values("gender")
+            .annotate(count=Count("gender"))
+            .order_by("gender")
+        )
+        gender_table_data.append(
+            {
+                "year": year,
+                "labels": [entry["gender"] for entry in year_data],
+                "counts": [entry["count"] for entry in year_data],
+            }
+        )
 
-    total_male_count = sum(entry['counts'][0] for entry in gender_table_data) if gender_table_data else 0
-    total_female_count = sum(entry['counts'][1] for entry in gender_table_data if len(entry['counts']) > 1) if gender_table_data else 0
+    total_male_count = sum(entry['counts'][0] if entry['counts'] else 0 for entry in gender_table_data)
+    total_female_count = sum(entry['counts'][1] if len(entry['counts']) > 1 else 0 for entry in gender_table_data)
 
-    gender_data_creation_year = CollegeStudentAccepted.objects.values('gender', 'created_at__year').annotate(count=models.Count('gender'))
+    gender_data_creation_year = CollegeStudentAccepted.objects.values(
+        "gender", "created_at__year"
+    ).annotate(count=models.Count("gender"))
 
-    unique_years = set(entry['created_at__year'] for entry in gender_data_creation_year)
+    unique_years = set(entry["created_at__year"] for entry in gender_data_creation_year)
     unique_years = sorted(unique_years)[-4:]
 
     gender_table_data_creation_year = []
 
     for year in unique_years:
-        year_data = gender_data_creation_year.filter(status='Ongoing', created_at__year=year).order_by('gender')
-        male_count = year_data.filter(gender='Male').first()['count'] if year_data.filter(gender='Male').exists() else 0
-        female_count = year_data.filter(gender='Female').first()['count'] if year_data.filter(gender='Female').exists() else 0
-        gender_table_data_creation_year.append({'year': year, 'male_count': male_count, 'female_count': female_count})
+        year_data = gender_data_creation_year.filter(
+            status="Ongoing", created_at__year=year
+        ).order_by("gender")
+        male_count = (
+            year_data.filter(gender="Male").first()["count"]
+            if year_data.filter(gender="Male").exists()
+            else 0
+        )
+        female_count = (
+            year_data.filter(gender="Female").first()["count"]
+            if year_data.filter(gender="Female").exists()
+            else 0
+        )
+        gender_table_data_creation_year.append(
+            {"year": year, "male_count": male_count, "female_count": female_count}
+        )
 
     context = {
-        'labels': labels,
-        'counts': counts,
-        'unique_school_years': unique_school_years,
-        'gender_table_data': gender_table_data,
-        'total_male_count': total_male_count,
-        'total_female_count': total_female_count,
-        'unique_years': unique_years,
-        'gender_table_data_creation_year': gender_table_data_creation_year,
+        "labels": labels,
+        "counts": counts,
+        "unique_school_years": unique_school_years,
+        "gender_table_data": gender_table_data,
+        "total_male_count": total_male_count,
+        "total_female_count": total_female_count,
+        "unique_years": unique_years,
+        "gender_table_data_creation_year": gender_table_data_creation_year,
     }
 
     return render(request, "in-depth-charts/gender/gender_data.html", context)
+
 
 
 
