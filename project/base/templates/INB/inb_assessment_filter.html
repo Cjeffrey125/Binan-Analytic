@@ -31,12 +31,10 @@
 </div>
 
 <script>
-
     function endApplicant() {
         const modal = document.getElementById('openModal');
         modal.style.display = 'flex';
     }
-
 
     function closeModal() {
         const modal = document.getElementById('openModal');
@@ -44,12 +42,10 @@
     }
 
     if (document.getElementById('openModal')) {
-
         document.getElementById('modalOpen').addEventListener('click', modalOpen);
 
-        document.getElementById('cancelButton').addEventListener('click', function () {
+        document.getElementById('cancelFilterButton').addEventListener('click', function () {
             closeModal();
         });
     }
-
 </script>

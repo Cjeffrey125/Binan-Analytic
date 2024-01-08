@@ -1,25 +1,37 @@
-
 document.getElementById('openSchoolForm').addEventListener('click', function () {
     document.getElementById('schoolFormContainer').style.display = 'flex';
     initializeInputBox();
 });
 
-document.getElementById('schoolFormContainer').addEventListener('click', function (e) {
-    if (e.target === this) {
-        this.style.display = 'none';
-    }
+document.getElementById('closeSchoolForm').addEventListener('click', function () {
+    document.getElementById('schoolFormContainer').style.display = 'none';
 });
 
 document.getElementById('openCourseForm').addEventListener('click', function () {
-    document.getElementById('courseFormContainer').style.display = 'flex';
+    let courseFormContainer = document.getElementById('courseFormContainer');
+    courseFormContainer.classList.remove('hidden');
+    courseFormContainer.classList.add('flex');
     initializeInputBox();
 });
 
-document.getElementById('courseFormContainer').addEventListener('click', function (e) {
-    if (e.target === this) {
-        this.style.display = 'none';
+document.getElementById('closeCourseForm').addEventListener('click', function () {
+    document.getElementById('courseFormContainer').classList.add('hidden');
+    document.getElementById('courseFormContainer').classList.remove('flex');
+});
+
+document.getElementById('schoolFormContainer').addEventListener('click', function (e) {
+    if (e.target.id === 'schoolFormContainer' || e.target.id === 'closeSchoolForm') {
+        document.getElementById('schoolFormContainer').style.display = 'none';
     }
 });
+
+document.getElementById('courseFormContainer').addEventListener('click', function (e) {
+    if (e.target.id === 'courseFormContainer' || e.target.id === 'closeCourseForm') {
+        document.getElementById('courseFormContainer').classList.add('hidden');
+        document.getElementById('courseFormContainer').classList.remove('flex');
+    }
+});
+
 
 var input = document.querySelector(".input-box");
 var countContainer = document.createElement("span");
@@ -33,9 +45,18 @@ input.appendChild(totalCountContainer);
 var totalOptions = parseInt(input.dataset.totalOptions) || 0;
 var displayLimit = 2;
 
+document.querySelector(".input-box").addEventListener("click", function() {
+    var list = document.getElementById("toggleList");
+    if (list.style.display === "none" || list.style.display === "") {
+        list.style.display = "block";
+    } else {
+        list.style.display = "none";
+    }
+});
+
 function initializeInputBox() {
-    input.classList.remove("open");
-    input.innerHTML = "Select Options";
+    var input = document.querySelector(".input-box");
+    input.innerHTML = "Select a school ";
     countContainer.textContent = "";
     totalCountContainer.textContent = `Total: 0/${totalOptions}`;
 }
@@ -75,15 +96,22 @@ function updateSelectedOptions() {
     var selectedContainer = document.querySelector(".input-box");
     selectedContainer.innerHTML = "";
 
-    for (let i = 0; i < Math.min(selectedOptions.length, displayLimit); i++) {
-        addSelectedTag(selectedOptions[i].id, selectedOptions[i].name);
-    }
-
-    if (selectedOptions.length > displayLimit) {
-        countContainer.textContent = `+${selectedOptions.length - displayLimit}`;
-        selectedContainer.appendChild(countContainer);
+    if (selectedOptions.length === 0) {
+        selectedContainer.innerHTML = "Select a school";
     } else {
-        countContainer.textContent = "";
+        for (let i = 0; i < Math.min(selectedOptions.length, displayLimit); i++) {
+            addSelectedTag(selectedOptions[i].id, selectedOptions[i].name);
+            if (i < Math.min(selectedOptions.length, displayLimit) - 1) {
+                selectedContainer.innerHTML += ", ";
+            }
+        }
+
+        if (selectedOptions.length > displayLimit) {
+            countContainer.textContent = `+${selectedOptions.length - displayLimit}`;
+            selectedContainer.appendChild(countContainer);
+        } else {
+            countContainer.textContent = "";
+        }
     }
 
     totalCountContainer.textContent = `Total: ${selectedOptions.length}/${totalOptions}`;

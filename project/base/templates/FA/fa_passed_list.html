@@ -70,22 +70,22 @@
           <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white">
               <tr>
-                <th class="table-header">Control Number</th>
-                <th class="table-header">Name</th>
-                <th class="table-header">School</th>
-                <th class="table-header">Strand</th>
+                <th scope="col" class="px-6 py-3">Control Number</th>
+                <th scope="col" class="px-6 py-3">Name</th>
+                <th scope="col" class="px-6 py-3">School</th>
+                <th scope="col" class="px-6 py-3">Strand</th>
               </tr>
             </thead>
             
               <tbody>
                 <div class="scrollable-container">
                   {% for applicant in applicants %}
-                  <tr onclick="window.location='{% url 'fa_passed_applicant_info' applicant.control_number %}';"
+                  <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" onclick="window.location='{% url 'fa_passed_applicant_info' applicant.control_number %}';"
                     style="cursor: pointer;">
-                    <td>{{ applicant.control_number }}</td>
-                    <td>{{ applicant.fullname }}</td>
-                    <td>{{ applicant.school }}</td>
-                    <td>{{ applicant.strand }}</td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.control_number }}</td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.fullname }}</td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.school }}</td>
+                    <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.strand }}</td>
                   </tr>
                   {% endfor %}
                 </div>

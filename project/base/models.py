@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 class CollegeStudentApplication(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -91,7 +92,7 @@ class INBApplicationRequirements(models.Model):
 
 class CollegeStudentAccepted(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
-    status =  models.CharField(max_length=100, default="Ongoing")
+    status = models.CharField(max_length=100, default="Ongoing")
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
     school_year = models.CharField(max_length=50, default="1st Year")
@@ -101,7 +102,6 @@ class CollegeStudentAccepted(models.Model):
     barangay = models.CharField(max_length=100, default="Unknown")
     grant = models.CharField(max_length=500, default="100%")
     remarks = models.CharField(max_length=500, default="")
-    
 
 
 class CollegeStudentAssesment(models.Model):
@@ -121,7 +121,9 @@ class CollegeStudentRejected(models.Model):
 
 class ApplicantInfoRepositoryINB(models.Model):
     control_number = models.CharField(unique=True, max_length=50)
-    status = models.CharField(max_length=20, choices=(("Accepted", "Accepted"), ("Rejected", "Rejected")))
+    status = models.CharField(
+        max_length=20, choices=(("Accepted", "Accepted"), ("Rejected", "Rejected"))
+    )
 
     fullname = models.CharField(max_length=250, default="")
 
@@ -381,13 +383,15 @@ class ApplicantTracker(models.Model):
     year = models.IntegerField(default=0)
     admitted_applicants = models.IntegerField(default=0)
     applied_applicants = models.IntegerField(default=0)
-    
+
+
 class INBScholars(models.Model):
     year = models.IntegerField(default=0)
     total_applicants = models.IntegerField(default=0)
     total_accepted_applicants = models.IntegerField(default=0)
     total_failed_applicants = models.IntegerField(default=0)
     total_rejected_applicants = models.IntegerField(default=0)
+
 
 class INBSchool(models.Model):
     school = models.CharField(max_length=100)

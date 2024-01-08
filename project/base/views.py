@@ -85,7 +85,7 @@ def import_excel(request):
                     if "Desired Course" in df.columns:
                         applicant = CollegeStudentApplication(
                             control_number=row["Control Number"],
-                            school_year = row["School Year"],
+                            school_year=row["School Year"],
                             last_name=row["Surname"],
                             first_name=row["Firstname"],
                             middle_name=row["Middlename"],
@@ -318,6 +318,7 @@ def register_user(request):
 from django.db.models import Count
 from django.db import models
 
+
 def fa_data_visualization(request):
     return render(
         request,
@@ -326,49 +327,86 @@ def fa_data_visualization(request):
 
 
 def inb_data_visualization(request):
-    school_counts = CollegeStudentAccepted.objects.exclude(status='Graduated').exclude(school_year='Graduated').values('school').annotate(count=Count('school')).order_by('-count')
+    school_counts = (
+        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        .exclude(school_year="Graduated")
+        .values("school")
+        .annotate(count=Count("school"))
+        .order_by("-count")
+    )
 
-    barangay_counts = CollegeStudentAccepted.objects.exclude(status='Graduated').exclude(school_year='Graduated').values('barangay').annotate(count=Count('barangay')).order_by('-count')
+    barangay_counts = (
+        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        .exclude(school_year="Graduated")
+        .values("barangay")
+        .annotate(count=Count("barangay"))
+        .order_by("-count")
+    )
 
-    first_year_count = CollegeStudentAccepted.objects.filter(school_year='1st Year', status='Ongoing').count()
-    second_year_count = CollegeStudentAccepted.objects.filter(school_year='2nd Year', status='Ongoing').count()
-    third_year_count = CollegeStudentAccepted.objects.filter(school_year='3rd Year', status='Ongoing').count()
-    fourth_year_count = CollegeStudentAccepted.objects.filter(school_year='4th Year', status='Ongoing').count()
-    fifth_year_count = CollegeStudentAccepted.objects.filter(school_year='5th Year', status='Ongoing').count()
+    first_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="1st Year", status="Ongoing"
+    ).count()
+    second_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="2nd Year", status="Ongoing"
+    ).count()
+    third_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="3rd Year", status="Ongoing"
+    ).count()
+    fourth_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="4th Year", status="Ongoing"
+    ).count()
+    fifth_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="5th Year", status="Ongoing"
+    ).count()
 
     total_scholars_count = CollegeStudentAccepted.objects.count()
 
-    graduated_scholars_count = CollegeStudentAccepted.objects.filter(school_year='Graduated').count()
-    ongoing_scholars_count = CollegeStudentAccepted.objects.filter(status='Ongoing').exclude(school_year='Graduated').count()
-
+    graduated_scholars_count = CollegeStudentAccepted.objects.filter(
+        school_year="Graduated"
+    ).count()
+    ongoing_scholars_count = (
+        CollegeStudentAccepted.objects.filter(status="Ongoing")
+        .exclude(school_year="Graduated")
+        .count()
+    )
 
     rejected_scholars_count = CollegeStudentRejected.objects.count()
-    unsuccessful_scholar_count = CollegeStudentAccepted.objects.filter(status='Failed').count()
+    unsuccessful_scholar_count = CollegeStudentAccepted.objects.filter(
+        status="Failed"
+    ).count()
 
     total_failed_applicants = rejected_scholars_count + unsuccessful_scholar_count
 
-    percentage_ongoing = (ongoing_scholars_count / total_scholars_count) * 100 if total_scholars_count > 0 else 0
+    percentage_ongoing = (
+        (ongoing_scholars_count / total_scholars_count) * 100
+        if total_scholars_count > 0
+        else 0
+    )
 
-    gender_data = CollegeStudentAccepted.objects.filter(status='Ongoing').values('gender').annotate(count=models.Count('gender'))
+    gender_data = (
+        CollegeStudentAccepted.objects.filter(status="Ongoing")
+        .values("gender")
+        .annotate(count=models.Count("gender"))
+    )
 
-    labels = [entry['gender'] for entry in gender_data]
-    counts = [entry['count'] for entry in gender_data]
+    labels = [entry["gender"] for entry in gender_data]
+    counts = [entry["count"] for entry in gender_data]
 
     context = {
-        'customLabels': [entry['school'] for entry in school_counts],
-        'dataCounts': [entry['count'] for entry in school_counts],
-        'barangay_counts': barangay_counts,
-        'first_year_count': first_year_count,
-        'second_year_count': second_year_count,
-        'third_year_count': third_year_count,
-        'fourth_year_count': fourth_year_count,
-        'fifth_year_count': fifth_year_count,
-        'graduated_scholars_count': graduated_scholars_count,
-        'total_failed_applicants': total_failed_applicants,
-        'ongoing_scholars_count':  ongoing_scholars_count,
-        'percentage_ongoing': percentage_ongoing,
-        'labels': labels,
-        'counts': counts,
+        "customLabels": [entry["school"] for entry in school_counts],
+        "dataCounts": [entry["count"] for entry in school_counts],
+        "barangay_counts": barangay_counts,
+        "first_year_count": first_year_count,
+        "second_year_count": second_year_count,
+        "third_year_count": third_year_count,
+        "fourth_year_count": fourth_year_count,
+        "fifth_year_count": fifth_year_count,
+        "graduated_scholars_count": graduated_scholars_count,
+        "total_failed_applicants": total_failed_applicants,
+        "ongoing_scholars_count": ongoing_scholars_count,
+        "percentage_ongoing": percentage_ongoing,
+        "labels": labels,
+        "counts": counts,
     }
 
     return render(request, "inb-dashboard.html", context)
@@ -377,16 +415,17 @@ def inb_data_visualization(request):
 def barangay_summary(request):
     return render(request, "in-depth-charts/barangay/barangay_data.html")
 
+
 def active_scholar_summary(request):
     return render(request, "in-depth-charts/active-scholar/active_scholar.html")
 
 def gender_summary(request):
-    gender_data = (CollegeStudentAccepted.objects.filter(status="Ongoing").values("gender").annotate(count=models.Count("gender")))
+    gender_data = CollegeStudentAccepted.objects.filter(status='Ongoing').values('gender').annotate(count=models.Count('gender'))
 
     labels = [entry["gender"] for entry in gender_data]
     counts = [entry["count"] for entry in gender_data]
 
-    unique_school_years = ["1st Year","2nd Year","3rd Year","4th Year","5th Year","Graduated",]
+    unique_school_years = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Graduated']
 
     gender_table_data = []
 
@@ -447,7 +486,6 @@ def gender_summary(request):
     }
 
     return render(request, "in-depth-charts/gender/gender_data.html", context)
-
 
 
 
@@ -560,7 +598,7 @@ def inb_filter_applicants(request):
                 ApplicantInfoRepositoryINB.objects.get_or_create(
                     control_number=applicant.control_number,
                     fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                    school_year = applicant.school_year,
+                    school_year=applicant.school_year,
                     blkstr=applicant.blkstr,
                     barangay=applicant.barangay,
                     province=applicant.province,
@@ -611,14 +649,14 @@ def inb_filter_applicants(request):
                         control_number=applicant.control_number
                     ).update(status="Accepted")
                     CollegeStudentAccepted.objects.create(
-                        created_at = applicant.created_at,
+                        created_at=applicant.created_at,
                         control_number=applicant.control_number,
                         fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
                         school=applicant.school,
                         course=applicant.course,
                         gender=applicant.gender,
                         school_year=applicant.school_year,
-                        barangay = applicant.barangay,
+                        barangay=applicant.barangay,
                     )
                     CollegeStudentApplication.objects.filter(
                         control_number=applicant.control_number
@@ -671,6 +709,7 @@ def filter_assessment(request):
                 if applicant.status == "Accepted":
                     CollegeStudentAccepted.objects.create(
                         control_number=applicant.control_number,
+                        fullname=applicant.fullname,
                         school=applicant.school,
                         course=applicant.course,
                     )
@@ -1219,7 +1258,7 @@ def inb_requirements_list(request, control_number):
         )
 
         return redirect("inb_applicant_list")
-    
+
     context = {
         "student": student,
         "requirements": requirements,
@@ -1378,6 +1417,7 @@ def update_course_list(request, course_id):
     return render(
         request, "Admin/update-school-course.html", {"course": course, "form": form}
     )
+
 
 def delete_item(request, item_type, item_id):
     if item_type == "school":
