@@ -1583,6 +1583,21 @@ def import_grade(request):
                             gwa=gwa
                         )
                     )
+                
+          
+
+                college_student = get_object_or_404(CollegeStudentAccepted, control_number=control_number)
+                college_student.grant = gwa
+                if 1 <= gwa <= 2:
+                    college_student.grant = '100%'
+                elif 2.25 <= gwa <= 2.75:
+                    college_student.grant = '80%'
+                elif 3 <= gwa <= 5:
+                    college_student.grant = 'Failed'
+                else:
+                    college_student.grant = 'Unknown'
+
+                college_student.save()
 
             StudentGrade.objects.bulk_create(student_grades)
 
