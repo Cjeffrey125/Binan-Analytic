@@ -62,6 +62,8 @@ document.addEventListener('DOMContentLoaded', function () {
       closeModal('filterModal');
     });
 
+
+
   });
   
 
@@ -69,41 +71,40 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('#filterDropdown').classList.toggle('hidden');
   });
 
-    $(document).ready(function () {
-        // Function to toggle sorting direction
-        function toggleSortDirection($th) {
-          $th.toggleClass('asc desc');
-        }
+     $(document).ready(function () {
+      // Function to toggle sorting direction
+      function toggleSortDirection($th) {
+        $th.toggleClass('asc desc');
+      }
 
-        // Function to handle sorting
-        function sortTable($table, columnIndex, direction) {
-          const rows = $table.find('tbody tr').get();
+      // Function to handle sorting
+      function sortTable($table, columnIndex, direction) {
+        const rows = $table.find('tbody tr').get();
 
-          rows.sort(function (a, b) {
-            const keyA = $(a).find('td').eq(columnIndex).text();
-            const keyB = $(b).find('td').eq(columnIndex).text();
+        rows.sort(function (a, b) {
+          const keyA = $(a).find('td').eq(columnIndex).text();
+          const keyB = $(b).find('td').eq(columnIndex).text();
 
-            if (direction === 'asc') {
-              return keyA.localeCompare(keyB);
-            } else {
-              return keyB.localeCompare(keyA);
-            }
-          });
-
-          $.each(rows, function (index, row) {
-            $table.children('tbody').append(row);
-          });
-        }
-
-        // Click event for sortable columns
-        $('.sortable').click(function () {
-          const $th = $(this);
-          const columnIndex = $th.index();
-          const direction = $th.hasClass('asc') ? 'desc' : 'asc';
-
-          toggleSortDirection($th);
-          sortTable($th.closest('table'), columnIndex, direction);
+          if (direction === 'asc') {
+            return keyA.localeCompare(keyB);
+          } else {
+            return keyB.localeCompare(keyA);
+          }
         });
-      });
 
+        $.each(rows, function (index, row) {
+          $table.children('tbody').append(row);
+        });
+      }
+
+      // Click event for sortable columns
+      $('.sortable').click(function () {
+        const $th = $(this);
+        const columnIndex = $th.index();
+        const direction = $th.hasClass('asc') ? 'desc' : 'asc';
+
+        toggleSortDirection($th);
+        sortTable($th.closest('table'), columnIndex, direction);
+      });
+    });
   
