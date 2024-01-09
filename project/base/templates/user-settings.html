@@ -1,0 +1,57 @@
+<!-- user-settings.html -->
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+{% load static %}
+<h2>User Settings</h2>
+<a href="{% url 'home' %}">Back to Home</a>
+
+<form method="post" action="{% url 'user_setting' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload Image</button>
+</form>
+
+<div class="flex justify-between mx-52 mt-4">
+    <div class="bg-gray-800 ml-48 mt-24 rounded flex flex-col justify-center items-center" style="width: 450px; height: 520px">
+        {% if user.profileimage.image %}
+    <img src="{{ user.profileimage.image.url }}" alt="User Image">
+{% else %}
+    <!-- Display a default image if no user profile image exists -->
+    <div class="relative w-40 h-40 bg-gray-700 rounded-full overflow-hidden">
+        <img class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32" src="{% static 'images/user.png' %}" alt="User Image">
+    </div>
+{% endif %}
+
+        <div>
+            {{ user.first_name }} {{ user.last_name }}
+        </div>
+
+  
+
+        <div>
+            {{ user.email }}
+        </div>
+    </div>
+
+    <div class="bg-gray-800 mr-48 mt-24 rounded flex flex-col justify-center items-center" style="width: 630px; height: 320px">
+        <div>
+            Personal Details
+        </div>
+
+        <div>
+            Username: {{ user.username }}
+        </div>
+
+        <div>
+            Firstname: {{ user.first_name }}
+            <br>
+            Lastname: {{ user.last_name }}
+            <br>
+            Email: {{ user.email }}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

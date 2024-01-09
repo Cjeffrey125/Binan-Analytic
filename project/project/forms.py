@@ -12,8 +12,18 @@ from base.models import (
     FAApplicationRequirements,
     CollegeStudentAssesment,
     FinancialAssistanceAssesment,
+    ProfileImage,
 )
 
+class ProfileImageForm(forms.ModelForm):
+    class Meta:
+        model = ProfileImage
+        fields = ['image']
+
+class UpdateUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email']
 
 class INBSchoolForm(forms.ModelForm):
     school = forms.CharField(

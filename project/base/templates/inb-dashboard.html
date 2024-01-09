@@ -19,7 +19,7 @@
                 </div>
             </a>
             
-            <a href="{% url 'inb-active-scholar-summary' %}">
+            <a href="{% url 'inb-graduated-scholar-summary' %}">
                 <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
                     style="width: 430px; height: 200px">
                     <div class = "mt-32">
@@ -28,7 +28,7 @@
                 </div>
             </a>
             
-            <a href="{% url 'inb-active-scholar-summary' %}">
+            <a href="{% url 'inb-unsuccessful-scholar-summary' %}">
                 <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
                     style="width: 430px; height: 200px">
                     <div class = "mt-32">
@@ -53,14 +53,16 @@
 
     <div class="flex justify-center items-center mt-4">
         <div class="flex flex-row space-x-4">
-
-          <div class="bg-gray-800 rounded p-4" style="width: 878px; height: 300px;">
-                {% include "Graphs/linegraph.html" %}    
-          </div>
-      
-          <div class="bg-gray-800 rounded p-4 group transition-transform transform hover:scale-105 cursor-pointer" style="width: 878px; height: 300px;">
-                {% include "Graphs/stackhorizontal.html" %}
-          </div>
+            <a href="{% url 'inb-tracker-scholar-summary' %}">
+                <div class="bg-gray-800 rounded p-4 group transition-transform transform hover:scale-105 cursor-pointer" style="width: 878px; height: 300px;">
+                        {% include "Graphs/linegraph.html" %}    
+                </div>
+            </a>
+            <a href="{% url 'inb-school-scholar-summary' %}">
+                <div class="bg-gray-800 rounded p-4 group transition-transform transform hover:scale-105 cursor-pointer" style="width: 878px; height: 300px;">
+                        {% include "Graphs/stackhorizontal.html" %}
+                </div>
+            </a>
 
         </div>
     </div>
@@ -68,13 +70,13 @@
     <div class="flex justify-center items-center mt-3">
         <div class="flex flex-row space-x-4">
             
-            <a href="#">
+            <a href="{% url 'inb-year-scholar-summary' %}">
                 <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 580px; height: 280px">
                     {% include "Graphs/bargraph.html" %}
                 </div>
             </a>
     
-            <a href="#">
+            <a href="{% url 'inb-course-scholar-summary' %}">
                 <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 580px; height: 280px">
                     {% include "Graphs/course.html" %}
                 </div>

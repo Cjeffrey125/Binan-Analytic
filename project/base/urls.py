@@ -7,11 +7,28 @@ urlpatterns = [
     path("Login/", views.login_user, name="login"),
     path("Logout/", views.logout_user, name="logout"),
     path("SignUp/", views.register_user, name="signup"),
+    path("User-Setting/", views.user_settings, name="user_setting"),
+
+    path("User-Setting/Update-User", views.update_user, name="update_user"),
+    
+
     path("INB-Dashboard/", views.inb_data_visualization, name="inb-dashboard"),
     
-    path("INB-Dashboard/Gender", views.gender_summary, name="inb-gender-summary"),
-    path("INB-Dashboard/Barangay", views.barangay_summary, name="inb-barangay-summary"),
-    path("INB-Dashboard/Active-Scholar", views.active_scholar_summary, name="inb-active-scholar-summary"),
+    path("INB-Dashboard/Gender/", views.gender_summary, name="inb-gender-summary"),
+    path("INB-Dashboard/Barangay/", views.barangay_summary, name="inb-barangay-summary"),
+    path("INB-Dashboard/Active-Scholar/", views.active_scholar_summary, name="inb-active-scholar-summary"),
+    path("INB-Dashboard/Graduated-Scholar/", views.graduate_scholar_summary, name="inb-graduated-scholar-summary"),
+    path("INB-Dashboard/Unsuccessful-Scholar/", views.unsuccessful_scholar_summary, name="inb-unsuccessful-scholar-summary"),
+    path("INB-Dashboard/Applied-Admitted-Scholar/", views.tracker_scholar_summary, name="inb-tracker-scholar-summary"),
+    path("INB-Dashboard/School-Grantees-Scholar/", views.school_scholar_summary, name="inb-school-scholar-summary"),
+    path("INB-Dashboard/Course-Grantees-Scholar/", views.course_scholar_summary, name="inb-course-scholar-summary"),
+    path("INB-Dashboard/Year-Level-Scholar/", views.yearlevel_scholar_summary, name="inb-year-scholar-summary"),
+
+    
+
+    
+
+    
     
 
 
