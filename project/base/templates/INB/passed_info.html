@@ -54,36 +54,44 @@
                 </div>
             </div>
         </div>
+
     <div class="relative bottom-10 w-[400px]">
         <div class="relative right-10">
     <div class="mb-10">
         <h1 class="text-gray-500 sm:text-lg mb-2">Grades</h1>
+        {% if student_grades %}
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
             <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white z-0">
                 <tr>
                     <th scope="col" class="px-3 py-3">#</th>
                     <th scope="col" class="px-3 py-3">Subject Code</th>
-                    <th scope="col" class="px-3 py-3">Sect Code</th>
                     <th scope="col" class="px-3 py-3">Grade</th>
+                  
                 </tr>
             </thead>
             <tbody>
+                {% for grade in student_grades %}
                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <td scope="row" class="px-3 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">1</td>
-                <td scope="row" class="px-4 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">COMP 20333
-                </td>
-                <td scope="row" class="px-4 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">BSIT-BN 4-1
-                </td>
-                <td scope="row" class="px-4 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">1.75
-                </td>
+                    <td scope="row" class="px-3 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ forloop.counter }}</td>
+                    <td scope="row" class="px-4 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ grade.subject }}</td>
+                    <td scope="row" class="px-4 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ grade.grade }}</td>
+                </tr>
+                {% endfor %}
+            
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <td scope="row" class="px-3 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">GWA</td>
+                    <td scope="row" class="px-3 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white"></td>
+                    <td scope="row" class="px-3 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ student_grades.0.gwa }}</td>
+                </tr>
             </tbody>
+            
         </table>
+        {% else %}
+        <p>No grades available for this student.</p>
+        {% endif %}
     </div>
     </div>
     </div>
-
-    
-   
     
 
 </div>

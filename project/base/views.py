@@ -31,10 +31,10 @@ from .models import (
     FARequirementRepository,
     INBSchool,
     INBCourse,
-    Subject,
     StudentGrade,
     INBApplicationRequirements,
     FAApplicationRequirements,
+    INBApplicantTracker,
 )
 from django.db.models import Count
 from django.http import HttpResponse
@@ -328,53 +328,25 @@ def fa_data_visualization(request):
 
 
 def inb_data_visualization(request):
-    school_counts = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
-        .values("school")
-        .annotate(count=Count("school"))
-        .order_by("-count")
-    )
+    applicant_courses = (CollegeStudentAccepted.objects.exclude(status="Graduated").exclude(school_year="Graduated").values("course").annotate(count=Count("course")).order_by("-count"))
 
-    barangay_counts = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
-        .values("barangay")
-        .annotate(count=Count("barangay"))
-        .order_by("-count")
-    )
+    school_counts = (CollegeStudentAccepted.objects.exclude(status="Graduated").exclude(school_year="Graduated").values("school").annotate(count=Count("school")).order_by("-count"))
 
-    first_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="1st Year", status="Ongoing"
-    ).count()
-    second_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="2nd Year", status="Ongoing"
-    ).count()
-    third_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="3rd Year", status="Ongoing"
-    ).count()
-    fourth_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="4th Year", status="Ongoing"
-    ).count()
-    fifth_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="5th Year", status="Ongoing"
-    ).count()
+    barangay_counts = (CollegeStudentAccepted.objects.exclude(status="Graduated").exclude(school_year="Graduated").values("barangay").annotate(count=Count("barangay")).order_by("-count"))
+
+    first_year_count = CollegeStudentAccepted.objects.filter(school_year="1st Year", status="Ongoing").count()
+    second_year_count = CollegeStudentAccepted.objects.filter(school_year="2nd Year", status="Ongoing").count()
+    third_year_count = CollegeStudentAccepted.objects.filter(school_year="3rd Year", status="Ongoing").count()
+    fourth_year_count = CollegeStudentAccepted.objects.filter(school_year="4th Year", status="Ongoing").count()
+    fifth_year_count = CollegeStudentAccepted.objects.filter(school_year="5th Year", status="Ongoing").count()
 
     total_scholars_count = CollegeStudentAccepted.objects.count()
 
-    graduated_scholars_count = CollegeStudentAccepted.objects.filter(
-        school_year="Graduated"
-    ).count()
-    ongoing_scholars_count = (
-        CollegeStudentAccepted.objects.filter(status="Ongoing")
-        .exclude(school_year="Graduated")
-        .count()
-    )
+    graduated_scholars_count = CollegeStudentAccepted.objects.filter(school_year="Graduated").count()
+    ongoing_scholars_count = (CollegeStudentAccepted.objects.filter(status="Ongoing").exclude(school_year="Graduated").count())
 
     rejected_scholars_count = CollegeStudentRejected.objects.count()
-    unsuccessful_scholar_count = CollegeStudentAccepted.objects.filter(
-        status="Failed"
-    ).count()
+    unsuccessful_scholar_count = CollegeStudentAccepted.objects.filter(status="Failed").count()
 
     total_failed_applicants = rejected_scholars_count + unsuccessful_scholar_count
 
@@ -385,15 +357,13 @@ def inb_data_visualization(request):
     )
 
     gender_data = (
-        CollegeStudentAccepted.objects.filter(status="Ongoing")
-        .values("gender")
-        .annotate(count=models.Count("gender"))
-    )
+        CollegeStudentAccepted.objects.filter(status="Ongoing").values("gender").annotate(count=models.Count("gender")))
 
     labels = [entry["gender"] for entry in gender_data]
     counts = [entry["count"] for entry in gender_data]
 
     context = {
+        "applicant_courses": applicant_courses,
         "customLabels": [entry["school"] for entry in school_counts],
         "dataCounts": [entry["count"] for entry in school_counts],
         "barangay_counts": barangay_counts,
@@ -420,25 +390,13 @@ def barangay_summary(request):
 def active_scholar_summary(request):
     return render(request, "in-depth-charts/active-scholar/active_scholar.html")
 
-
 def gender_summary(request):
-    gender_data = (
-        CollegeStudentAccepted.objects.filter(status="Ongoing")
-        .values("gender")
-        .annotate(count=models.Count("gender"))
-    )
+    gender_data = CollegeStudentAccepted.objects.filter(status='Ongoing').values('gender').annotate(count=models.Count('gender'))
 
     labels = [entry["gender"] for entry in gender_data]
     counts = [entry["count"] for entry in gender_data]
 
-    unique_school_years = [
-        "1st Year",
-        "2nd Year",
-        "3rd Year",
-        "4th Year",
-        "5th Year",
-        "Graduated",
-    ]
+    unique_school_years = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Graduated']
 
     gender_table_data = []
 
@@ -504,6 +462,7 @@ def gender_summary(request):
     }
 
     return render(request, "in-depth-charts/gender/gender_data.html", context)
+
 
 
 #  -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -819,16 +778,10 @@ def iskolar_ng_bayan_list(request):
         export_form = ExportForm(request.POST)
         all_applicants = CollegeStudentApplication.objects.all()
 
-        accepted_applicants = CollegeStudentAccepted.objects.values_list(
-            "control_number", flat=True
-        )
-        rejected_applicants = CollegeStudentAssesment.objects.values_list(
-            "control_number", flat=True
-        )
+        accepted_applicants = CollegeStudentAccepted.objects.values_list("control_number", flat=True)
+        rejected_applicants = CollegeStudentAssesment.objects.values_list("control_number", flat=True)
 
-        filtered_applicants = all_applicants.exclude(
-            control_number__in=list(accepted_applicants) + list(rejected_applicants)
-        )
+        filtered_applicants = all_applicants.exclude(control_number__in=list(accepted_applicants) + list(rejected_applicants))
 
         # Search functionality
         query = request.GET.get("q")
@@ -962,6 +915,7 @@ def inb_applicant_info(request, status, control_number):
     if request.user.is_authenticated:
         if status == "passed":
             model_class = CollegeStudentAccepted
+            grade_class = StudentGrade
             template = "INB/passed_info.html"
         elif status == "pending":
             model_class = CollegeStudentAssesment
@@ -977,14 +931,11 @@ def inb_applicant_info(request, status, control_number):
         try:
             if request.method == "GET":
                 if status == "passed":
-                    passed_applicant = get_object_or_404(
-                        model_class, control_number=control_number
-                    )
-                    return render(
-                        request,
-                        template,
-                        {"passed_applicant": passed_applicant, "status": status},
-                    )
+                    passed_applicant = get_object_or_404(model_class, control_number=control_number)
+                    student_grades = grade_class.objects.filter(control_number=control_number)
+                    
+                    return render(request,template,{"passed_applicant": passed_applicant, "status": status, "student_grades": student_grades,},)
+                
                 elif status == "pending":
                     pending_applicant = get_object_or_404(
                         model_class, control_number=control_number
@@ -1686,72 +1637,58 @@ def delete_requirement(request, item_type, item_id):
 
     return redirect("home")
 
-
 def import_grade(request):
     if request.method == "POST":
         form = GradeUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            excel_file = request.FILES["file"]
-
+            excel_file = request.FILES['file']
             df = pd.read_excel(excel_file, skiprows=10)
+            df.columns = df.columns.str.strip()
 
-            student_grades_dict = {}
+            if 'CONTROL_NUMBER' not in df.columns:
+                return HttpResponse("Error: 'CONTROL_NUMBER' column not found in the Excel file.")
 
-            subject_columns = df[["Subject Code", "Description"]]
+            student_grades = []
 
-            for _, row in df.iterrows():
-                control_number = row["NO."]
+            for index, row in df.iterrows():
+                control_number = row['CONTROL_NUMBER']
+                gwa = row['GWA']
 
-                student_key = (control_number,)
-                student = student_grades_dict.get(student_key)
+                subject_cols = [col for col in df.columns if col.startswith('SUBJECT')]
+                grade_cols = [col for col in df.columns if col.startswith('GRADE')]
 
-                if student is None:
-                    students = CollegeStudentAccepted.objects.filter(
-                        control_number=control_number
-                    )
-                    if students.exists():
-                        student = students.first()
-                    else:
-                        student = CollegeStudentAccepted.objects.create(
+                for subject_col, grade_col in zip(subject_cols, grade_cols):
+                    subject = row[subject_col]
+                    grade = row[grade_col]
+                    print(f"Creating StudentGrade: control_number={control_number}, subject={subject}, grade={grade}, gwa={gwa}")
+                    student_grades.append(
+                        StudentGrade(
                             control_number=control_number,
-                            last_name=row["LASTNAME"],
-                            first_name=row["FIRSTNAME"],
-                            middle_initial=row["M.I."],
-                            course=row["COURSE"],
+                            subject=subject,
+                            grade=grade,
+                            gwa=gwa
                         )
-                    student_grades_dict[student_key] = student
-
-                for index, subject_row in subject_columns.iterrows():
-                    subject_code = subject_row["Subject Code"]
-                    description = subject_row["Description"]
-
-                    subject, _ = Subject.objects.get_or_create(
-                        code=subject_code, defaults={"description": description}
                     )
+                
+          
 
-                    for col in df.columns[
-                        df.columns.str.startswith(
-                            f'GRADE{subject_code[len("SUBJECT"):]}'
-                        )
-                    ]:
-                        grade_value = row[col]
-                        if pd.notna(grade_value):
-                            student_grade, created = StudentGrade.objects.get_or_create(
-                                student=student,
-                                subject=subject,
-                                defaults={"grade": grade_value},
-                            )
-                            if not created:
-                                student_grade.grade = grade_value
-                                student_grade.save()
+                college_student = get_object_or_404(CollegeStudentAccepted, control_number=control_number)
+                college_student.grant = gwa
+                if 1 <= gwa <= 2:
+                    college_student.grant = '100%'
+                elif 2.25 <= gwa <= 2.75:
+                    college_student.grant = '80%'
+                elif 3 <= gwa <= 5:
+                    college_student.grant = 'Failed'
+                else:
+                    college_student.grant = 'Unknown'
 
-                gwa_value = row["GWA"]
-                if pd.notna(gwa_value):
-                    student.gwa = gwa_value
-                    student.save()
+                college_student.save()
 
-            messages.success(request, "Import successful!")
-            return redirect("home")
+            StudentGrade.objects.bulk_create(student_grades)
+
+            messages.success(request, "Grades Successfully Imported")
+            return redirect('inb_passed_applicant')
 
     else:
         form = GradeUploadForm()
@@ -1759,19 +1696,5 @@ def import_grade(request):
     return render(request, "modal/import_grades.html", {"form": form})
 
 
-def test1(request):
-    inb_requirements_list = INBRequirementRepository.objects.all()
 
-    if request.method == "POST":
-        form = ChecklistForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("test1")
-    else:
-        form = ChecklistForm()
 
-    return render(
-        request,
-        "test-template.html",
-        {"inb_requirements_list": inb_requirements_list, "form": form},
-    )

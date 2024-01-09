@@ -67,28 +67,34 @@
 
     <div class="flex justify-center items-center mt-3">
         <div class="flex flex-row space-x-4">
-
-            <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 580px; height: 280px">
-                {% include "Graphs/bargraph.html" %}
-            </div>
-
-            <div class="bg-gray-800 rounded" style="width: 580px; height: 280px">
-                <label class="text-white ml-8">Summary of Courses</label>
-            </div>
-        
-        <a href="{% url 'inb-barangay-summary' %}">
-            <div class="bg-gray-800 rounded  group transition-transform transform hover:scale-105 cursor-pointer " style="width: 580px; height: 280px">
-                {% include "Graphs/barangay.html" %}
-            </div>
-        </a>
-      
+            
+            <a href="#">
+                <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 580px; height: 280px">
+                    {% include "Graphs/bargraph.html" %}
+                </div>
+            </a>
+    
+            <a href="#">
+                <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 580px; height: 280px">
+                    {% include "Graphs/course.html" %}
+                </div>
+            </a>
+            
+            <a href="{% url 'inb-barangay-summary' %}">
+                <div class="bg-gray-800 rounded group transition-transform transform hover:scale-105 cursor-pointer" style="width: 580px; height: 280px">
+                    {% include "Graphs/barangay.html" %}
+                </div>
+            </a>
         </div>
     </div>
+    
+
+ 
 
 
     
     
-    <script src="../static/js/Graphs/inb-linechart.js"></script>
+ 
 
     
           
