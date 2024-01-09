@@ -14,6 +14,7 @@ from project.forms import (
     INBCourseForm,
     GradeUploadForm,
     INBPendingApplicants,
+    FAPendingApplicants,
 )
 from .models import (
     CollegeStudentApplication,
@@ -456,8 +457,13 @@ def gender_summary(request):
             }
         )
 
-    total_male_count = sum(entry['counts'][0] if entry['counts'] else 0 for entry in gender_table_data)
-    total_female_count = sum(entry['counts'][1] if len(entry['counts']) > 1 else 0 for entry in gender_table_data)
+    total_male_count = sum(
+        entry["counts"][0] if entry["counts"] else 0 for entry in gender_table_data
+    )
+    total_female_count = sum(
+        entry["counts"][1] if len(entry["counts"]) > 1 else 0
+        for entry in gender_table_data
+    )
 
     gender_data_creation_year = CollegeStudentAccepted.objects.values(
         "gender", "created_at__year"
@@ -574,6 +580,9 @@ def fa_filter_applicants(request):
                     control_number=applicant.control_number,
                     fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
                     school=applicant.school,
+                    strand=applicant.strand,
+                    gender=applicant.gender,
+                    barangay=applicant.barangay,
                 )
                 FinancialAssistanceApplication.objects.filter(
                     control_number=applicant.control_number
@@ -695,7 +704,7 @@ def inb_filter_applicants(request):
     return redirect("inb_applicant_list")
 
 
-def filter_assessment(request):
+def inb_filter_assessment(request):
     applicants_to_transfer = CollegeStudentAssesment.objects.filter(
         status__in=["Accepted", "Rejected"]
     )
@@ -743,6 +752,57 @@ def filter_assessment(request):
         )
 
     return redirect("inb_pending_applicant")
+
+
+def fa_filter_assessment(request):
+    applicants_to_transfer = FinancialAssistanceAssesment.objects.filter(
+        status__in=["Accepted", "Rejected"]
+    )
+
+    if applicants_to_transfer.exists():
+        for applicant in applicants_to_transfer:
+            try:
+                (
+                    applicant_info,
+                    created,
+                ) = FinancialAssistanceInfoRepository.objects.get_or_create(
+                    control_number=applicant.control_number
+                )
+
+                if created:
+                    if applicant.status == "Accepted":
+                        applicant_info.status = "Accepted"
+                    elif applicant.status == "Rejected":
+                        applicant_info.status = "Rejected"
+                    applicant_info.save()
+
+                if applicant.status == "Accepted":
+                    FinancialAssistanceAccepted.objects.create(
+                        control_number=applicant.control_number,
+                        fullname=applicant.fullname,
+                        school=applicant.school,
+                        strand=applicant.strand,
+                    )
+                elif applicant.status == "Rejected":
+                    FinancialAssistanceRejected.objects.create(
+                        control_number=applicant.control_number,
+                        fullname=applicant.fullname,
+                        school=applicant.school,
+                        strand=applicant.strand,
+                    )
+
+                applicant.delete()
+
+                messages.success(request, "Applicants have been successfully filtered.")
+            except Exception as e:
+                messages.error(request, f"An error occurred: {str(e)}")
+    else:
+        messages.warning(
+            request,
+            "There are no applicants with status 'Accepted' or 'Rejected' to filter.",
+        )
+
+    return redirect("fa_pending_applicant")
 
 
 # ---------------------------------------------
@@ -1021,7 +1081,8 @@ def fa_applicant_info(request, status, control_number):
             template = "FA/fa_passed_info.html"
         elif status == "pending":
             model_class = FinancialAssistanceAssesment
-            template = "FA/fa_pending_list.html"
+            template = "FA/fa_pending_info.html"
+            form_class = FAPendingApplicants
         elif status == "failed":
             model_class = FinancialAssistanceRejected
             template = "FA/fa_failed_info.html"
@@ -1030,36 +1091,61 @@ def fa_applicant_info(request, status, control_number):
             return redirect("home")
 
         try:
-            if status == "passed":
-                passed_applicant = get_object_or_404(
-                    model_class, control_number=control_number
-                )
-                return render(
-                    request,
-                    template,
-                    {"passed_applicant": passed_applicant, "status": status},
-                )
-            elif status == "pending":
-                pending_applicant = get_object_or_404(
-                    model_class, control_number=control_number
-                )
-                return render(
-                    request,
-                    template,
-                    {"pending_applicant": pending_applicant, "status": status},
-                )
-            elif status == "failed":
-                failed_applicant = get_object_or_404(
-                    model_class, control_number=control_number
-                )
-                return render(
-                    request,
-                    template,
-                    {"failed_applicant": failed_applicant, "status": status},
-                )
+            if request.method == "GET":
+                if status == "passed":
+                    passed_applicant = get_object_or_404(
+                        model_class, control_number=control_number
+                    )
+                    return render(
+                        request,
+                        template,
+                        {"passed_applicant": passed_applicant, "status": status},
+                    )
+                elif status == "pending":
+                    pending_applicant = get_object_or_404(
+                        model_class, control_number=control_number
+                    )
+                    form = form_class()
+                    return render(
+                        request,
+                        template,
+                        {
+                            "pending_applicant": pending_applicant,
+                            "status": status,
+                            "form": form,
+                            "control_number": control_number,
+                        },
+                    )
+                elif status == "failed":
+                    failed_applicant = get_object_or_404(
+                        model_class, control_number=control_number
+                    )
+                    return render(
+                        request,
+                        template,
+                        {"failed_applicant": failed_applicant, "status": status},
+                    )
+
+            elif request.method == "POST":
+                form = form_class(request.POST)
+                if form.is_valid():
+                    if status == "pending":
+                        pending_applicant = get_object_or_404(
+                            model_class, control_number=control_number
+                        )
+                        pending_applicant.status = form.cleaned_data["status"]
+                        pending_applicant.remarks = form.cleaned_data["remarks"]
+                        pending_applicant.save()
+
+                    messages.success(
+                        request,
+                        f"{status.capitalize()} applicant information updated successfully.",
+                    )
+                    return redirect("fa_pending_applicant")
+
         except model_class.DoesNotExist:
             messages.error(request, f"{status.capitalize()} applicant not found.")
-            return redirect(f"inb_{status}_applicant")
+            return redirect(f"fa_{status}_applicant")
 
     else:
         messages.error(request, "You don't have permission.")
@@ -1455,8 +1541,8 @@ def filter(request):
     schools = INBSchool.objects.all()
     courses = INBCourse.objects.all()
 
-    selected_schools = request.GET.getlist("school")
-    selected_courses = request.GET.getlist("course")
+    selected_schools = request.GET.getlist("schools")  # Update to match the form field name
+    selected_courses = request.GET.getlist("courses")  # Update to match the form field name
 
     filtered_applicants = CollegeStudentApplication.objects.all()
 
@@ -1472,7 +1558,7 @@ def filter(request):
 
     return render(
         request,
-        "sidebar_filter.html",
+        "inb_sidebar_filter.html",
         {
             "schools": schools,
             "courses": courses,

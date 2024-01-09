@@ -286,7 +286,6 @@ class FAApplicationRequirements(models.Model):
 class FinancialAssistanceAccepted(models.Model):
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
-    school_year = models.CharField(max_length=50, default="1st Years")
     strand = models.CharField(max_length=50, default="")
     school = models.CharField(max_length=50, default="")
 
@@ -300,9 +299,9 @@ class FinancialAssistanceRejected(models.Model):
 class FinancialAssistanceAssesment(models.Model):
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
-    school_year = models.CharField(max_length=50, default="1st Years")
     strand = models.CharField(max_length=50, default="")
     school = models.CharField(max_length=50, default="")
+    
 
 
 class FinancialAssistanceInfoRepository(models.Model):

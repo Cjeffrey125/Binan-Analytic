@@ -43,8 +43,8 @@ urlpatterns = [
 
     path("inb/pending/applicant/",views.inb_applicant_list,{"status": "pending"},name="inb_pending_applicant",),
 
-    path("inb_filter_assessment",views.filter_assessment,name="inb_filter_assessment",),
-    path("fa_filter_assessment",views.filter_assessment,name="fa_filter_applicants",),
+    path("inb_filter_assessment",views.inb_filter_assessment,name="inb_filter_assessment",),
+   
 
     path("update_assessment/<str:control_number>/", views.inb_applicant_info, {"status": "pending"}, name="update_assessment"),
     path("inb/pending/applicant/<str:control_number>/", views.inb_applicant_info, {"status": "pending"}, name="inb_pending_applicant_info"),
@@ -64,6 +64,10 @@ urlpatterns = [
     path("FA_Requirements/<str:control_number>/",views.fa_requirement_list,name="fa_requirements_list",),
 
     path("fa/pending/applicant/",views.fa_applicant_list,{"status": "pending"},name="fa_pending_applicant",),
+
+     path("fa_filter_assessment",views.fa_filter_assessment,name="fa_filter_applicants",),
+
+
     path("fa/pending/applicant/<str:control_number>/", views.fa_applicant_info, {"status": "pending"}, name="fa_pending_applicant_info"),
 
     path("fa/passed/applicant/",views.fa_applicant_list,{"status": "passed"},name="fa_passed_applicant",),
@@ -102,5 +106,9 @@ urlpatterns = [
 
   
 
+
+
    path("test1", views.test1,  name="forms",),
+
+   path('filter/', views.filter, name='filter'),
 ]
