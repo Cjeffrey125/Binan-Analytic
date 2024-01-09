@@ -102,5 +102,4 @@ urlpatterns = [
 
   
 
-   path("test1", views.test1,  name="forms",),
 ]

@@ -30,7 +30,6 @@ from .models import (
     FARequirementRepository,
     INBSchool,
     INBCourse,
-    Subject,
     StudentGrade,
     INBApplicationRequirements,
     FAApplicationRequirements,
@@ -856,6 +855,7 @@ def inb_applicant_info(request, status, control_number):
     if request.user.is_authenticated:
         if status == "passed":
             model_class = CollegeStudentAccepted
+            grade_class = StudentGrade
             template = "INB/passed_info.html"
         elif status == "pending":
             model_class = CollegeStudentAssesment
@@ -871,14 +871,11 @@ def inb_applicant_info(request, status, control_number):
         try:
             if request.method == "GET":
                 if status == "passed":
-                    passed_applicant = get_object_or_404(
-                        model_class, control_number=control_number
-                    )
-                    return render(
-                        request,
-                        template,
-                        {"passed_applicant": passed_applicant, "status": status},
-                    )
+                    passed_applicant = get_object_or_404(model_class, control_number=control_number)
+                    student_grades = grade_class.objects.filter(control_number=control_number)
+                    
+                    return render(request,template,{"passed_applicant": passed_applicant, "status": status, "student_grades": student_grades,},)
+                
                 elif status == "pending":
                     pending_applicant = get_object_or_404(
                         model_class, control_number=control_number
@@ -1554,72 +1551,43 @@ def delete_requirement(request, item_type, item_id):
 
     return redirect("home")
 
-
 def import_grade(request):
     if request.method == "POST":
         form = GradeUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            excel_file = request.FILES["file"]
-
+            excel_file = request.FILES['file']
             df = pd.read_excel(excel_file, skiprows=10)
+            df.columns = df.columns.str.strip()
 
-            student_grades_dict = {}
+            if 'CONTROL_NUMBER' not in df.columns:
+                return HttpResponse("Error: 'CONTROL_NUMBER' column not found in the Excel file.")
 
-            subject_columns = df[["Subject Code", "Description"]]
+            student_grades = []
 
-            for _, row in df.iterrows():
-                control_number = row["NO."]
+            for index, row in df.iterrows():
+                control_number = row['CONTROL_NUMBER']
+                gwa = row['GWA']
 
-                student_key = (control_number,)
-                student = student_grades_dict.get(student_key)
+                subject_cols = [col for col in df.columns if col.startswith('SUBJECT')]
+                grade_cols = [col for col in df.columns if col.startswith('GRADE')]
 
-                if student is None:
-                    students = CollegeStudentAccepted.objects.filter(
-                        control_number=control_number
-                    )
-                    if students.exists():
-                        student = students.first()
-                    else:
-                        student = CollegeStudentAccepted.objects.create(
+                for subject_col, grade_col in zip(subject_cols, grade_cols):
+                    subject = row[subject_col]
+                    grade = row[grade_col]
+                    print(f"Creating StudentGrade: control_number={control_number}, subject={subject}, grade={grade}, gwa={gwa}")
+                    student_grades.append(
+                        StudentGrade(
                             control_number=control_number,
-                            last_name=row["LASTNAME"],
-                            first_name=row["FIRSTNAME"],
-                            middle_initial=row["M.I."],
-                            course=row["COURSE"],
+                            subject=subject,
+                            grade=grade,
+                            gwa=gwa
                         )
-                    student_grades_dict[student_key] = student
-
-                for index, subject_row in subject_columns.iterrows():
-                    subject_code = subject_row["Subject Code"]
-                    description = subject_row["Description"]
-
-                    subject, _ = Subject.objects.get_or_create(
-                        code=subject_code, defaults={"description": description}
                     )
 
-                    for col in df.columns[
-                        df.columns.str.startswith(
-                            f'GRADE{subject_code[len("SUBJECT"):]}'
-                        )
-                    ]:
-                        grade_value = row[col]
-                        if pd.notna(grade_value):
-                            student_grade, created = StudentGrade.objects.get_or_create(
-                                student=student,
-                                subject=subject,
-                                defaults={"grade": grade_value},
-                            )
-                            if not created:
-                                student_grade.grade = grade_value
-                                student_grade.save()
+            StudentGrade.objects.bulk_create(student_grades)
 
-                gwa_value = row["GWA"]
-                if pd.notna(gwa_value):
-                    student.gwa = gwa_value
-                    student.save()
-
-            messages.success(request, "Import successful!")
-            return redirect("home")
+            messages.success(request, "Grades Successfully Imported")
+            return redirect('inb_passed_applicant')
 
     else:
         form = GradeUploadForm()
@@ -1627,19 +1595,5 @@ def import_grade(request):
     return render(request, "modal/import_grades.html", {"form": form})
 
 
-def test1(request):
-    inb_requirements_list = INBRequirementRepository.objects.all()
 
-    if request.method == "POST":
-        form = ChecklistForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("test1")
-    else:
-        form = ChecklistForm()
 
-    return render(
-        request,
-        "test-template.html",
-        {"inb_requirements_list": inb_requirements_list, "form": form},
-    )

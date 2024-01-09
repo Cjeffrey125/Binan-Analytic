@@ -91,9 +91,9 @@ class INBApplicationRequirements(models.Model):
 
 
 class CollegeStudentAccepted(models.Model):
+    control_number = models.CharField(primary_key=True, max_length=50)
     created_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=100, default="Ongoing")
-    control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
     school_year = models.CharField(max_length=50, default="1st Year")
     course = models.CharField(max_length=50, default="")
@@ -102,6 +102,7 @@ class CollegeStudentAccepted(models.Model):
     barangay = models.CharField(max_length=100, default="Unknown")
     grant = models.CharField(max_length=500, default="100%")
     remarks = models.CharField(max_length=500, default="")
+    semester = models.CharField(max_length=500, default="1st Semester")
 
 
 class CollegeStudentAssesment(models.Model):
@@ -412,13 +413,9 @@ class INBCourse(models.Model):
 
 
 class StudentGrade(models.Model):
-    student = models.ForeignKey(
-        CollegeStudentAccepted, on_delete=models.CASCADE, related_name="grades"
-    )
+    control_number = models.CharField(max_length=255, default="")
     subject = models.CharField(max_length=255)
-    grade = models.CharField(max_length=255)
+    grade = models.IntegerField(default="0")
+    gwa = models.IntegerField(default="0")
 
 
-class Subject(models.Model):
-    code = models.CharField(max_length=50, unique=True)
-    description = models.CharField(max_length=255)

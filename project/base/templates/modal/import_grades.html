@@ -1,3 +1,12 @@
+{% load static tailwind_tags %}
+
+{% load widget_tweaks %}
+
+    {% tailwind_css %}
+    
+    {% block content %}
+    {% if user.is_authenticated %}
+
 <style>
     .animated {
         -webkit-animation-duration: 1s;
@@ -5,24 +14,18 @@
         -webkit-animation-fill-mode: both;
         animation-fill-mode: both;
     }
-
-
-
     .animated.faster {
         -webkit-animation-duration: 500ms;
         animation-duration: 500ms;
     }
-
     .fadeIn {
         -webkit-animation-name: fadeIn;
         animation-name: fadeIn;
     }
-
     .fadeOut {
         -webkit-animation-name: fadeOut;
         animation-name: fadeOut;
     }
-
     @keyframes fadeIn {
         from {
             opacity: 0;
@@ -32,7 +35,6 @@
             opacity: 1;
         }
     }
-
     @keyframes fadeOut {
         from {
             opacity: 1;
@@ -45,15 +47,13 @@
 </style>
 
 
-<div id="importModal"
-    class="main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster"
-    style="background: rgba(0,0,0,.7);">
-    <div
-        class="modal-container bg-gray-800 w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+
+<div id="importModal" class="main-modal fixed w-full h-100 inset-0 z-50 overflow-hidden flex justify-center items-center animated fadeIn faster" style="background: rgba(0,0,0,.7); display: none;">
+    <div class="modal-container bg-gray-800 w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
         <div class="modal-content py-4 text-left px-6">
             <!--Title-->
-            <div class="flex justify-between items-center pb-3">
-                <h1 class="text-2xl font-bold ">IMPORT</h1>
+            <div class="flex justify-center items-center pb-3 border-b">
+                <h1 class="text-2xl font-bold ">IMPORT GRADES</h1>
             </div>
             <!--Body-->
             <form method="post" action="{% url 'import_excel' %}" enctype="multipart/form-data">
@@ -61,20 +61,13 @@
                 <div class="my-5 ">
                     {% for field in form %}
                     <p>
-                        {{ field.label_tag }} {{ field }}
-                        {% if field.help_text %}
-                        <small class="form-text text-muted">{{ field.help_text }}</small>
-                        {% endif %}
-                        {% for error in field.errors %}
-                    <div class="alert alert-danger">{{ error }}</div>
-                    {% endfor %}
+                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
+                        {{ field |add_class:"block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"}}      
                     </p>
                     {% endfor %}
                 </div>
-                <!--Footer-->
                 <div class="flex justify-end pt-2">
-                    <button
-                        class="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg  hover:bg-gray-300">Cancel</button>
+                    <button id="cancelButton" class="focus:outline-none modal-close px-4 bg-gray-400 p-3 rounded-lg  hover:bg-gray-300">Cancel</button>
                     <button type="submit"
                         class="focus:outline-none px-4 bg-teal-500 p-3 ml-3 rounded-lg text-white hover:bg-teal-400">Confirm</button>
                 </div>
@@ -82,41 +75,35 @@
         </div>
     </div>
 </div>
-</div>
+
 
 <script>
-    const modal = document.querySelector('.main-modal');
-    const closeButton = document.querySelectorAll('.modal-close');
-
-    const modalClose = () => {
-        modal.classList.remove('fadeIn');
-        modal.classList.add('fadeOut');
-        setTimeout(() => {
-            modal.style.display = 'none';
-        }, 500);
-    }
-
-    function openModal() {
-        const modal = document.querySelector('#importModal');
-        modal.classList.remove('fadeOut');
-        modal.classList.add('fadeIn');
+   
+    function openImport() {
+        const modal = document.getElementById('importModal');
         modal.style.display = 'flex';
     }
 
-    for (let i = 0; i < closeButton.length; i++) {
 
-        const elements = closeButton[i];
-
-        elements.onclick = (e) => modalClose();
-
+    function closeModal() {
+        const modal = document.getElementById('importModal');
         modal.style.display = 'none';
-
-        window.onclick = function (event) {
-            if (event.target == modal) modalClose();
-        }
     }
 
-</script>
+    if (document.getElementById('importModal')) {
+        
+        document.getElementById('openModal').addEventListener('click', openModal);
+
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            closeModal();
+        });
+    }
+
 
 </script>
+
+
+          
+{% endif %}
+{% endblock %}
 

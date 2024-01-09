@@ -34,15 +34,19 @@
         const totalValue = 100;
 
         const data = {
-            datasets: [{
-                data: [percentageOngoing, totalValue - percentageOngoing],
-                backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgba(255, 255, 255, 0)',  
-                ],
-                hoverOffset: 4,
-                borderWidth: 0,  
-                borderRadius: 50,
+        datasets: [{
+        data: [percentageOngoing, totalValue - percentageOngoing],
+        backgroundColor: [
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(255, 255, 255, 0)',  
+        ],
+        borderColor: [
+            'rgba(75, 192, 192)', 
+            'rgba(255, 255, 255, 0)',
+        ],
+        borderWidth: 1,
+        hoverOffset: 4,
+        borderRadius: 50,
             }],
         };
 
@@ -79,8 +83,8 @@
                     onComplete: function (animation) {
                         const xCoor = myChart.width / 2;
                         const yCoor = myChart.height / 2.5;
-                        ctx.font = 'bold 12px sans-serif';
-                        ctx.fillStyle = 'rgba(54, 162, 235, 1)';
+                        ctx.font = '12px sans-serif';
+                        ctx.fillStyle = 'rgba(255, 255, 255)';
                         ctx.textAlign = 'center';
                         ctx.textBaseline = 'middle';
                         const formattedPercentage = percentageOngoing.toFixed(2);
