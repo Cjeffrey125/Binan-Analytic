@@ -1,6 +1,10 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
+class ProfileImage(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(null=True, blank=True)
 
 class CollegeStudentApplication(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

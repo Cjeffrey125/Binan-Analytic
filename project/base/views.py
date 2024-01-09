@@ -14,6 +14,8 @@ from project.forms import (
     INBCourseForm,
     GradeUploadForm,
     INBPendingApplicants,
+    UpdateUserForm,
+    ProfileImageForm,
     FAPendingApplicants,
 )
 from .models import (
@@ -35,6 +37,7 @@ from .models import (
     INBApplicationRequirements,
     FAApplicationRequirements,
     INBApplicantTracker,
+    ProfileImage,
 )
 from django.db.models import Count
 from django.http import HttpResponse
@@ -272,6 +275,34 @@ def csv_record(request):
 
 
 # Login  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+from django.contrib.auth.forms import PasswordChangeForm
+ 
+
+def user_settings(request):
+    user = request.user
+
+    profile_image_instance, created = ProfileImage.objects.get_or_create(user=request.user)
+    if request.method == 'POST':
+        form = ProfileImageForm(request.POST, request.FILES, instance=profile_image_instance)
+        if form.is_valid():
+            form.save()
+            return redirect('user_setting') 
+    else:
+        form = ProfileImageForm(instance=profile_image_instance)
+
+    return render(request, "user-settings.html", {"user": user, 'form': form})
+
+def update_user(request):
+    if request.method == 'POST':
+        form = UpdateUserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('user_setting')
+    else:
+        form = UpdateUserForm(instance=request.user)
+
+    return render(request, 'update-user.html', {'form': form})
+
 def login_user(request):
     if request.method == "POST":
         try:
@@ -284,7 +315,6 @@ def login_user(request):
             else:
                 messages.error(request, "Incorrect username or password.")
         except MultiValueDictKeyError:
-            # Handle the error, perhaps redirect to the login page with an error message.
             messages.error(request, "Please provide a username.")
             return render(request, "login.html")
     return render(request, "login.html")
@@ -294,7 +324,6 @@ def logout_user(request):
     logout(request)
     messages.success(request, "You have been Logged Out")
     return render(request, "home.html", {})
-
 
 def register_user(request):
     if request.method == "POST":
@@ -428,7 +457,6 @@ def barangay_summary(request):
 
 def active_scholar_summary(request):
     return render(request, "in-depth-charts/active-scholar/active_scholar.html")
-
 
 def gender_summary(request):
     gender_data = (
