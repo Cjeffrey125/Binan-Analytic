@@ -10,6 +10,11 @@ urlpatterns = [
     path("User-Setting/", views.user_settings, name="user_setting"),
 
     path("User-Setting/Update-User", views.update_user, name="update_user"),
+
+    path("Print/", views.print, name="print"),
+    path("Print-Permit/", views.print_permit, name="print_permit"),
+
+    path("Logs/", views.logger, name="logger"),
     
 
     path("INB-Dashboard/", views.inb_data_visualization, name="inb-dashboard"),
