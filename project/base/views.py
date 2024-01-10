@@ -810,6 +810,8 @@ def inb_filter_assessment(request):
                     CollegeStudentRejected.objects.create(
                         control_number=applicant.control_number,
                         fullname=applicant.fullname,
+                        school=applicant.school,
+                        course=applicant.course,
                         remarks=applicant.remarks,
                     )
 

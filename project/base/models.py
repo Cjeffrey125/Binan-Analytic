@@ -121,6 +121,8 @@ class CollegeStudentAssesment(models.Model):
 class CollegeStudentRejected(models.Model):
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
+    course = models.CharField(max_length=100, default="")
+    school = models.CharField(max_length=200, default="")
     remarks = models.CharField(max_length=200, default="")
 
 
