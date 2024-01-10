@@ -15,6 +15,7 @@ def user_logged_in_handler(sender, request, user, **kwargs):
         staff_username=user.username 
     )
 
+
 @receiver(post_save, sender=CollegeStudentApplication)
 def applicant_added_handler(sender, instance, created, **kwargs):
     if created:

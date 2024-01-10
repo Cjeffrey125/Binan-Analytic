@@ -1351,7 +1351,7 @@ def inb_applicant_information(request, pk):
         if request.method == 'POST' and form_inb.is_valid():
             form_inb.save()
 
-            # Manually call the signal handler after saving the applicant
+          
             applicant_added_handler(sender=CollegeStudentApplication, instance=current_record_inb, created=True, request=request)
 
         try:
