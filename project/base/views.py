@@ -38,6 +38,7 @@ from .models import (
     FAApplicationRequirements,
     INBApplicantTracker,
     ProfileImage,
+    LogEntry
 )
 from django.db.models import Count
 from django.http import HttpResponse
@@ -53,6 +54,67 @@ from django.db import IntegrityError
 from django.contrib import messages
 
 
+def logger(request):
+    logs = LogEntry.objects.all()  
+    return render(request, "admin/logger.html", {"logs": logs})
+
+#------------------------------------------------------------------------
+
+from django.http import FileResponse
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+from django.conf import settings
+from django.template.loader import get_template
+from django.urls import reverse
+
+
+
+def generate_permit_pdf(permits):
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter)
+
+    textob = c.beginText()
+    textob.setTextOrigin(100, 700) 
+    textob.setFont("Helvetica", 14)
+
+    for permit in permits:
+        lines = [
+            f"Control Number: {permit.control_number}",
+            f"Full Name: {permit.fullname}",
+            f"School Year: {permit.school_year}",
+            f"Course: {permit.course}",
+            f"School: {permit.school}",
+            f"Grant: {permit.grant}",
+            f"Semester: {permit.semester}",
+        ]
+
+        for line in lines:
+            textob.textLine(line)
+
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+
+    return buf
+
+def print_permit(request):
+    get_permit = CollegeStudentAccepted.objects.all()
+    pdf_buffer = generate_permit_pdf(get_permit)
+
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="INB-Permit.pdf"'
+    response.write(pdf_buffer.read())
+
+    return response
+
+def print(request):
+    get_permit = CollegeStudentAccepted.objects.all()
+    context = {'permits': get_permit}
+    return render(request, "print_permit.html", context)
+
 class CollegeStudentApplicationResource(resources.ModelResource):
     class Meta:
         model = CollegeStudentApplication
@@ -61,8 +123,6 @@ class CollegeStudentApplicationResource(resources.ModelResource):
 
 def home(request):
     return render(request, "home.html", {})
-
-
 # import ----------------------------------------------------------------------------------------------------------------------------------
 # problem fk nan&update
 
@@ -1277,7 +1337,9 @@ def fa_applicant_list(request, status):
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-
+from django.dispatch import Signal
+from .signals import applicant_added_handler
+applicant_added = Signal()
 
 # ----- hindi ko na alam kung tama pa to
 def inb_applicant_information_details(request, pk):
@@ -1299,6 +1361,13 @@ def inb_applicant_information(request, pk):
     if request.user.is_authenticated:
         current_record_inb = CollegeStudentApplication.objects.get(id=pk)
         form_inb = AddINBForm(request.POST or None, instance=current_record_inb)
+
+        if request.method == 'POST' and form_inb.is_valid():
+            form_inb.save()
+
+          
+            applicant_added_handler(sender=CollegeStudentApplication, instance=current_record_inb, created=True, request=request)
+
         try:
             records = CollegeStudentApplication.objects.get(id=pk)
             requirements = INBApplicationRequirements.objects.filter(applicant=records)

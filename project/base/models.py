@@ -2,6 +2,18 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+class LogEntry(models.Model):
+    timestamp = models.DateTimeField(auto_now_add=True)
+    action = models.CharField(max_length=255)
+    staff = models.ForeignKey(User, on_delete=models.CASCADE, related_name='log_entries')
+    staff_username = models.CharField(max_length=255, default="")
+
+
+    def __str__(self):
+        return f"{self.timestamp} - {self.action} by {self.staff}"
+
+    
+
 class ProfileImage(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(null=True, blank=True)
