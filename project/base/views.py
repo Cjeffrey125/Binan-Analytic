@@ -136,8 +136,9 @@ def import_excel(request):
                         )
 
                         messages.success(
-                        request, f"{applicant_count} applicant(s) imported successfully."
-                    )
+                            request,
+                            f"{applicant_count} applicant(s) imported successfully.",
+                        )
                     else:
                         sibling_count = row["Sibling Count"]
                         if pd.isna(sibling_count) or sibling_count == 0:
@@ -205,8 +206,6 @@ def import_excel(request):
                         request,
                         f'Duplicate entry found for {row["Control Number"]}. Skipped.',
                     )
-
-           
 
             if "Desired Course" not in df.columns:
                 return redirect("fa_applicant_list")
@@ -1129,7 +1128,6 @@ def inb_applicant_info(request, status, control_number):
 
 
 def inb_applicant_list(request, status):
-
     if request.user.is_authenticated:
         if status == "passed":
             model_class = CollegeStudentAccepted
@@ -1279,6 +1277,22 @@ def fa_applicant_list(request, status):
 
 
 # ------------------------------------------------------------------------------------------------------------------------
+
+
+# ----- hindi ko na alam kung tama pa to
+def inb_applicant_information_details(request, pk):
+    if request.user.is_authenticated:
+        records = ApplicantInfoRepositoryINB.objects.get(id=pk)
+
+        return render(
+            request,
+            "INB/applicant_detailed_info.html",  # replace with your actual template name
+            {"records": records},
+        )
+    else:
+        messages.success(request, "You need to be logged in to see this data!")
+        return redirect("home")
+    # -----
 
 
 def inb_applicant_information(request, pk):
@@ -1634,8 +1648,8 @@ def filter(request):
     schools = INBSchool.objects.all()
     courses = INBCourse.objects.values("acronym").distinct()
 
-    school_list = CollegeStudentApplication.objects.values('school')
-    course_list = CollegeStudentApplication.objects.values('course')
+    school_list = CollegeStudentApplication.objects.values("school")
+    course_list = CollegeStudentApplication.objects.values("course")
 
     filtered_applicants = CollegeStudentApplication.objects.all()
 
