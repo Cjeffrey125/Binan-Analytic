@@ -223,38 +223,29 @@
           
           {% endif %}
 
+<!-- <script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<script>
+  
   document.addEventListener('DOMContentLoaded', function () {
-
     console.log('Page loaded successfully!');
-
     document.getElementById('addButton').addEventListener('click', function () {
       console.log('Add button clicked!');
       window.location.href = "{% url 'add_fa_applicant' %}";
     });
 
-    function openModal(modalId) {
-      const modal = document.getElementById(modalId);
-      modal.classList.remove('fadeOut');
-      modal.classList.add('fadeIn');
-      modal.style.display = 'flex';
-    }
+      function openModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.style.display = 'flex';
+      }
 
-    function closeModal(modalId) {
-      const modal = document.getElementById(modalId);
-
-      setTimeout(() => {
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
         modal.style.display = 'none';
-      }, 50);
-    }
+      }
 
-    function openFilter(modalId) {
-      const modal = document.getElementById(modalId);
-      modal.style.display = 'flex';
-    }
+      function openFilter() {
+        openModal('filterModal');
+      }
 
     document.getElementById('openImport').addEventListener('click', function () {
       openModal('importModal');
@@ -274,16 +265,51 @@
       closeModal('exportModal');
     });
 
-    document.getElementById('openFilter').addEventListener('click', function () {
-      openFilter('filterModal');
-      closeModal('exportModal');
-    });
-
+    document.getElementById('openFilter').addEventListener('click', openFilter);
     document.getElementById('cancelFilterButton').addEventListener('click', function () {
       closeModal('filterModal');
     });
-
   });
+</script> -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('Page loaded successfully!');
 
+     document.getElementById('addButton').addEventListener('click', function () {
+      console.log('Add button clicked!');
+      window.location.href = "{% url 'add_fa_applicant' %}";
+    });
+
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      modal.style.display = 'none';
+    }
+
+    
+    
+    document.getElementById('openImport').addEventListener('click', function () {
+      openModal('importModal');
+      closeModal('exportModal');
+    });
+    document.getElementById('cancelImportButton').addEventListener('click', function () {
+      closeModal('importModal');
+    });
+
+
+    function openFilter() {
+      openModal('filterModal');
+    }
+
+    document.getElementById('openFilter').addEventListener('click', openFilter);
+    document.getElementById('cancelFilterButton').addEventListener('click', function () {
+      closeModal('filterModal');
+    });
+  });
 </script>
+
 {% endblock %}

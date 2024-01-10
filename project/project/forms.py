@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django import forms
 from base.models import (
     CollegeStudentApplication,
@@ -15,15 +16,18 @@ from base.models import (
     ProfileImage,
 )
 
+
 class ProfileImageForm(forms.ModelForm):
     class Meta:
         model = ProfileImage
-        fields = ['image']
+        fields = ["image"]
+
 
 class UpdateUserForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
+        fields = ["username", "first_name", "last_name", "email"]
+
 
 class INBSchoolForm(forms.ModelForm):
     school = forms.CharField(
@@ -92,9 +96,7 @@ class ApplicantUploadForm(forms.Form):
 
 
 class GradeUploadForm(forms.Form):
-    file = forms.FileField(
-        widget=forms.FileInput(attrs={"accept": ".xlsx"})
-    )
+    file = forms.FileField(widget=forms.FileInput(attrs={"accept": ".xlsx"}))
 
 
 # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -180,7 +182,6 @@ class ExportForm(forms.Form):
 
 
 class AddINBForm(forms.ModelForm):
-
     BARANGAY_CHOICES = [
         ("0", "Select Barangay"),
         ("Biñan", "Biñan"),
@@ -282,7 +283,7 @@ class AddINBForm(forms.ModelForm):
         help_text='<span class="subscript">Blk Street</span>',
         label="",
     )
-    
+
     barangay = forms.ChoiceField(
         choices=BARANGAY_CHOICES,
         widget=forms.widgets.Select(),
@@ -424,28 +425,28 @@ class AddINBForm(forms.ModelForm):
         label="",
     )
     father_name = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Father Name", "class": "prev-school"}
         ),
         label="",
     )
     father_educational_attainment = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Educational Attainment", "class": "prev-school"}
         ),
         label="",
     )
     father_occupation = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Occupation", "class": "prev-school"}
         ),
         label="",
     )
     father_employer = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Name of Employer", "class": "prev-school"}
         ),
@@ -459,28 +460,28 @@ class AddINBForm(forms.ModelForm):
         label="",
     )
     mother_name = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Mother Name", "class": "prev-school"}
         ),
         label="",
     )
     mother_educational_attainment = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Educational Attainment", "class": "prev-school"}
         ),
         label="",
     )
     mother_occupation = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Occupation", "class": "prev-school"}
         ),
         label="",
     )
     mother_employer = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Name of Employer", "class": "prev-school"}
         ),
@@ -494,33 +495,47 @@ class AddINBForm(forms.ModelForm):
         label="",
     )
     guardian_name = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Legal Guardian Name", "class": "prev-school"}
         ),
         label="",
     )
     guardian_educational_attainment = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Educational Attainment", "class": "prev-school"}
         ),
         label="",
     )
     guardian_occupation = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Occupation", "class": "prev-school"}
         ),
         label="",
     )
     guardian_employer = forms.CharField(
-        required=True,
+        required=False,
         widget=forms.widgets.TextInput(
             attrs={"placeholder": "Name of Employer", "class": "prev-school"}
         ),
         label="",
     )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        father_name = cleaned_data.get("father_name")
+        mother_name = cleaned_data.get("mother_name")
+        guardian_name = cleaned_data.get("guardian_name")
+
+        if not any([father_name, mother_name, guardian_name]):
+            raise ValidationError(
+                "At least one of Father, Mother, or Legal Guardian must be filled out."
+            )
+
+        return cleaned_data
 
     class Meta:
         model = CollegeStudentApplication
