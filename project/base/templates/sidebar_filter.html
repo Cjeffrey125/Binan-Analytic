@@ -13,6 +13,7 @@
     
         <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-900 rounded-lg dark:text-white">FILTERS
         </h5>
+        
         <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
             <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -22,7 +23,7 @@
             </svg>
             <span class="sr-only">Close menu</span>
         </button>
-
+<form method="GET" action="{% url 'filter' %}">
         <div class="xfilter-container py-4 overflow-y-auto">
             <ul class="filter_status xbox space-y-2 font-medium">
                 <h6
@@ -49,7 +50,7 @@
                             {% for school in schools %}
                             <li class="ml-4">
                                 <div class="inputted flex items-center text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group text-xs">
-                                    <input type="checkbox" class="mb-2 mr-2" name="schools" value="{{ school.id }}">
+                                <input type="checkbox" id="school-{{ school.id }}" class="school-checkbox" name="schools" value="{{ school.id }}">
                                     <p class="mb-2 mx-2">{{ school.school }}</p>
                                 </div>
                             </li>
@@ -74,8 +75,8 @@
                             {% for course in courses %}
                             <li class="ml-4">
                                 <div class="inputted flex items-center text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group text-xs">
-                                    <input type="checkbox" class="mb-2" name="courses" value="{{ course.id }}">
-                                    <p class="mb-2 mx-2">{{ course.course }}</p>
+                                    <input type="checkbox" class="mb-2 course-checkbox" id="course-{{ course.id }}" name="courses" value="{{ course.id }}">
+                                    <p class="mb-2 mx-2">{{ course.acronym }}</p>
                                 </div>
                             </li>
                             {% empty %}
@@ -87,8 +88,56 @@
                     </div>
                 </div>
             </div>
-            <input type="submit" value="Filter">
+            <input type="submit" value="Filter" class="bg-white text-black py-2 px-4 border border-black cursor-pointer">
+
+            <a href="{% url 'inb_applicant_list' %}"
+                class="inline-block bg-white text-black py-2 px-4 border border-black cursor-pointer">Clear Filters</a>
+        </form>
     </div>
 </div>
-    
+
+
+<script>
+    // When the page loads
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Get all checkboxes
+        const checkboxes = document.querySelectorAll('.school-checkbox, .course-checkbox');
+
+        // For each checkbox
+        checkboxes.forEach((checkbox) => {
+            // Get the saved value from local storage
+            const checked = localStorage.getItem(checkbox.id);
+
+            // If there was a saved value
+            if (checked !== null) {
+                // Set the checkbox to the saved value
+                checkbox.checked = checked === 'true';
+            }
+
+            // When the checkbox is clicked
+            checkbox.addEventListener('change', (event) => {
+                // Save the new value to local storage
+                localStorage.setItem(checkbox.id, checkbox.checked);
+            });
+        });
+
+        // Get the "Clear Filters" button
+        const clearFiltersButton = document.getElementById('clear-filters');
+
+        // When the "Clear Filters" button is clicked
+        clearFiltersButton.addEventListener('click', (event) => {
+            // For each checkbox
+            checkboxes.forEach((checkbox) => {
+                // Uncheck the checkbox
+                checkbox.checked = false;
+
+                // Remove the saved value from local storage
+                localStorage.removeItem(checkbox.id);
+            });
+
+            // Submit the form
+            event.target.form.submit();
+        });
+    });
+</script>
 {% endblock %}

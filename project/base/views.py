@@ -134,6 +134,10 @@ def import_excel(request):
                             guardian_employer=row["Guardian Employer"],
                             guardian_occupation=row["Guardian Occupation"],
                         )
+
+                        messages.success(
+                        request, f"{applicant_count} applicant(s) imported successfully."
+                    )
                     else:
                         sibling_count = row["Sibling Count"]
                         if pd.isna(sibling_count) or sibling_count == 0:
@@ -202,9 +206,7 @@ def import_excel(request):
                         f'Duplicate entry found for {row["Control Number"]}. Skipped.',
                     )
 
-            messages.success(
-                request, f"{applicant_count} applicant(s) imported successfully."
-            )
+           
 
             if "Desired Course" not in df.columns:
                 return redirect("fa_applicant_list")
@@ -276,32 +278,38 @@ def csv_record(request):
 
 # Login  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 from django.contrib.auth.forms import PasswordChangeForm
- 
+
 
 def user_settings(request):
     user = request.user
 
-    profile_image_instance, created = ProfileImage.objects.get_or_create(user=request.user)
-    if request.method == 'POST':
-        form = ProfileImageForm(request.POST, request.FILES, instance=profile_image_instance)
+    profile_image_instance, created = ProfileImage.objects.get_or_create(
+        user=request.user
+    )
+    if request.method == "POST":
+        form = ProfileImageForm(
+            request.POST, request.FILES, instance=profile_image_instance
+        )
         if form.is_valid():
             form.save()
-            return redirect('user_setting') 
+            return redirect("user_setting")
     else:
         form = ProfileImageForm(instance=profile_image_instance)
 
-    return render(request, "user-settings.html", {"user": user, 'form': form})
+    return render(request, "user-settings.html", {"user": user, "form": form})
+
 
 def update_user(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = UpdateUserForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect('user_setting')
+            return redirect("user_setting")
     else:
         form = UpdateUserForm(instance=request.user)
 
-    return render(request, 'update-user.html', {'form': form})
+    return render(request, "update-user.html", {"form": form})
+
 
 def login_user(request):
     if request.method == "POST":
@@ -324,6 +332,7 @@ def logout_user(request):
     logout(request)
     messages.success(request, "You have been Logged Out")
     return render(request, "home.html", {})
+
 
 def register_user(request):
     if request.method == "POST":
@@ -457,6 +466,33 @@ def barangay_summary(request):
 
 def active_scholar_summary(request):
     return render(request, "in-depth-charts/active-scholar/active_scholar.html")
+
+
+def graduate_scholar_summary(request):
+    return render(request, "in-depth-charts/graduated-scholar/graduated-scholar.html")
+
+
+def unsuccessful_scholar_summary(request):
+    return render(
+        request, "in-depth-charts/unsuccessful-scholar/unsuccessful-scholar.html"
+    )
+
+
+def tracker_scholar_summary(request):
+    return render(request, "in-depth-charts/tracker-count/tracket-count.html")
+
+
+def school_scholar_summary(request):
+    return render(request, "in-depth-charts/school-grantees/school-grantees.html")
+
+
+def course_scholar_summary(request):
+    return render(request, "in-depth-charts/course-grantees/course-grantees.html")
+
+
+def yearlevel_scholar_summary(request):
+    return render(request, "in-depth-charts/year-tracker/year-tracker.html")
+
 
 def gender_summary(request):
     gender_data = (
@@ -854,7 +890,7 @@ def fa_filter_assessment(request):
 def iskolar_ng_bayan_list(request):
     if request.user.is_authenticated:
         schools = INBSchool.objects.all()
-        courses = INBCourse.objects.all()
+        courses = INBCourse.objects.values("acronym").distinct()
         form = AddINBForm()
         import_form = ApplicantUploadForm(request.POST, request.FILES)
         export_form = ExportForm(request.POST)
@@ -924,6 +960,7 @@ def iskolar_ng_bayan_list(request):
                 "export_form": export_form,
                 "schools": schools,
                 "courses": courses,
+                "filtered_applicants": filtered_applicants,
             },
         )
 
@@ -1090,8 +1127,7 @@ def inb_applicant_info(request, status, control_number):
 
 
 def inb_applicant_list(request, status):
-    schools = INBSchool.objects.all()
-    courses = INBCourse.objects.all()
+
     if request.user.is_authenticated:
         if status == "passed":
             model_class = CollegeStudentAccepted
@@ -1594,30 +1630,28 @@ def delete_item(request, item_type, item_id):
 
 def filter(request):
     schools = INBSchool.objects.all()
-    courses = INBCourse.objects.all()
+    courses = INBCourse.objects.values("acronym").distinct()
 
-    selected_schools = request.GET.getlist("schools")
-    selected_courses = request.GET.getlist("courses")
+    school_list = CollegeStudentApplication.objects.values('school')
+    course_list = CollegeStudentApplication.objects.values('course')
 
     filtered_applicants = CollegeStudentApplication.objects.all()
 
-    if selected_schools:
-        filtered_applicants = filtered_applicants.filter(
-            school__id__in=selected_schools
-        )
+    if school_list:
+        filtered_applicants = filtered_applicants.filter(school__in=school_list)
 
-    if selected_courses:
-        filtered_applicants = filtered_applicants.filter(
-            course__id__in=selected_courses
-        )
+    if course_list:
+        filtered_applicants = filtered_applicants.filter(course__in=course_list)
 
     return render(
         request,
-        "sidebar_filter.html",
+        "INB/applicant_list.html",
         {
             "schools": schools,
             "courses": courses,
             "filtered_applicants": filtered_applicants,
+            "selected_schools": school_list,
+            "selected_courses": course_list,
         },
     )
 
