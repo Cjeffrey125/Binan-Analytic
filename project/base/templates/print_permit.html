@@ -6,17 +6,9 @@
 <h1>Print Permit</h1>
 <button id="generateButton">Generate Permit</button>
 <hr>
-{% for permit in permits %}
-<div>
-    <p>Control Number: {{ permit.control_number }}</p>
-    <p>Full Name: {{ permit.fullname }}</p>
-    <p>School Year: {{ permit.school_year }}</p>
-    <p>Course: {{ permit.course }}</p>
-    <p>School: {{ permit.school }}</p>
-    <p>Grant: {{ permit.grant }}</p>
-    <p>Semester: {{ permit.semester }}</p>
-</div>
-{% endfor %}
+
+<iframe id="pdfViewer" style="display: none;"></iframe>
+
 
 <script>
 document.getElementById("generateButton").addEventListener("click", function() {

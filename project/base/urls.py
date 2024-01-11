@@ -30,6 +30,8 @@ urlpatterns = [
     
     path("inb/passed/applicant_info/<str:control_number>",views.inb_applicant_information_details,name="inb_applicant_information_details"),
 
+    path("End-Semester/", views.new_sem, name="end_sem"),
+    
     
     
 

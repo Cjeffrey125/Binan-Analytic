@@ -33,6 +33,8 @@
     </button> -->
   </div>
 
+
+
     <div class="flex justify-between">
       <form method="GET" action="" id="searchForm">
         <div class="relative flex-grow">
@@ -67,9 +69,12 @@
           </div>
         </div>
       </form>
-    </div>
-    
-</div>
+
+      <button type="button" id="openFilter" class="text-sm transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 bg-purple-700 text-white px-3 py-2 rounded-sm hover:bg-purple-400 ml-4 w-40 shadow-sm shadow-gray-700">
+        End Semester
+      </button>
+    </div>  
+  </div>
 
 {% if applicants %}
   <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -166,6 +171,8 @@
 
 {% include 'modal/import_grades.html' %}
 
+{% include 'modal/end_sem.html' %}
+
 {% endif %}
 
 
@@ -178,6 +185,7 @@
       modal.classList.add('fadeIn');
       modal.style.display = 'flex';
     }
+    
   
     function closeModal(modalId) {
       const modal = document.getElementById(modalId);

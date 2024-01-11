@@ -434,5 +434,14 @@ class StudentGrade(models.Model):
     subject = models.CharField(max_length=255)
     grade = models.IntegerField(default="0")
     gwa = models.IntegerField(default="0")
+    
+
+class StudentGradeRepository(models.Model):
+    control_number = models.CharField(max_length=255, default="")
+    school_year = models.CharField(max_length=255)
+    gwa = models.IntegerField(default=0)
+    semester = models.CharField(max_length=255, default="")
+
+
 
 
