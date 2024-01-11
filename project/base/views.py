@@ -38,7 +38,7 @@ from .models import (
     FAApplicationRequirements,
     INBApplicantTracker,
     ProfileImage,
-    LogEntry
+    LogEntry,
 )
 from django.db.models import Count
 from django.http import HttpResponse
@@ -55,10 +55,11 @@ from django.contrib import messages
 
 
 def logger(request):
-    logs = LogEntry.objects.all()  
+    logs = LogEntry.objects.all()
     return render(request, "admin/logger.html", {"logs": logs})
 
-#------------------------------------------------------------------------
+
+# ------------------------------------------------------------------------
 
 from django.http import FileResponse
 import io
@@ -70,13 +71,12 @@ from django.template.loader import get_template
 from django.urls import reverse
 
 
-
 def generate_permit_pdf(permits):
     buf = io.BytesIO()
     c = canvas.Canvas(buf, pagesize=letter)
 
     textob = c.beginText()
-    textob.setTextOrigin(100, 700) 
+    textob.setTextOrigin(100, 700)
     textob.setFont("Helvetica", 14)
 
     for permit in permits:
@@ -100,20 +100,23 @@ def generate_permit_pdf(permits):
 
     return buf
 
+
 def print_permit(request):
     get_permit = CollegeStudentAccepted.objects.all()
     pdf_buffer = generate_permit_pdf(get_permit)
 
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="INB-Permit.pdf"'
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = 'attachment; filename="INB-Permit.pdf"'
     response.write(pdf_buffer.read())
 
     return response
 
+
 def print(request):
     get_permit = CollegeStudentAccepted.objects.all()
-    context = {'permits': get_permit}
+    context = {"permits": get_permit}
     return render(request, "print_permit.html", context)
+
 
 class CollegeStudentApplicationResource(resources.ModelResource):
     class Meta:
@@ -123,6 +126,8 @@ class CollegeStudentApplicationResource(resources.ModelResource):
 
 def home(request):
     return render(request, "home.html", {})
+
+
 # import ----------------------------------------------------------------------------------------------------------------------------------
 # problem fk nan&update
 
@@ -196,8 +201,9 @@ def import_excel(request):
                         )
 
                         messages.success(
-                        request, f"{applicant_count} applicant(s) imported successfully."
-                    )
+                            request,
+                            f"{applicant_count} applicant(s) imported successfully.",
+                        )
                     else:
                         sibling_count = row["Sibling Count"]
                         if pd.isna(sibling_count) or sibling_count == 0:
@@ -265,8 +271,6 @@ def import_excel(request):
                         request,
                         f'Duplicate entry found for {row["Control Number"]}. Skipped.',
                     )
-
-           
 
             if "Desired Course" not in df.columns:
                 return redirect("fa_applicant_list")
@@ -1189,7 +1193,6 @@ def inb_applicant_info(request, status, control_number):
 
 
 def inb_applicant_list(request, status):
-
     if request.user.is_authenticated:
         if status == "passed":
             model_class = CollegeStudentAccepted
@@ -1339,11 +1342,14 @@ def fa_applicant_list(request, status):
 
 
 # ------------------------------------------------------------------------------------------------------------------------
-    
+
+
 def inb_applicant_information_details(request, control_number):
     if request.user.is_authenticated:
         try:
-            records = ApplicantInfoRepositoryINB.objects.get(control_number=control_number)
+            records = ApplicantInfoRepositoryINB.objects.get(
+                control_number=control_number
+            )
             context = {"records": records, "control_number": control_number}
             return render(
                 request,
@@ -1357,12 +1363,16 @@ def inb_applicant_information_details(request, control_number):
         messages.success(request, "You need to be logged in to see this data!")
         return redirect("home")
 
+
 def page_not_found(request):
-    return render(request,"page_not_found.html")
-       
+    return render(request, "page_not_found.html")
+
+
 from django.dispatch import Signal
 from django.contrib.auth.decorators import login_required
+
 applicant_added_signal = Signal()
+
 
 @login_required
 def inb_applicant_information(request, pk):
@@ -1370,13 +1380,17 @@ def inb_applicant_information(request, pk):
         current_record_inb = CollegeStudentApplication.objects.get(id=pk)
         form_inb = AddINBForm(request.POST or None, instance=current_record_inb)
 
-        if request.method == 'POST' and form_inb.is_valid():
+        if request.method == "POST" and form_inb.is_valid():
             form_inb.save()
 
-          
             username = request.user.username
 
-            applicant_added_signal.send(sender=CollegeStudentApplication, instance=current_record_inb, created=True, username=request.user.username)
+            applicant_added_signal.send(
+                sender=CollegeStudentApplication,
+                instance=current_record_inb,
+                created=True,
+                username=request.user.username,
+            )
 
         try:
             records = CollegeStudentApplication.objects.get(id=pk)
@@ -1727,8 +1741,8 @@ def filter(request):
     schools = INBSchool.objects.all()
     courses = INBCourse.objects.values("acronym").distinct()
 
-    school_list = CollegeStudentApplication.objects.values('school')
-    course_list = CollegeStudentApplication.objects.values('course')
+    school_list = CollegeStudentApplication.objects.values("school")
+    course_list = CollegeStudentApplication.objects.values("course")
 
     filtered_applicants = CollegeStudentApplication.objects.all()
 

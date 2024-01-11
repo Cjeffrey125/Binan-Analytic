@@ -16,7 +16,7 @@
 			<h3 class="text-cyan-400">CREATE NEW USER ACCOUNT</h3>
 		</div>
 	<div class="flex justify-center items-start space-x-[0] mt-6 rounded">
-		<div class="relative ml-10 bg-gray-800 mt-6 rounded flex flex-col justify-center items-center" style="width: 300px; height: 280px">
+		<div class="relative ml-10  bg-gray-800 mb-7 rounded flex flex-col justify-center items-center" style="width: 300px; height: 320px">
 			{% if user.profileimage.image %}
 			<img src="{{ user.profileimage.image.url }}" alt="User Image">
 			{% else %}
@@ -39,12 +39,13 @@
 		</div>
 		<form method="POST" action="{% url 'signup' %}" class="max-w-lg ">
 			{% csrf_token %}
-			<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+			<div class="flex flex-col items-center justify-center px-6 mx-auto lg:py-0">
 
-				<div class="w-full bg-white rounded-lg shadow dark:border px-5 py-5 md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-					<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-						<div class="flex mx-60 pt-10">
-						<div class="w-full sm:w-1/2 px-2 mb-4">
+				<div
+					class="w-screen bg-white rounded-lg shadow dark:border px-5 py-5 md:mt-0 sm:max-w-full xl:p-0 dark:bg-gray-800 dark:border-gray-700 ">
+					<div class="py-14 px-2">
+						<div class="flex">
+						<div class=" sm:w-1/2 px-2 mb-4">
 							<div>
 								<label for="first_name" class="block  text-sm font-medium text-gray-900 dark:text-white mt-2 ">First Name</label>
 								{{ form.first_name|add_class:"block p-2 w-full text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1 rounded-lg" }}
@@ -80,7 +81,7 @@
 				</div>
 			</div>
 
-				<div class="flex justify-center items-center">
+				<div class="flex justify-center items-center mt-3">
 					<button type="submit" name="signup"
 						class="w-60 text-center py-3 rounded bg-green-600 text-white hover:bg-green-dark focus:outline-none my-1">Create
 						Account</button>
