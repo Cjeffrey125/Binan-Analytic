@@ -53,6 +53,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
 from django.db import IntegrityError
 from django.contrib import messages
+from django.http import JsonResponse
 
 
 def logger(request):
@@ -127,6 +128,16 @@ class CollegeStudentApplicationResource(resources.ModelResource):
 
 def home(request):
     return render(request, "home.html", {})
+
+
+def check_control_number(request):
+    control_number = request.GET.get("control_number", None)
+    data = {
+        "is_taken": CollegeStudentApplication.objects.filter(
+            control_number__iexact=control_number
+        ).exists()
+    }
+    return JsonResponse(data)
 
 
 # import ----------------------------------------------------------------------------------------------------------------------------------
