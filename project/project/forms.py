@@ -1,7 +1,9 @@
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django import forms
+import re
 from base.models import (
     CollegeStudentApplication,
     FinancialAssistanceApplication,
@@ -234,10 +236,23 @@ class AddINBForm(forms.ModelForm):
         ("Registered Voter", ""),
     ]
 
+    def clean_control_number(self):
+        control_number = self.cleaned_data.get("control_number")
+        if CollegeStudentApplication.objects.filter(
+            control_number=control_number
+        ).exists():
+            raise forms.ValidationError("This control number is already in use.")
+        return control_number
+
     control_number = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Control Number", "class": "control-number-input"}
+            attrs={
+                "placeholder": "Control Number",
+                "class": "control-number-input",
+                "required": "Please enter your control number.",
+                "unique": "This control number is already in use. Please enter a different control number.",
+            }
         ),
         label="",
     )
@@ -253,24 +268,54 @@ class AddINBForm(forms.ModelForm):
         required=False,
     )
     # Personal Data
+
+    def validate_name(value):
+        if not value.isalpha():
+            raise ValidationError(
+                "Invalid name: %(value)s. Only alphabetical characters are allowed.",
+                code="invalid_name",
+                params={"value": value},
+            )
+
     first_name = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"class": "name-input", "placeholder": "First name"}
+            attrs={
+                "class": "name-input",
+                "placeholder": "First name",
+                "class": "form-control",
+                "autocomplete": "off",
+                "pattern": "[A-Za-z ]+",
+                "title": "Enter Characters Only ",
+            }
         ),
         label="",
     )
     last_name = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"class": "name-input", "placeholder": "Last name"}
+            attrs={
+                "class": "name-input",
+                "placeholder": "Last name",
+                "class": "form-control",
+                "autocomplete": "off",
+                "pattern": "[A-Za-z ']+",
+                "title": "Enter Characters Only ",
+            }
         ),
         label="",
     )
     middle_name = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"class": "name-input", "placeholder": "Middle Name"}
+            attrs={
+                "class": "name-input",
+                "placeholder": "Middle Name",
+                "class": "form-control",
+                "autocomplete": "off",
+                "pattern": "[A-Za-z ']+",
+                "title": "Enter Characters Only ",
+            }
         ),
         label="",
     )
@@ -293,7 +338,14 @@ class AddINBForm(forms.ModelForm):
     province = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"class": "address-input-2", "placeholder": "Province"}
+            attrs={
+                "class": "address-input-2",
+                "placeholder": "Province",
+                "class": "form-control",
+                "autocomplete": "off",
+                "pattern": "[A-Za-z ]+",
+                "title": "Enter Characters Only ",
+            }
         ),
         help_text='<span class="subscript">Province</span>',
         label="",
@@ -301,7 +353,14 @@ class AddINBForm(forms.ModelForm):
     city = forms.CharField(
         required=True,
         widget=forms.widgets.TextInput(
-            attrs={"class": "address-input-2", "placeholder": "City"}
+            attrs={
+                "class": "address-input-2",
+                "placeholder": "City",
+                "class": "form-control",
+                "autocomplete": "off",
+                "pattern": "[A-Za-z ]+",
+                "title": "Enter Characters Only ",
+            }
         ),
         help_text='<span class="subscript">City</span>',
         label="",
@@ -331,15 +390,30 @@ class AddINBForm(forms.ModelForm):
     )
     contact_no = forms.IntegerField(
         required=True,
-        widget=forms.widgets.TextInput(
-            attrs={"class": "contact-input", "placeholder": "Contact Number"}
+        validators=[
+            MinValueValidator(10000000000, "The number must be at least 1000000000."),
+            MaxValueValidator(
+                99999999999, "The number must be less than or equal to 99999999999."
+            ),
+        ],
+        widget=forms.widgets.NumberInput(
+            attrs={
+                "class": "contact-input",
+                "placeholder": "Contact Number",
+                "autocomplete": "off",
+                "pattern": "[0-9]+",
+                "title": "Enter Numbers Only ",
+                "maxlength": "10",
+                "oninvalid": "this.setCustomValidity('Please enter your contact number.')",
+                "oninput": "this.setCustomValidity(''); if(this.value.length > 11) { this.setCustomValidity('Contact number must be 11 digits.'); }",
+            }
         ),
         label="",
     )
 
-    email_address = forms.CharField(
+    email_address = forms.EmailField(
         required=True,
-        widget=forms.widgets.TextInput(
+        widget=forms.widgets.EmailInput(
             attrs={"class": "half-input", "placeholder": "Email Address"}
         ),
         label="",
@@ -360,15 +434,29 @@ class AddINBForm(forms.ModelForm):
     )
     gwa = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(
-            attrs={"placeholder": "General Weighted Average", "class": "rank-gwa-input"}
+        widget=forms.widgets.NumberInput(
+            attrs={
+                "placeholder": "General Weighted Average",
+                "class": "rank-gwa-input",
+                "pattern": "[0-9]+",
+                "title": "Enter Numbers Only ",
+                "maxlength": "4",
+                "oninvalid": "this.setCustomValidity('Please enter gwa.')",
+            }
         ),
         label="",
     )
     rank = forms.CharField(
         required=True,
-        widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Rank", "class": "rank-gwa-input"}
+        widget=forms.widgets.NumberInput(
+            attrs={
+                "placeholder": "Rank",
+                "class": "rank-gwa-input",
+                "pattern": "[0-9]+",
+                "title": "Enter Numbers Only ",
+                "maxlength": "4",
+                "oninvalid": "this.setCustomValidity('Please enter rank.')",
+            }
         ),
         label="",
     )
@@ -427,7 +515,14 @@ class AddINBForm(forms.ModelForm):
     father_name = forms.CharField(
         required=False,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Father Name", "class": "prev-school"}
+            attrs={
+                "placeholder": "Father Name",
+                "class": "prev-school",
+                "class": "form-control",
+                "autocomplete": "off",
+                "pattern": "[A-Za-z ' ]+",
+                "title": "Enter Characters Only ",
+            }
         ),
         label="",
     )
@@ -462,7 +557,14 @@ class AddINBForm(forms.ModelForm):
     mother_name = forms.CharField(
         required=False,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Mother Name", "class": "prev-school"}
+            attrs={
+                "placeholder": "Mother Name",
+                "class": "prev-school",
+                "class": "form-control",
+                "autocomplete": "off",
+                "pattern": "[A-Za-z ' ]+",
+                "title": "Enter Characters Only ",
+            }
         ),
         label="",
     )
@@ -497,7 +599,14 @@ class AddINBForm(forms.ModelForm):
     guardian_name = forms.CharField(
         required=False,
         widget=forms.widgets.TextInput(
-            attrs={"placeholder": "Legal Guardian Name", "class": "prev-school"}
+            attrs={
+                "placeholder": "Legal Guardian Name",
+                "class": "prev-school",
+                "class": "form-control",
+                "autocomplete": "off",
+                "pattern": "[A-Za-z ']+",
+                "title": "Enter Characters Only ",
+            }
         ),
         label="",
     )

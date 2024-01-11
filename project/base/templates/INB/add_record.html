@@ -34,6 +34,11 @@
             <div class="flex space-x-4">
                 <div class="mr-4">
                     {{ form.control_number |add_class:"block p-2 w-80 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+                    {% if form.control_number.errors %}
+                    <div class="error text-red-500 font-bold">
+                        {{ form.control_number.errors }}
+                    </div>
+                    {% endif %}
                 </div>
                 <div>
                     {{ form.school_year |add_class:"block p-2 w-64 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1 " }}
@@ -199,7 +204,26 @@
 {% endif %}
     </form>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+    $(document).ready(function () {
+        $('.control-number-input').change(function () {
+            var control_number = $(this).val();
+            $.ajax({
+                url: '/check_control_number/',  // URL of your view that checks for uniqueness
+                data: {
+                    'control_number': control_number
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.is_taken) {
+                        alert("A form with this control number already exists.");
+                    }
+                }
+            });
+        });
+    });
+    
     window.onload = function () {
         setTimeout(function () {
             var errorAlert = document.getElementById('error-alert');
@@ -212,6 +236,21 @@
             }
         }, 1000);
     };
+
+    $(document).ready(function () {
+            // Check each form field for errors
+            $('.error').each(function () {
+                // If there's an error, change the border color of the corresponding form field to red
+                $(this).prev().addClass('border-red-500');
+
+                // Set a timer to remove the error message and border color after 5 seconds
+                var errorElement = $(this);
+                setTimeout(function () {
+                    errorElement.prev().removeClass('border-red-500');
+                    errorElement.remove();
+                }, 5000);
+            });
+        });
 </script>
 
 {% endblock %}
