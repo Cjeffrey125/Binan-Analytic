@@ -129,5 +129,8 @@ urlpatterns = [
  
     path('Filter/', views.filter, name='filter'),
 
-    path("inb/passed/applicant_info/<str:control_number>/<int:pk>/",views.inb_applicant_information_details,name="inb_applicant_information_details",),
+    path("inb/passed/applicant_info/<str:control_number>/<int:pk>/",views.inb_applicant_information_details,name="inb_applicant_information_details"),
+
+
+    path("Page_not_found",views.page_not_found,name="page_not_found"),
 ]
