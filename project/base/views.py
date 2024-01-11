@@ -525,17 +525,27 @@ def inb_data_visualization(request):
     return render(request, "inb-dashboard.html", context)
 
 
-def barangay_summary(request):
-    return render(request, "in-depth-charts/barangay/barangay_data.html")
-
-
-def active_scholar_summary(request):
-    return render(request, "in-depth-charts/active-scholar/active_scholar.html")
-
+from django.db.models import Sum, F
 
 def graduate_scholar_summary(request):
-    return render(request, "in-depth-charts/graduated-scholar/graduated-scholar.html")
+  
+    graduated_data = CollegeStudentAccepted.objects.filter(
+        school_year='Graduated'
+    ).values('created_at__year', 'school').annotate(graduates_count=Count('control_number'))
 
+    unique_years = set(entry["created_at__year"] for entry in graduated_data)
+    unique_years_list = sorted(unique_years)
+
+    context = {
+        'graduated_data': graduated_data,
+        'unique_years_list': unique_years_list
+    }
+
+    return render(request, "in-depth-charts/graduated-scholar/graduated-scholar.html", context)
+
+
+def barangay_summary(request):
+    return render(request, "in-depth-charts/barangay/barangay_data.html")
 
 def unsuccessful_scholar_summary(request):
     return render(
@@ -547,16 +557,151 @@ def tracker_scholar_summary(request):
     return render(request, "in-depth-charts/tracker-count/tracket-count.html")
 
 
+
+
+from django.db.models import Count
+
 def school_scholar_summary(request):
-    return render(request, "in-depth-charts/school-grantees/school-grantees.html")
+    courses = (
+        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        .exclude(school_year="Graduated")
+        .values("course")
+        .annotate(count=Count("course"))
+        .order_by("-count")
+    )
+
+    schools = (
+        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        .exclude(school_year="Graduated")
+        .values("school")
+        .annotate(count=Count("school"))
+        .order_by("-count")
+    )
+
+    unique_schools_data = CollegeStudentAccepted.objects.values('school').distinct()
+
+    schools_with_courses = []
+
+    for school_data in unique_schools_data:
+        school_courses_data = CollegeStudentAccepted.objects.filter(
+            school=school_data['school']
+        ).exclude(
+            school_year='Graduated'
+        ).values('course').annotate(student_count=Count('control_number'))
+
+        if school_courses_data:
+            course_info = {
+                'school': school_data['school'],
+                'courses': list(school_courses_data)
+            }
+
+            schools_with_courses.append(course_info)
+
+    custom_labels = [course['course'] for school_info in schools_with_courses for course in school_info['courses']]
+
+    data_counts = []
+
+    for school_info in schools_with_courses:
+        counts_per_school = [0] * len(custom_labels)
+
+        for course_data in school_info['courses']:
+            course_index = custom_labels.index(course_data['course'])
+            counts_per_school[course_index] = course_data['student_count']
+
+        data_counts.append(counts_per_school)
+
+    return render(request, "in-depth-charts/school-grantees/school-grantees.html", {
+        'schools_with_courses': schools_with_courses,
+        'custom_labels': custom_labels,
+        'data_counts': data_counts,
+
+        "customLabel": [entry["school"] for entry in schools],
+        "dataCounts": [entry["count"] for entry in courses],
+    })
+
 
 
 def course_scholar_summary(request):
-    return render(request, "in-depth-charts/course-grantees/course-grantees.html")
+    courses_data = (
+        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        .exclude(school_year="Graduated")
+        .values("course")
+        .annotate(student_count=Count('control_number'))
+        .order_by("-student_count")
+    )
+
+    custom_labels = [entry["course"] for entry in courses_data]
+    data_counts = [entry["student_count"] for entry in courses_data]
+
+    return render(request, "in-depth-charts/course-grantees/course-grantees.html", {
+        'customLabels': custom_labels,
+        'dataCounts': data_counts,
+    })
 
 
 def yearlevel_scholar_summary(request):
-    return render(request, "in-depth-charts/year-tracker/year-tracker.html")
+    
+
+    first_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="1st Year", status="Ongoing"
+    ).count()
+    second_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="2nd Year", status="Ongoing"
+    ).count()
+    third_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="3rd Year", status="Ongoing"
+    ).count()
+    fourth_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="4th Year", status="Ongoing"
+    ).count()
+    fifth_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="5th Year", status="Ongoing"
+    ).count()
+
+    year_levels = ["1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"]
+
+    schools = CollegeStudentAccepted.objects.values('school').distinct()
+
+    school_year_counts = {}
+
+    for school_data in schools:
+        school = school_data['school']
+        school_year_counts[school] = {}
+        for year_level in year_levels:
+            count = CollegeStudentAccepted.objects.filter(
+                school_year=year_level, status="Ongoing", school=school
+            ).count()
+            school_year_counts[school][year_level] = count
+
+    context = {
+        "first_year_count": first_year_count,
+        "second_year_count": second_year_count,
+        "third_year_count": third_year_count,
+        "fourth_year_count": fourth_year_count,
+        "fifth_year_count": fifth_year_count,
+        "school_year_counts": school_year_counts,
+    }
+
+    return render(request, "in-depth-charts/year-tracker/year-tracker.html", context)
+
+   
+
+def active_scholar_summary(request):
+    graduated_data = CollegeStudentAccepted.objects.filter(
+        school_year='Graduated'
+    ).values('created_at__year').annotate(graduates_count=Count('control_number'))
+
+    unique_years = set(entry["created_at__year"] for entry in graduated_data)
+    unique_years_list = sorted(unique_years)
+
+    context = {
+        'graduated_data': graduated_data,
+        'unique_years_list': unique_years_list
+    }
+
+    return render(request, "in-depth-charts/graduated-scholar/graduated-scholar.html", context)
+   
+
 
 
 def gender_summary(request):
@@ -1958,9 +2103,12 @@ def new_sem(request):
         school_year = student.school_year
         sem = student.semester
 
-        try:
-            gwa = StudentGrade.objects.get(control_number=control_number).gwa
-        except StudentGrade.DoesNotExist:
+        student_grade_queryset = StudentGrade.objects.filter(control_number=control_number)
+
+        if student_grade_queryset.exists():
+            student_grade = student_grade_queryset.first()
+            gwa = student_grade.gwa
+        else:
             gwa = 0  
 
         student_grades.append(StudentGradeRepository(
@@ -1970,10 +2118,39 @@ def new_sem(request):
             gwa=gwa,
         ))
 
-
         StudentGrade.objects.all().delete()
-
         StudentGradeRepository.objects.bulk_create(student_grades)
+
+        if sem == '1st Semester':
+            student.semester = '2nd Semester'
+        elif sem == '2nd Semester':
+            student.semester = '1st Semester'
+
+        if sem == '1st Semester':
+            student.semester = '2nd Semester'
+            if student.school_year == '1st Year':
+                student.school_year = '1st Year'
+            elif student.school_year == '2nd Year':
+                student.school_year = '2nd Year'
+            elif student.school_year == '3rd Year':
+                student.school_year = '3rd Year'
+            elif student.school_year == '4th Year':
+                student.school_year = '4th Year'
+            elif student.school_year == '5th Year':
+                student.school_year = '5th Year'
+        elif sem == '2nd Semester':
+            student.semester = '1st Semester'
+            if student.school_year == '1st Year':
+                student.school_year = '2nd Year'
+            elif student.school_year == '2nd Year':
+                student.school_year = '3rd Year'
+            elif student.school_year == '3rd Year':
+                student.school_year = '4th Year'
+            elif student.school_year == '4th Year':
+                student.school_year = '5th Year'
+            elif student.school_year == '5th Year':
+                student.school_year = 'Graduated'
+        student.save()
 
         messages.success(request, "Semester Successfully Ended")
         return redirect("inb_passed_applicant")
