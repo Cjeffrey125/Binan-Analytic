@@ -8,12 +8,22 @@
   <div class="flex justify-between">
     
     <div class="  flex flex-col space-y-4">
-      <label class="font-bold text-2xl" style="color: #39B8FF;">Summary of Courses</label>
-      <ul class = "ml-8">
-        {% for entry in barangay_counts|slice:":8" %}
-          <li>{{ entry.barangay }} {{ entry.count }}</li>
-        {% endfor %}
-      </ul>
+      <div class="flex items-start mt-3 ml-5">
+        <div class="list-disc">
+           {% for entry in barangay_counts|slice:":5" %}
+                <div class="mb-2 relative">
+                    <div class="text-base font-medium dark:text-white">{{ entry.barangay }}</div>
+                    <div class="ml-8">
+                        {{ entry.count }} Applicant as of {% now "Y" %}
+                    </div>
+
+                    <div class="ml-8 w-500px rounded-full h-2.5" style="width: 480px; background-color: rgba(54, 162, 235, 0.2);">
+                        <div class="h-2 rounded-full" style="width: {{ course.count }}%; background-color: rgb(54, 162, 235);"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>  
     </div>
 
     <div class="w-48 h-72 mr-24 bg-center bg-cover rounded" style="background-image: url('{% static 'images/map.png' %}')"></div>
