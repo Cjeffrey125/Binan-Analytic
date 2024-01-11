@@ -101,7 +101,7 @@ def generate_permit_pdf(permits):
     return buf
 
 
-def print_permit(request):
+def print_permit_view(request):
     get_permit = CollegeStudentAccepted.objects.all()
     pdf_buffer = generate_permit_pdf(get_permit)
 
@@ -112,7 +112,7 @@ def print_permit(request):
     return response
 
 
-def print(request):
+def print_view(request):
     get_permit = CollegeStudentAccepted.objects.all()
     context = {"permits": get_permit}
     return render(request, "print_permit.html", context)

@@ -7,14 +7,12 @@ from .views import applicant_added_signal
 
 User = get_user_model()
 
+
 @receiver(user_logged_in)
 def user_logged_in_handler(sender, request, user, **kwargs):
     log_action = f"User {user.username} logged in"
-    LogEntry.objects.create(
-        action=log_action,
-        staff=user,
-        staff_username=user.username 
-    )
+    LogEntry.objects.create(action=log_action, staff=user, staff_username=user.username)
+
 
 @receiver(applicant_added_signal)
 def applicant_added_handler(sender, instance, created, username, **kwargs):
@@ -24,7 +22,5 @@ def applicant_added_handler(sender, instance, created, username, **kwargs):
         staff_user = User.objects.get(username=username)
 
         LogEntry.objects.create(
-            action=log_action,
-            staff=staff_user,
-            staff_username=staff_user.username  
+            action=log_action, staff=staff_user, staff_username=staff_user.username
         )
