@@ -1,46 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Line Chart Example</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-<body>
-    <h1>Line Chart Example</h1>
 
-    <div class="chart-wrapper" style="width: 550px; height: 250px;">
-        <canvas id="myChart" width="600" height="400"></canvas>
-    </div>
+<div class="chart-wrapper" style="width: 600px; height: 400px;">
+    <canvas id="myChart" width="600" height="250"></canvas>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('myChart').getContext('2d');
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var ctx = document.getElementById('myChart').getContext('2d');
+        const labels = {{ unique_years_list|safe }};
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Graduates Count',
+                data: [
+                    {% for entry in graduated_data %}
+                        {{ entry.graduates_count }},
+                    {% endfor %}
+                ],
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        };
 
-            const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-            const data = {
-                labels: labels,
-                datasets: [{
-                    label: 'My First Dataset',
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
-                }]
-            };
-
-            var myChart = new Chart(ctx, {
-                type: 'line',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                }
-            });
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
         });
-    </script>
-</body>
+    });
+</script>
 
-</html>

@@ -700,17 +700,21 @@ def yearlevel_scholar_summary(request):
 def active_scholar_summary(request):
     graduated_data = CollegeStudentAccepted.objects.filter(
         school_year='Graduated'
-    ).values('created_at__year').annotate(graduates_count=Count('control_number'))
+    ).values('created_at__year', 'school').annotate(graduates_count=Count('control_number'))
 
     unique_years = set(entry["created_at__year"] for entry in graduated_data)
     unique_years_list = sorted(unique_years)
 
+    unique_schools = set(entry["school"] for entry in graduated_data)
+    unique_schools_list = sorted(unique_schools)
+
     context = {
         'graduated_data': graduated_data,
-        'unique_years_list': unique_years_list
+        'unique_years_list': unique_years_list,
+        'unique_schools_list': unique_schools_list,
     }
 
-    return render(request, "in-depth-charts/graduated-scholar/graduated-scholar.html", context)
+    return render(request, "in-depth-charts/active-scholar/active_scholar.html", context)
    
 
 
