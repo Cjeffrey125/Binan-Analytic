@@ -980,6 +980,18 @@ select {
   top: 100%;
 }
 
+.left-5 {
+  left: 1.25rem;
+}
+
+.right-6 {
+  right: 1.5rem;
+}
+
+.right-72 {
+  right: 18rem;
+}
+
 .z-0 {
   z-index: 0;
 }
@@ -1264,6 +1276,42 @@ select {
   margin-top: 1.5rem;
 }
 
+.mt-auto {
+  margin-top: auto;
+}
+
+.mt-7 {
+  margin-top: 1.75rem;
+}
+
+.mt-52 {
+  margin-top: 13rem;
+}
+
+.mt-72 {
+  margin-top: 18rem;
+}
+
+.mt-80 {
+  margin-top: 20rem;
+}
+
+.mt-44 {
+  margin-top: 11rem;
+}
+
+.mb-20 {
+  margin-bottom: 5rem;
+}
+
+.mt-64 {
+  margin-top: 16rem;
+}
+
+.mb-7 {
+  margin-bottom: 1.75rem;
+}
+
 .block {
   display: block;
 }
@@ -1466,6 +1514,10 @@ select {
 
 .w-full {
   width: 100%;
+}
+
+.w-screen {
+  width: 100vw;
 }
 
 .max-w-5xl {
@@ -1806,6 +1858,16 @@ select {
   border-color: transparent;
 }
 
+.border-white {
+  --tw-border-opacity: 1;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity));
+}
+
+.border-gray-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(107 114 128 / var(--tw-border-opacity));
+}
+
 .bg-black {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
@@ -1977,6 +2039,14 @@ select {
   padding: 1.5rem;
 }
 
+.p-10 {
+  padding: 2.5rem;
+}
+
+.p-5 {
+  padding: 1.25rem;
+}
+
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
@@ -2060,6 +2130,31 @@ select {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.py-10 {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.py-7 {
+  padding-top: 1.75rem;
+  padding-bottom: 1.75rem;
+}
+
+.py-9 {
+  padding-top: 2.25rem;
+  padding-bottom: 2.25rem;
+}
+
+.py-14 {
+  padding-top: 3.5rem;
+  padding-bottom: 3.5rem;
 }
 
 .pb-1 {
@@ -2318,6 +2413,18 @@ select {
 
 .opacity-95 {
   opacity: 0.95;
+}
+
+.opacity-80 {
+  opacity: 0.8;
+}
+
+.opacity-100 {
+  opacity: 1;
+}
+
+.opacity-90 {
+  opacity: 0.9;
 }
 
 .shadow {
@@ -2988,6 +3095,10 @@ select {
     max-width: 28rem;
   }
 
+  .sm\:max-w-full {
+    max-width: 100%;
+  }
+
   .sm\:rounded-lg {
     border-radius: 0.5rem;
   }
@@ -3002,6 +3113,10 @@ select {
 
   .sm\:p-8 {
     padding: 2rem;
+  }
+
+  .sm\:p-10 {
+    padding: 2.5rem;
   }
 
   .sm\:text-base {

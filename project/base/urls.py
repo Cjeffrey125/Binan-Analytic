@@ -11,8 +11,8 @@ urlpatterns = [
 
     path("User-Setting/Update-User", views.update_user, name="update_user"),
 
-    path("Print/", views.print, name="print"),
-    path("Print-Permit/", views.print_permit, name="print_permit"),
+    path("Print/", views.print_view, name="print"),
+    path("Print-Permit/", views.generate_permit_pdf, name="print_permit"),
 
     path("Logs/", views.logger, name="logger"),
 
