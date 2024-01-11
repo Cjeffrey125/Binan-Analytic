@@ -38,7 +38,8 @@ from .models import (
     FAApplicationRequirements,
     INBApplicantTracker,
     ProfileImage,
-    LogEntry
+    LogEntry,
+    StudentGradeRepository
 )
 from django.db.models import Count
 from django.http import HttpResponse
@@ -1932,3 +1933,35 @@ def import_grade(request):
         form = GradeUploadForm()
 
     return render(request, "modal/import_grades.html", {"form": form})
+
+def new_sem(request):
+    data_update = CollegeStudentAccepted.objects.all()
+
+    student_grades = []
+
+    for student in data_update:
+        control_number = student.control_number
+        school_year = student.school_year
+        sem = student.semester
+
+        try:
+            gwa = StudentGrade.objects.get(control_number=control_number).gwa
+        except StudentGrade.DoesNotExist:
+            gwa = 0  
+
+        student_grades.append(StudentGradeRepository(
+            control_number=control_number,
+            school_year=school_year,
+            semester=sem,
+            gwa=gwa,
+        ))
+
+
+        StudentGrade.objects.all().delete()
+
+        StudentGradeRepository.objects.bulk_create(student_grades)
+
+        messages.success(request, "Semester Successfully Ended")
+        return redirect("inb_passed_applicant")
+
+    return render(request, "modal/end_sem.html")

@@ -6,6 +6,9 @@
 <h1>Print Permit</h1>
 <button id="generateButton">Generate Permit</button>
 <hr>
+
+<iframe id="pdfViewer" style="display: none;"></iframe>
+
 {% for permit in permits %}
 <div>
     <p>Control Number: {{ permit.control_number }}</p>
