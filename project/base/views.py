@@ -762,90 +762,95 @@ def inb_filter_applicants(request):
         applicants_to_transfer = CollegeStudentApplication.objects.all()
 
         with transaction.atomic():
-            for applicant in applicants_to_transfer:
-                ApplicantInfoRepositoryINB.objects.get_or_create(
-                    control_number=applicant.control_number,
-                    fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                    school_year=applicant.school_year,
-                    blkstr=applicant.blkstr,
-                    barangay=applicant.barangay,
-                    province=applicant.province,
-                    city=applicant.city,
-                    gender=applicant.gender,
-                    date_of_birth=applicant.date_of_birth,
-                    place_of_birth=applicant.place_of_birth,
-                    contact_no=applicant.contact_no,
-                    email_address=applicant.email_address,
-                    school=applicant.school,
-                    course=applicant.course,
-                    gwa=applicant.gwa,
-                    rank=applicant.rank,
-                    jhs=applicant.jhs,
-                    jhs_address=applicant.jhs_address,
-                    jhs_educational_provider=applicant.jhs_educational_provider,
-                    shs=applicant.shs,
-                    shs_address=applicant.shs_address,
-                    shs_educational_provider=applicant.shs_educational_provider,
-                    father_name=applicant.father_name,
-                    father_voter_status=applicant.father_voter_status,
-                    father_educational_attainment=applicant.father_educational_attainment,
-                    father_employer=applicant.father_employer,
-                    father_occupation=applicant.father_occupation,
-                    mother_name=applicant.mother_name,
-                    mother_voter_status=applicant.mother_voter_status,
-                    mother_educational_attainment=applicant.mother_educational_attainment,
-                    mother_employer=applicant.mother_employer,
-                    mother_occupation=applicant.mother_occupation,
-                    guardian_name=applicant.guardian_name,
-                    guardian_voter_status=applicant.guardian_voter_status,
-                    guardian_educational_attainment=applicant.guardian_educational_attainment,
-                    guardian_employer=applicant.guardian_employer,
-                    guardian_occupation=applicant.guardian_occupation,
-                )
-
-                is_met_list = [
-                    req.is_met
-                    for req in INBApplicationRequirements.objects.filter(
-                        applicant=applicant
-                    )
-                ]
-
-                if all(is_met_list):
-                    applicant.requirement = "Complete"
-
-                    ApplicantInfoRepositoryINB.objects.filter(
-                        control_number=applicant.control_number
-                    ).update(status="Accepted")
-                    CollegeStudentAccepted.objects.create(
-                        created_at=applicant.created_at,
+            try:
+                for applicant in applicants_to_transfer:
+                    ApplicantInfoRepositoryINB.objects.get_or_create(
                         control_number=applicant.control_number,
                         fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                        school=applicant.school,
-                        course=applicant.course,
-                        gender=applicant.gender,
                         school_year=applicant.school_year,
+                        blkstr=applicant.blkstr,
                         barangay=applicant.barangay,
-                    )
-                    CollegeStudentApplication.objects.filter(
-                        control_number=applicant.control_number
-                    ).delete()
-                else:
-                    applicant.requirement = "Incomplete"
-
-                    ApplicantInfoRepositoryINB.objects.filter(
-                        control_number=applicant.control_number
-                    ).update(status="Incomplete")
-                    CollegeStudentAssesment.objects.create(
-                        control_number=applicant.control_number,
-                        fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                        province=applicant.province,
+                        city=applicant.city,
+                        gender=applicant.gender,
+                        date_of_birth=applicant.date_of_birth,
+                        place_of_birth=applicant.place_of_birth,
+                        contact_no=applicant.contact_no,
+                        email_address=applicant.email_address,
                         school=applicant.school,
                         course=applicant.course,
+                        gwa=applicant.gwa,
+                        rank=applicant.rank,
+                        jhs=applicant.jhs,
+                        jhs_address=applicant.jhs_address,
+                        jhs_educational_provider=applicant.jhs_educational_provider,
+                        shs=applicant.shs,
+                        shs_address=applicant.shs_address,
+                        shs_educational_provider=applicant.shs_educational_provider,
+                        father_name=applicant.father_name,
+                        father_voter_status=applicant.father_voter_status,
+                        father_educational_attainment=applicant.father_educational_attainment,
+                        father_employer=applicant.father_employer,
+                        father_occupation=applicant.father_occupation,
+                        mother_name=applicant.mother_name,
+                        mother_voter_status=applicant.mother_voter_status,
+                        mother_educational_attainment=applicant.mother_educational_attainment,
+                        mother_employer=applicant.mother_employer,
+                        mother_occupation=applicant.mother_occupation,
+                        guardian_name=applicant.guardian_name,
+                        guardian_voter_status=applicant.guardian_voter_status,
+                        guardian_educational_attainment=applicant.guardian_educational_attainment,
+                        guardian_employer=applicant.guardian_employer,
+                        guardian_occupation=applicant.guardian_occupation,
                     )
-                    CollegeStudentApplication.objects.filter(
-                        control_number=applicant.control_number
-                    ).delete()
 
-            messages.success(request, "Applicants have been successfully filtered.")
+                    is_met_list = [
+                        req.is_met
+                        for req in INBApplicationRequirements.objects.filter(
+                            applicant=applicant
+                        )
+                    ]
+
+                    if all(is_met_list):
+                        applicant.requirement = "Complete"
+
+                        ApplicantInfoRepositoryINB.objects.filter(
+                            control_number=applicant.control_number
+                        ).update(status="Accepted")
+                        CollegeStudentAccepted.objects.create(
+                            created_at=applicant.created_at,
+                            control_number=applicant.control_number,
+                            fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                            school=applicant.school,
+                            course=applicant.course,
+                            gender=applicant.gender,
+                            school_year=applicant.school_year,
+                            barangay=applicant.barangay,
+                        )
+                        CollegeStudentApplication.objects.filter(
+                            control_number=applicant.control_number
+                        ).delete()
+                    else:
+                        applicant.requirement = "Incomplete"
+
+                        ApplicantInfoRepositoryINB.objects.filter(
+                            control_number=applicant.control_number
+                        ).update(status="Incomplete")
+                        CollegeStudentAssesment.objects.create(
+                            control_number=applicant.control_number,
+                            fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                            school=applicant.school,
+                            course=applicant.course,
+                        )
+                        CollegeStudentApplication.objects.filter(
+                            control_number=applicant.control_number
+                        ).delete()
+
+                messages.success(request, "Applicants have been successfully filtered.")
+            except Exception as e:
+                messages.error(request, f"An error occurred: {str(e)}")
+                return redirect("inb_applicant_list")
+
     else:
         messages.warning(request, "There are no applicants to filter.")
 
@@ -1900,57 +1905,63 @@ def import_grade(request):
     if request.method == "POST":
         form = GradeUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            excel_file = request.FILES["file"]
-            df = pd.read_excel(excel_file, skiprows=10)
-            df.columns = df.columns.str.strip()
+            try:
+                excel_file = request.FILES["file"]
+                df = pd.read_excel(excel_file, skiprows=10)
+                df.columns = df.columns.str.strip()
 
-            if "CONTROL_NUMBER" not in df.columns:
-                return HttpResponse(
-                    "Error: 'CONTROL_NUMBER' column not found in the Excel file."
-                )
-
-            student_grades = []
-
-            for index, row in df.iterrows():
-                control_number = row["CONTROL_NUMBER"]
-                gwa = row["GWA"]
-
-                subject_cols = [col for col in df.columns if col.startswith("SUBJECT")]
-                grade_cols = [col for col in df.columns if col.startswith("GRADE")]
-
-                for subject_col, grade_col in zip(subject_cols, grade_cols):
-                    subject = row[subject_col]
-                    grade = row[grade_col]
-                    print(
-                        f"Creating StudentGrade: control_number={control_number}, subject={subject}, grade={grade}, gwa={gwa}"
+                if "CONTROL_NUMBER" not in df.columns:
+                    return HttpResponse(
+                        "Error: 'CONTROL_NUMBER' column not found in the Excel file."
                     )
-                    student_grades.append(
-                        StudentGrade(
-                            control_number=control_number,
-                            subject=subject,
-                            grade=grade,
-                            gwa=gwa,
+
+                student_grades = []
+
+                for index, row in df.iterrows():
+                    control_number = row["CONTROL_NUMBER"]
+                    gwa = row["GWA"]
+
+                    subject_cols = [
+                        col for col in df.columns if col.startswith("SUBJECT")
+                    ]
+                    grade_cols = [col for col in df.columns if col.startswith("GRADE")]
+
+                    for subject_col, grade_col in zip(subject_cols, grade_cols):
+                        subject = row[subject_col]
+                        grade = row[grade_col]
+                        print(
+                            f"Creating StudentGrade: control_number={control_number}, subject={subject}, grade={grade}, gwa={gwa}"
                         )
+                        student_grades.append(
+                            StudentGrade(
+                                control_number=control_number,
+                                subject=subject,
+                                grade=grade,
+                                gwa=gwa,
+                            )
+                        )
+
+                    college_student = get_object_or_404(
+                        CollegeStudentAccepted, control_number=control_number
                     )
+                    college_student.grant = gwa
+                    if 1 <= gwa <= 2:
+                        college_student.grant = "100%"
+                    elif 2.25 <= gwa <= 2.75:
+                        college_student.grant = "80%"
+                    elif 3 <= gwa <= 5:
+                        college_student.grant = "Failed"
+                    else:
+                        college_student.grant = "Unknown"
 
-                college_student = get_object_or_404(
-                    CollegeStudentAccepted, control_number=control_number
-                )
-                college_student.grant = gwa
-                if 1 <= gwa <= 2:
-                    college_student.grant = "100%"
-                elif 2.25 <= gwa <= 2.75:
-                    college_student.grant = "80%"
-                elif 3 <= gwa <= 5:
-                    college_student.grant = "Failed"
-                else:
-                    college_student.grant = "Unknown"
+                    college_student.save()
 
-                college_student.save()
+                StudentGrade.objects.bulk_create(student_grades)
 
-            StudentGrade.objects.bulk_create(student_grades)
+                messages.success(request, "Grades Successfully Imported")
+            except Exception as e:
+                messages.error(request, f"An error occurred: {str(e)}")
 
-            messages.success(request, "Grades Successfully Imported")
             return redirect("inb_passed_applicant")
 
     else:
