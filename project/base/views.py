@@ -1340,9 +1340,10 @@ def fa_applicant_list(request, status):
 
 # ------------------------------------------------------------------------------------------------------------------------
 from django.dispatch import Signal
-from .signals import applicant_added_handler
-applicant_added = Signal()
+from django.contrib.auth.decorators import login_required
+applicant_added_signal = Signal()
 
+@login_required
 def inb_applicant_information(request, pk):
     if request.user.is_authenticated:
         current_record_inb = CollegeStudentApplication.objects.get(id=pk)
@@ -1352,7 +1353,9 @@ def inb_applicant_information(request, pk):
             form_inb.save()
 
           
-            applicant_added_handler(sender=CollegeStudentApplication, instance=current_record_inb, created=True, request=request)
+            username = request.user.username
+
+            applicant_added_signal.send(sender=CollegeStudentApplication, instance=current_record_inb, created=True, username=request.user.username)
 
         try:
             records = CollegeStudentApplication.objects.get(id=pk)
