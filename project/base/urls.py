@@ -15,7 +15,6 @@ urlpatterns = [
     path("Print-Permit/", views.print_permit, name="print_permit"),
 
     path("Logs/", views.logger, name="logger"),
-    
 
     path("INB-Dashboard/", views.inb_data_visualization, name="inb-dashboard"),
     
@@ -28,10 +27,8 @@ urlpatterns = [
     path("INB-Dashboard/School-Grantees-Scholar/", views.school_scholar_summary, name="inb-school-scholar-summary"),
     path("INB-Dashboard/Course-Grantees-Scholar/", views.course_scholar_summary, name="inb-course-scholar-summary"),
     path("INB-Dashboard/Year-Level-Scholar/", views.yearlevel_scholar_summary, name="inb-year-scholar-summary"),
-
     
-
-    
+    path("inb/passed/applicant_info/<str:control_number>",views.inb_applicant_information_details,name="inb_applicant_information_details"),
 
     
     
@@ -129,5 +126,8 @@ urlpatterns = [
  
     path('Filter/', views.filter, name='filter'),
 
+    
 
+
+    path("Page_not_found",views.page_not_found,name="page_not_found"),
 ]

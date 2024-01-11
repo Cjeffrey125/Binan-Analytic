@@ -1339,6 +1339,27 @@ def fa_applicant_list(request, status):
 
 
 # ------------------------------------------------------------------------------------------------------------------------
+    
+def inb_applicant_information_details(request, control_number):
+    if request.user.is_authenticated:
+        try:
+            records = ApplicantInfoRepositoryINB.objects.get(control_number=control_number)
+            context = {"records": records, "control_number": control_number}
+            return render(
+                request,
+                "INB/applicant_detailed_info.html",
+                context,
+            )
+        except ApplicantInfoRepositoryINB.DoesNotExist:
+            messages.error(request, "Applicant data not found.")
+            return redirect("home")
+    else:
+        messages.success(request, "You need to be logged in to see this data!")
+        return redirect("home")
+
+def page_not_found(request):
+    return render(request,"page_not_found.html")
+       
 from django.dispatch import Signal
 from django.contrib.auth.decorators import login_required
 applicant_added_signal = Signal()
