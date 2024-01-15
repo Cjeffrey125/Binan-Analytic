@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.signals import user_logged_in
+from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.contrib.auth import get_user_model
 from .models import LogEntry, CollegeStudentApplication
 from .views import applicant_added_signal
@@ -11,6 +11,12 @@ User = get_user_model()
 @receiver(user_logged_in)
 def user_logged_in_handler(sender, request, user, **kwargs):
     log_action = f"User {user.username} logged in"
+    LogEntry.objects.create(action=log_action, staff=user, staff_username=user.username)
+
+
+@receiver(user_logged_out)
+def user_logged_out_handler(sender, request, user, **kwargs):
+    log_action = f"User {user.username} logged out"
     LogEntry.objects.create(action=log_action, staff=user, staff_username=user.username)
 
 
