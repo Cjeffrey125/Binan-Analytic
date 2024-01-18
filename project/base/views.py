@@ -39,7 +39,7 @@ from .models import (
     INBApplicantTracker,
     ProfileImage,
     LogEntry,
-    StudentGradeRepository
+    StudentGradeRepository,
 )
 from django.db.models import Count
 from django.http import HttpResponse
@@ -447,10 +447,98 @@ from django.db import models
 
 
 def fa_data_visualization(request):
-    return render(
-        request,
-        "fa-dashboard.html",
+    applicant_courses = (
+        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        .exclude(school_year="Graduated")
+        .values("course")
+        .annotate(count=Count("course"))
+        .order_by("-count")
     )
+
+    school_counts = (
+        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        .exclude(school_year="Graduated")
+        .values("school")
+        .annotate(count=Count("school"))
+        .order_by("-count")
+    )
+
+    barangay_counts = (
+        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        .exclude(school_year="Graduated")
+        .values("barangay")
+        .annotate(count=Count("barangay"))
+        .order_by("-count")
+    )
+
+    first_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="1st Year", status="Ongoing"
+    ).count()
+    second_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="2nd Year", status="Ongoing"
+    ).count()
+    third_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="3rd Year", status="Ongoing"
+    ).count()
+    fourth_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="4th Year", status="Ongoing"
+    ).count()
+    fifth_year_count = CollegeStudentAccepted.objects.filter(
+        school_year="5th Year", status="Ongoing"
+    ).count()
+
+    total_scholars_count = CollegeStudentAccepted.objects.count()
+
+    graduated_scholars_count = CollegeStudentAccepted.objects.filter(
+        school_year="Graduated"
+    ).count()
+    ongoing_scholars_count = (
+        CollegeStudentAccepted.objects.filter(status="Ongoing")
+        .exclude(school_year="Graduated")
+        .count()
+    )
+
+    rejected_scholars_count = CollegeStudentRejected.objects.count()
+    unsuccessful_scholar_count = CollegeStudentAccepted.objects.filter(
+        status="Failed"
+    ).count()
+
+    total_failed_applicants = rejected_scholars_count + unsuccessful_scholar_count
+
+    percentage_ongoing = (
+        (ongoing_scholars_count / total_scholars_count) * 100
+        if total_scholars_count > 0
+        else 0
+    )
+
+    gender_data = (
+        CollegeStudentAccepted.objects.filter(status="Ongoing")
+        .values("gender")
+        .annotate(count=models.Count("gender"))
+    )
+
+    labels = [entry["gender"] for entry in gender_data]
+    counts = [entry["count"] for entry in gender_data]
+
+    context = {
+        "applicant_courses": applicant_courses,
+        "customLabels": [entry["school"] for entry in school_counts],
+        "dataCounts": [entry["count"] for entry in school_counts],
+        "barangay_counts": barangay_counts,
+        "first_year_count": first_year_count,
+        "second_year_count": second_year_count,
+        "third_year_count": third_year_count,
+        "fourth_year_count": fourth_year_count,
+        "fifth_year_count": fifth_year_count,
+        "graduated_scholars_count": graduated_scholars_count,
+        "total_failed_applicants": total_failed_applicants,
+        "ongoing_scholars_count": ongoing_scholars_count,
+        "percentage_ongoing": percentage_ongoing,
+        "labels": labels,
+        "counts": counts,
+    }
+
+    return render(request, "fa-dashboard.html", context)
 
 
 def inb_data_visualization(request):
@@ -550,29 +638,48 @@ def inb_data_visualization(request):
 
 from django.db.models import Sum, F
 
+
 def graduate_scholar_summary(request):
-  
-    graduated_data = CollegeStudentAccepted.objects.filter(
-        school_year='Graduated'
-    ).values('created_at__year', 'school').annotate(graduates_count=Count('control_number'))
+    graduated_data = (
+        CollegeStudentAccepted.objects.filter(school_year="Graduated")
+        .values("created_at__year", "school")
+        .annotate(graduates_count=Count("control_number"))
+    )
 
     unique_years = set(entry["created_at__year"] for entry in graduated_data)
     unique_years_list = sorted(unique_years)
 
-    context = {
-        'graduated_data': graduated_data,
-        'unique_years_list': unique_years_list
-    }
+    context = {"graduated_data": graduated_data, "unique_years_list": unique_years_list}
 
-    return render(request, "in-depth-charts/graduated-scholar/graduated-scholar.html", context)
+    return render(
+        request, "in-depth-charts/graduated-scholar/graduated-scholar.html", context
+    )
 
 
 def barangay_summary(request):
-    return render(request, "in-depth-charts/barangay/barangay_data.html")
+    barangay_counts = (
+        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        .exclude(school_year="Graduated")
+        .values("barangay")
+        .annotate(count=Count("barangay"))
+        .order_by("-count")
+    )
+
+    context = {
+        "barangay_counts": barangay_counts,
+    }
+    return render(request, "in-depth-charts/barangay/barangay_data.html", context)
+
 
 def unsuccessful_scholar_summary(request):
+    failed_count = CollegeStudentAccepted.objects.filter(status="Failed").count()
+    rejected_count = CollegeStudentRejected.objects.all().count()
+
+    context = {'failed_count' : failed_count, 
+               'rejected_count': rejected_count }
+
     return render(
-        request, "in-depth-charts/unsuccessful-scholar/unsuccessful-scholar.html"
+        request, "in-depth-charts/unsuccessful-scholar/unsuccessful-scholar.html", context
     )
 
 
@@ -580,9 +687,8 @@ def tracker_scholar_summary(request):
     return render(request, "in-depth-charts/tracker-count/tracket-count.html")
 
 
-
-
 from django.db.models import Count
+
 
 def school_scholar_summary(request):
     courses = (
@@ -601,47 +707,54 @@ def school_scholar_summary(request):
         .order_by("-count")
     )
 
-    unique_schools_data = CollegeStudentAccepted.objects.values('school').distinct()
+    unique_schools_data = CollegeStudentAccepted.objects.values("school").distinct()
 
     schools_with_courses = []
 
     for school_data in unique_schools_data:
-        school_courses_data = CollegeStudentAccepted.objects.filter(
-            school=school_data['school']
-        ).exclude(
-            school_year='Graduated'
-        ).values('course').annotate(student_count=Count('control_number'))
+        school_courses_data = (
+            CollegeStudentAccepted.objects.filter(school=school_data["school"])
+            .exclude(school_year="Graduated")
+            .values("course")
+            .annotate(student_count=Count("control_number"))
+        )
 
         if school_courses_data:
             course_info = {
-                'school': school_data['school'],
-                'courses': list(school_courses_data)
+                "school": school_data["school"],
+                "courses": list(school_courses_data),
             }
 
             schools_with_courses.append(course_info)
 
-    custom_labels = [course['course'] for school_info in schools_with_courses for course in school_info['courses']]
+    custom_labels = [
+        course["course"]
+        for school_info in schools_with_courses
+        for course in school_info["courses"]
+    ]
 
     data_counts = []
 
     for school_info in schools_with_courses:
         counts_per_school = [0] * len(custom_labels)
 
-        for course_data in school_info['courses']:
-            course_index = custom_labels.index(course_data['course'])
-            counts_per_school[course_index] = course_data['student_count']
+        for course_data in school_info["courses"]:
+            course_index = custom_labels.index(course_data["course"])
+            counts_per_school[course_index] = course_data["student_count"]
 
         data_counts.append(counts_per_school)
 
-    return render(request, "in-depth-charts/school-grantees/school-grantees.html", {
-        'schools_with_courses': schools_with_courses,
-        'custom_labels': custom_labels,
-        'data_counts': data_counts,
-
-        "customLabel": [entry["school"] for entry in schools],
-        "dataCounts": [entry["count"] for entry in courses],
-    })
-
+    return render(
+        request,
+        "in-depth-charts/school-grantees/school-grantees.html",
+        {
+            "schools_with_courses": schools_with_courses,
+            "custom_labels": custom_labels,
+            "data_counts": data_counts,
+            "customLabel": [entry["school"] for entry in schools],
+            "dataCounts": [entry["count"] for entry in courses],
+        },
+    )
 
 
 def course_scholar_summary(request):
@@ -649,22 +762,24 @@ def course_scholar_summary(request):
         CollegeStudentAccepted.objects.exclude(status="Graduated")
         .exclude(school_year="Graduated")
         .values("course")
-        .annotate(student_count=Count('control_number'))
+        .annotate(student_count=Count("control_number"))
         .order_by("-student_count")
     )
 
     custom_labels = [entry["course"] for entry in courses_data]
     data_counts = [entry["student_count"] for entry in courses_data]
 
-    return render(request, "in-depth-charts/course-grantees/course-grantees.html", {
-        'customLabels': custom_labels,
-        'dataCounts': data_counts,
-    })
+    return render(
+        request,
+        "in-depth-charts/course-grantees/course-grantees.html",
+        {
+            "customLabels": custom_labels,
+            "dataCounts": data_counts,
+        },
+    )
 
 
 def yearlevel_scholar_summary(request):
-    
-
     first_year_count = CollegeStudentAccepted.objects.filter(
         school_year="1st Year", status="Ongoing"
     ).count()
@@ -683,12 +798,12 @@ def yearlevel_scholar_summary(request):
 
     year_levels = ["1st Year", "2nd Year", "3rd Year", "4th Year", "5th Year"]
 
-    schools = CollegeStudentAccepted.objects.values('school').distinct()
+    schools = CollegeStudentAccepted.objects.values("school").distinct()
 
     school_year_counts = {}
 
     for school_data in schools:
-        school = school_data['school']
+        school = school_data["school"]
         school_year_counts[school] = {}
         for year_level in year_levels:
             count = CollegeStudentAccepted.objects.filter(
@@ -707,12 +822,13 @@ def yearlevel_scholar_summary(request):
 
     return render(request, "in-depth-charts/year-tracker/year-tracker.html", context)
 
-   
 
 def active_scholar_summary(request):
-    graduated_data = CollegeStudentAccepted.objects.filter(
-        school_year='Graduated'
-    ).values('created_at__year', 'school').annotate(graduates_count=Count('control_number'))
+    graduated_data = (
+        CollegeStudentAccepted.objects.filter(school_year="Graduated")
+        .values("created_at__year", "school")
+        .annotate(graduates_count=Count("control_number"))
+    )
 
     unique_years = set(entry["created_at__year"] for entry in graduated_data)
     unique_years_list = sorted(unique_years)
@@ -721,14 +837,14 @@ def active_scholar_summary(request):
     unique_schools_list = sorted(unique_schools)
 
     context = {
-        'graduated_data': graduated_data,
-        'unique_years_list': unique_years_list,
-        'unique_schools_list': unique_schools_list,
+        "graduated_data": graduated_data,
+        "unique_years_list": unique_years_list,
+        "unique_schools_list": unique_schools_list,
     }
 
-    return render(request, "in-depth-charts/active-scholar/active_scholar.html", context)
-   
-
+    return render(
+        request, "in-depth-charts/active-scholar/active_scholar.html", context
+    )
 
 
 def gender_summary(request):
@@ -924,90 +1040,95 @@ def inb_filter_applicants(request):
         applicants_to_transfer = CollegeStudentApplication.objects.all()
 
         with transaction.atomic():
-            for applicant in applicants_to_transfer:
-                ApplicantInfoRepositoryINB.objects.get_or_create(
-                    control_number=applicant.control_number,
-                    fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                    school_year=applicant.school_year,
-                    blkstr=applicant.blkstr,
-                    barangay=applicant.barangay,
-                    province=applicant.province,
-                    city=applicant.city,
-                    gender=applicant.gender,
-                    date_of_birth=applicant.date_of_birth,
-                    place_of_birth=applicant.place_of_birth,
-                    contact_no=applicant.contact_no,
-                    email_address=applicant.email_address,
-                    school=applicant.school,
-                    course=applicant.course,
-                    gwa=applicant.gwa,
-                    rank=applicant.rank,
-                    jhs=applicant.jhs,
-                    jhs_address=applicant.jhs_address,
-                    jhs_educational_provider=applicant.jhs_educational_provider,
-                    shs=applicant.shs,
-                    shs_address=applicant.shs_address,
-                    shs_educational_provider=applicant.shs_educational_provider,
-                    father_name=applicant.father_name,
-                    father_voter_status=applicant.father_voter_status,
-                    father_educational_attainment=applicant.father_educational_attainment,
-                    father_employer=applicant.father_employer,
-                    father_occupation=applicant.father_occupation,
-                    mother_name=applicant.mother_name,
-                    mother_voter_status=applicant.mother_voter_status,
-                    mother_educational_attainment=applicant.mother_educational_attainment,
-                    mother_employer=applicant.mother_employer,
-                    mother_occupation=applicant.mother_occupation,
-                    guardian_name=applicant.guardian_name,
-                    guardian_voter_status=applicant.guardian_voter_status,
-                    guardian_educational_attainment=applicant.guardian_educational_attainment,
-                    guardian_employer=applicant.guardian_employer,
-                    guardian_occupation=applicant.guardian_occupation,
-                )
-
-                is_met_list = [
-                    req.is_met
-                    for req in INBApplicationRequirements.objects.filter(
-                        applicant=applicant
-                    )
-                ]
-
-                if all(is_met_list):
-                    applicant.requirement = "Complete"
-
-                    ApplicantInfoRepositoryINB.objects.filter(
-                        control_number=applicant.control_number
-                    ).update(status="Accepted")
-                    CollegeStudentAccepted.objects.create(
-                        created_at=applicant.created_at,
+            try:
+                for applicant in applicants_to_transfer:
+                    ApplicantInfoRepositoryINB.objects.get_or_create(
                         control_number=applicant.control_number,
                         fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                        school=applicant.school,
-                        course=applicant.course,
-                        gender=applicant.gender,
                         school_year=applicant.school_year,
+                        blkstr=applicant.blkstr,
                         barangay=applicant.barangay,
-                    )
-                    CollegeStudentApplication.objects.filter(
-                        control_number=applicant.control_number
-                    ).delete()
-                else:
-                    applicant.requirement = "Incomplete"
-
-                    ApplicantInfoRepositoryINB.objects.filter(
-                        control_number=applicant.control_number
-                    ).update(status="Incomplete")
-                    CollegeStudentAssesment.objects.create(
-                        control_number=applicant.control_number,
-                        fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                        province=applicant.province,
+                        city=applicant.city,
+                        gender=applicant.gender,
+                        date_of_birth=applicant.date_of_birth,
+                        place_of_birth=applicant.place_of_birth,
+                        contact_no=applicant.contact_no,
+                        email_address=applicant.email_address,
                         school=applicant.school,
                         course=applicant.course,
+                        gwa=applicant.gwa,
+                        rank=applicant.rank,
+                        jhs=applicant.jhs,
+                        jhs_address=applicant.jhs_address,
+                        jhs_educational_provider=applicant.jhs_educational_provider,
+                        shs=applicant.shs,
+                        shs_address=applicant.shs_address,
+                        shs_educational_provider=applicant.shs_educational_provider,
+                        father_name=applicant.father_name,
+                        father_voter_status=applicant.father_voter_status,
+                        father_educational_attainment=applicant.father_educational_attainment,
+                        father_employer=applicant.father_employer,
+                        father_occupation=applicant.father_occupation,
+                        mother_name=applicant.mother_name,
+                        mother_voter_status=applicant.mother_voter_status,
+                        mother_educational_attainment=applicant.mother_educational_attainment,
+                        mother_employer=applicant.mother_employer,
+                        mother_occupation=applicant.mother_occupation,
+                        guardian_name=applicant.guardian_name,
+                        guardian_voter_status=applicant.guardian_voter_status,
+                        guardian_educational_attainment=applicant.guardian_educational_attainment,
+                        guardian_employer=applicant.guardian_employer,
+                        guardian_occupation=applicant.guardian_occupation,
                     )
-                    CollegeStudentApplication.objects.filter(
-                        control_number=applicant.control_number
-                    ).delete()
 
-            messages.success(request, "Applicants have been successfully filtered.")
+                    is_met_list = [
+                        req.is_met
+                        for req in INBApplicationRequirements.objects.filter(
+                            applicant=applicant
+                        )
+                    ]
+
+                    if all(is_met_list):
+                        applicant.requirement = "Complete"
+
+                        ApplicantInfoRepositoryINB.objects.filter(
+                            control_number=applicant.control_number
+                        ).update(status="Accepted")
+                        CollegeStudentAccepted.objects.create(
+                            created_at=applicant.created_at,
+                            control_number=applicant.control_number,
+                            fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                            school=applicant.school,
+                            course=applicant.course,
+                            gender=applicant.gender,
+                            school_year=applicant.school_year,
+                            barangay=applicant.barangay,
+                        )
+                        CollegeStudentApplication.objects.filter(
+                            control_number=applicant.control_number
+                        ).delete()
+                    else:
+                        applicant.requirement = "Incomplete"
+
+                        ApplicantInfoRepositoryINB.objects.filter(
+                            control_number=applicant.control_number
+                        ).update(status="Incomplete")
+                        CollegeStudentAssesment.objects.create(
+                            control_number=applicant.control_number,
+                            fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
+                            school=applicant.school,
+                            course=applicant.course,
+                        )
+                        CollegeStudentApplication.objects.filter(
+                            control_number=applicant.control_number
+                        ).delete()
+
+                messages.success(request, "Applicants have been successfully filtered.")
+            except Exception as e:
+                messages.error(request, f"An error occurred: {str(e)}")
+                return redirect("inb_applicant_list")
+
     else:
         messages.warning(request, "There are no applicants to filter.")
 
@@ -2064,63 +2185,70 @@ def import_grade(request):
     if request.method == "POST":
         form = GradeUploadForm(request.POST, request.FILES)
         if form.is_valid():
-            excel_file = request.FILES["file"]
-            df = pd.read_excel(excel_file, skiprows=10)
-            df.columns = df.columns.str.strip()
+            try:
+                excel_file = request.FILES["file"]
+                df = pd.read_excel(excel_file, skiprows=10)
+                df.columns = df.columns.str.strip()
 
-            if "CONTROL_NUMBER" not in df.columns:
-                return HttpResponse(
-                    "Error: 'CONTROL_NUMBER' column not found in the Excel file."
-                )
-
-            student_grades = []
-
-            for index, row in df.iterrows():
-                control_number = row["CONTROL_NUMBER"]
-                gwa = row["GWA"]
-
-                subject_cols = [col for col in df.columns if col.startswith("SUBJECT")]
-                grade_cols = [col for col in df.columns if col.startswith("GRADE")]
-
-                for subject_col, grade_col in zip(subject_cols, grade_cols):
-                    subject = row[subject_col]
-                    grade = row[grade_col]
-                    print(
-                        f"Creating StudentGrade: control_number={control_number}, subject={subject}, grade={grade}, gwa={gwa}"
+                if "CONTROL_NUMBER" not in df.columns:
+                    return HttpResponse(
+                        "Error: 'CONTROL_NUMBER' column not found in the Excel file."
                     )
-                    student_grades.append(
-                        StudentGrade(
-                            control_number=control_number,
-                            subject=subject,
-                            grade=grade,
-                            gwa=gwa,
+
+                student_grades = []
+
+                for index, row in df.iterrows():
+                    control_number = row["CONTROL_NUMBER"]
+                    gwa = row["GWA"]
+
+                    subject_cols = [
+                        col for col in df.columns if col.startswith("SUBJECT")
+                    ]
+                    grade_cols = [col for col in df.columns if col.startswith("GRADE")]
+
+                    for subject_col, grade_col in zip(subject_cols, grade_cols):
+                        subject = row[subject_col]
+                        grade = row[grade_col]
+                        print(
+                            f"Creating StudentGrade: control_number={control_number}, subject={subject}, grade={grade}, gwa={gwa}"
                         )
+                        student_grades.append(
+                            StudentGrade(
+                                control_number=control_number,
+                                subject=subject,
+                                grade=grade,
+                                gwa=gwa,
+                            )
+                        )
+
+                    college_student = get_object_or_404(
+                        CollegeStudentAccepted, control_number=control_number
                     )
+                    college_student.grant = gwa
+                    if 1 <= gwa <= 2:
+                        college_student.grant = "100%"
+                    elif 2.25 <= gwa <= 2.75:
+                        college_student.grant = "80%"
+                    elif 3 <= gwa <= 5:
+                        college_student.grant = "Failed"
+                    else:
+                        college_student.grant = "Unknown"
 
-                college_student = get_object_or_404(
-                    CollegeStudentAccepted, control_number=control_number
-                )
-                college_student.grant = gwa
-                if 1 <= gwa <= 2:
-                    college_student.grant = "100%"
-                elif 2.25 <= gwa <= 2.75:
-                    college_student.grant = "80%"
-                elif 3 <= gwa <= 5:
-                    college_student.grant = "Failed"
-                else:
-                    college_student.grant = "Unknown"
+                    college_student.save()
 
-                college_student.save()
+                StudentGrade.objects.bulk_create(student_grades)
 
-            StudentGrade.objects.bulk_create(student_grades)
+                messages.success(request, "Grades Successfully Imported")
+            except Exception as e:
+                messages.error(request, f"An error occurred: {str(e)}")
 
-            messages.success(request, "Grades Successfully Imported")
             return redirect("inb_passed_applicant")
 
     else:
         form = GradeUploadForm()
 
     return render(request, "modal/import_grades.html", {"form": form})
+
 
 def new_sem(request):
     data_update = CollegeStudentAccepted.objects.all()
@@ -2132,56 +2260,64 @@ def new_sem(request):
         school_year = student.school_year
         sem = student.semester
 
-        student_grade_queryset = StudentGrade.objects.filter(control_number=control_number)
+        student_grade_queryset = StudentGrade.objects.filter(
+            control_number=control_number
+        )
 
         if student_grade_queryset.exists():
             student_grade = student_grade_queryset.first()
             gwa = student_grade.gwa
         else:
-            gwa = 0  
+            gwa = 0
 
-        student_grades.append(StudentGradeRepository(
-            control_number=control_number,
-            school_year=school_year,
-            semester=sem,
-            gwa=gwa,
-        ))
+        student_grades.append(
+            StudentGradeRepository(
+                control_number=control_number,
+                school_year=school_year,
+                semester=sem,
+                gwa=gwa,
+            )
+        )
 
-        StudentGrade.objects.all().delete()
-        StudentGradeRepository.objects.bulk_create(student_grades)
+    # Move the delete and bulk_create outside the loop
+    StudentGrade.objects.all().delete()
+    StudentGradeRepository.objects.bulk_create(student_grades)
 
-        if sem == '1st Semester':
-            student.semester = '2nd Semester'
-        elif sem == '2nd Semester':
-            student.semester = '1st Semester'
+    for student in data_update:
+        sem = student.semester  # Move this line inside the loop
+    for student in data_update:
+        if student.semester == "1st Semester":
+            student.semester = "2nd Semester"
+        elif student.semester == "2nd Semester":
+            student.semester = "1st Semester"
 
-        if sem == '1st Semester':
-            student.semester = '2nd Semester'
-            if student.school_year == '1st Year':
-                student.school_year = '1st Year'
-            elif student.school_year == '2nd Year':
-                student.school_year = '2nd Year'
-            elif student.school_year == '3rd Year':
-                student.school_year = '3rd Year'
-            elif student.school_year == '4th Year':
-                student.school_year = '4th Year'
-            elif student.school_year == '5th Year':
-                student.school_year = '5th Year'
-        elif sem == '2nd Semester':
-            student.semester = '1st Semester'
-            if student.school_year == '1st Year':
-                student.school_year = '2nd Year'
-            elif student.school_year == '2nd Year':
-                student.school_year = '3rd Year'
-            elif student.school_year == '3rd Year':
-                student.school_year = '4th Year'
-            elif student.school_year == '4th Year':
-                student.school_year = '5th Year'
-            elif student.school_year == '5th Year':
-                student.school_year = 'Graduated'
+        if student.semester == "1st Semester":
+            if student.school_year == "1st Year":
+                student.school_year = "2nd Year"
+            elif student.school_year == "2nd Year":
+                student.school_year = "3rd Year"
+            elif student.school_year == "3rd Year":
+                student.school_year = "4th Year"
+            elif student.school_year == "4th Year":
+                student.school_year = "5th Year"
+            elif student.school_year == "5th Year":
+                student.school_year = "Graduated"
+        elif student.semester == "2nd Semester":
+            if student.school_year == "1st Year":
+                student.school_year = "1st Year"
+            elif student.school_year == "2nd Year":
+                student.school_year = "2nd Year"
+            elif student.school_year == "3rd Year":
+                student.school_year = "3rd Year"
+            elif student.school_year == "4th Year":
+                student.school_year = "4th Year"
+            elif student.school_year == "5th Year":
+                student.school_year = "5th Year"
+
+        # Save the updated CollegeStudentAccepted object
         student.save()
 
-        messages.success(request, "Semester Successfully Ended")
-        return redirect("inb_passed_applicant")
+    messages.success(request, "Semester Successfully Ended")
+    return redirect("inb_passed_applicant")
 
     return render(request, "modal/end_sem.html")

@@ -1,7 +1,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<h1>Accepted Vs Applied</h1>
+        <label class="text-white font-bold text-2xl" style="color: #39B8FF; position: absolute; top: 10px; left: 10%;">Accepted Vs Applied</label>
 
     <div class="chart-wrapper ml-6" style="width: 800px; height: 240px;">
         <canvas id="myChart" width="600" height="400"></canvas>
@@ -12,7 +12,7 @@
             var ctx = document.getElementById('myChart').getContext('2d');
 
             const data = {
-                labels: ['2018', '2019', '2020', '2023', '2024', '2025'],
+                labels: ['2018', '2019', '2020', '2023', '2024'],
                 datasets: [
                     {
                         label: 'Accepted',
