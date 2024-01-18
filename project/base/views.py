@@ -144,154 +144,166 @@ def check_control_number(request):
 # problem fk nan&update
 
 
+
 def import_excel(request):
     if request.method == "POST":
         form = ApplicantUploadForm(request.POST, request.FILES)
         if form.is_valid():
             file = request.FILES["file"]
-            df = pd.read_excel(file, na_values=["N/A", "-", "Not Available"])
+            try:
+                df = pd.read_excel(file, na_values=["N/A", "-", "Not Available"])
 
-            df = df.fillna("N/A")
+                required_headers = ["Control Number", "School Year", "Surname", "Firstname", "Middlename", "Blk Street",
+                                    "Barangay", "Province", "City", "Gender", "Date of Birth", "Place of Birth",
+                                    "Contact No.", "Email Address", "Preferred School", "Desired Course", "GWA",
+                                    "Rank", "JHS", "JHS Address", "JHS Education Provider", "SHS", "SHS Address",
+                                    "SHS Education Provider", "Father Name", "Father Voter Status",
+                                    "Father Educational Attainment", "Father Employer", "Father Occupation",
+                                    "Mother Name", "Mother Voter Status", "Mother Educational Attainment",
+                                    "Mother Employer", "Mother Occupation", "Legal Guardian", "Guardian Voter Status",
+                                    "Guardian Educational Attainment", "Guardian Employer", "Guardian Occupation"]
 
-            date_columns = ["Date of Birth"]
-            for col in date_columns:
-                df[col] = pd.to_datetime(df[col], errors="coerce").dt.strftime(
-                    "%Y-%m-%d"
-                )
+                for header in required_headers:
+                    if header not in df.columns:
+                        messages.error(request, f"The file does not contain the right information. Invalid file")
+                        return redirect("inb_applicant_list")
 
-            applicant_count = 0
+                df = df.fillna("N/A")
+                date_columns = ["Date of Birth"]
+                for col in date_columns:
+                    df[col] = pd.to_datetime(df[col], errors="coerce").dt.strftime("%Y-%m-%d")
 
-            for index, row in df.iterrows():
-                try:
-                    if "Desired Course" in df.columns:
-                        applicant = CollegeStudentApplication(
-                            control_number=row["Control Number"],
-                            school_year=row["School Year"],
-                            last_name=row["Surname"],
-                            first_name=row["Firstname"],
-                            middle_name=row["Middlename"],
-                            blkstr=row["Blk Street"],
-                            barangay=row["Barangay"],
-                            province=row["Province"],
-                            city=row["City"],
-                            gender=row["Gender"],
-                            date_of_birth=row["Date of Birth"],
-                            place_of_birth=row["Place of Birth"],
-                            contact_no=row["Contact No."],
-                            email_address=row["Email Address"],
-                            school=row["Preferred School"],
-                            course=row["Desired Course"],
-                            gwa=row["GWA"],
-                            rank=row["Rank"],
-                            jhs=row["JHS"],
-                            jhs_address=row["JHS Address"],
-                            jhs_educational_provider=row["JHS Education Provider"],
-                            shs=row["SHS"],
-                            shs_address=row["SHS Address"],
-                            shs_educational_provider=row["SHS Education Provider"],
-                            father_name=row["Father Name"],
-                            father_voter_status=row["Father Voter Status"],
-                            father_educational_attainment=row[
-                                "Father Educational Attainment"
-                            ],
-                            father_employer=row["Father Employer"],
-                            father_occupation=row["Father Occupation"],
-                            mother_name=row["Mother Name"],
-                            mother_voter_status=row["Mother Voter Status"],
-                            mother_educational_attainment=row[
-                                "Mother Educational Attainment"
-                            ],
-                            mother_employer=row["Mother Employer"],
-                            mother_occupation=row["Mother Occupation"],
-                            guardian_name=row["Legal Guardian"],
-                            guardian_voter_status=row["Guardian Voter Status"],
-                            guardian_educational_attainment=row[
-                                "Guardian Educational Attainment"
-                            ],
-                            guardian_employer=row["Guardian Employer"],
-                            guardian_occupation=row["Guardian Occupation"],
-                        )
+                applicant_count = 0
 
-                        messages.success(
-                            request,
-                            f"{applicant_count} applicant(s) imported successfully.",
-                        )
-                    else:
-                        sibling_count = row["Sibling Count"]
-                        if pd.isna(sibling_count) or sibling_count == 0:
-                            messages.warning(
-                                request,
-                                f'Entry for {row["Control Number"]} has sibling_count 0 or N/A. Imported with default values.',
+                for index, row in df.iterrows():
+                    try:
+                        if "Desired Course" in df.columns:
+                            applicant = CollegeStudentApplication(
+                                control_number=row["Control Number"],
+                                school_year=row["School Year"],
+                                last_name=row["Surname"],
+                                first_name=row["Firstname"],
+                                middle_name=row["Middlename"],
+                                blkstr=row["Blk Street"],
+                                barangay=row["Barangay"],
+                                province=row["Province"],
+                                city=row["City"],
+                                gender=row["Gender"],
+                                date_of_birth=row["Date of Birth"],
+                                place_of_birth=row["Place of Birth"],
+                                contact_no=row["Contact No."],
+                                email_address=row["Email Address"],
+                                school=row["Preferred School"],
+                                course=row["Desired Course"],
+                                gwa=row["GWA"],
+                                rank=row["Rank"],
+                                jhs=row["JHS"],
+                                jhs_address=row["JHS Address"],
+                                jhs_educational_provider=row["JHS Education Provider"],
+                                shs=row["SHS"],
+                                shs_address=row["SHS Address"],
+                                shs_educational_provider=row["SHS Education Provider"],
+                                father_name=row["Father Name"],
+                                father_voter_status=row["Father Voter Status"],
+                                father_educational_attainment=row["Father Educational Attainment"],
+                                father_employer=row["Father Employer"],
+                                father_occupation=row["Father Occupation"],
+                                mother_name=row["Mother Name"],
+                                mother_voter_status=row["Mother Voter Status"],
+                                mother_educational_attainment=row["Mother Educational Attainment"],
+                                mother_employer=row["Mother Employer"],
+                                mother_occupation=row["Mother Occupation"],
+                                guardian_name=row["Legal Guardian"],
+                                guardian_voter_status=row["Guardian Voter Status"],
+                                guardian_educational_attainment=row["Guardian Educational Attainment"],
+                                guardian_employer=row["Guardian Employer"],
+                                guardian_occupation=row["Guardian Occupation"],
                             )
-                        applicant = FinancialAssistanceApplication(
-                            control_number=row["Control Number"],
-                            first_name=row["Firstname"],
-                            middle_name=row["Middlename"],
-                            last_name=row["Surname"],
-                            suffix=row["Suffix"],
-                            date_of_birth=row["Date of Birth"],
-                            place_of_birth=row["Place of Birth"],
-                            gender=row["Gender"],
-                            religion=row["Religion"],
-                            blkstr=row["Blk Street"],
-                            barangay=row["Barangay"],
-                            city=row["City"],
-                            province=row["Province"],
-                            email_address=row["Email Address"],
-                            contact_no=row["Contact No."],
-                            general_average=row["GWA"],
-                            school=row["School"],
-                            school_address=row["School Address"],
-                            track=row["Track"],
-                            strand=row["Strand"],
-                            father_name=row["Father Name"],
-                            father_age=row["Father Age"],
-                            father_occupation=row["Father Occupation"],
-                            father_employer=row["Father Employer"],
-                            father_income=row["Father Income"],
-                            mother_name=row["Mother Name"],
-                            mother_age=row["Mother Age"],
-                            mother_occupation=row["Mother Occupation"],
-                            mother_employer=row["Mother Employer"],
-                            mother_income=row["Mother Income"],
-                            sibling_count=row["Sibling Count"],
-                            a_sibling_name=row["Sibling Name"],
-                            a_sibling_DOB=row["Sibling Date of Birth"],
-                            a_sibling_age=row["Sibling Age"],
-                            a_sibling_address=row["Sibling Address"],
-                            b_sibling_name=row["Sibling Name"],
-                            b_sibling_DOB=row["Sibling Date of Birth"],
-                            b_sibling_age=row["Sibling Age"],
-                            b_sibling_address=row["Sibling Address"],
-                            c_sibling_name=row["Sibling Name"],
-                            c_sibling_DOB=row["Sibling Date of Birth"],
-                            c_sibling_age=row["Sibling Age"],
-                            c_sibling_address=row["Sibling Address"],
-                            d_sibling_name=row["Sibling Name"],
-                            d_sibling_DOB=row["Sibling Date of Birth"],
-                            d_sibling_age=row["Sibling Age"],
-                            d_sibling_address=row["Sibling Address"],
-                            e_sibling_name=row["Sibling Name"],
-                            e_sibling_DOB=row["Sibling Date of Birth"],
-                            e_sibling_age=row["Sibling Age"],
-                            e_sibling_address=row["Sibling Address"],
+
+                            messages.success(
+                                request,
+                                f"{applicant_count} applicant(s) imported successfully.",
+                            )
+                        else:
+                            sibling_count = row["Sibling Count"]
+                            if pd.isna(sibling_count) or sibling_count == 0:
+                                messages.warning(
+                                    request,
+                                    f'Entry for {row["Control Number"]} has sibling_count 0 or N/A. Imported with default values.',
+                                )
+                            applicant = FinancialAssistanceApplication(
+                                control_number=row["Control Number"],
+                                first_name=row["Firstname"],
+                                middle_name=row["Middlename"],
+                                last_name=row["Surname"],
+                                suffix=row["Suffix"],
+                                date_of_birth=row["Date of Birth"],
+                                place_of_birth=row["Place of Birth"],
+                                gender=row["Gender"],
+                                religion=row["Religion"],
+                                blkstr=row["Blk Street"],
+                                barangay=row["Barangay"],
+                                city=row["City"],
+                                province=row["Province"],
+                                email_address=row["Email Address"],
+                                contact_no=row["Contact No."],
+                                general_average=row["GWA"],
+                                school=row["School"],
+                                school_address=row["School Address"],
+                                track=row["Track"],
+                                strand=row["Strand"],
+                                father_name=row["Father Name"],
+                                father_age=row["Father Age"],
+                                father_occupation=row["Father Occupation"],
+                                father_employer=row["Father Employer"],
+                                father_income=row["Father Income"],
+                                mother_name=row["Mother Name"],
+                                mother_age=row["Mother Age"],
+                                mother_occupation=row["Mother Occupation"],
+                                mother_employer=row["Mother Employer"],
+                                mother_income=row["Mother Income"],
+                                sibling_count=row["Sibling Count"],
+                                a_sibling_name=row["Sibling Name"],
+                                a_sibling_DOB=row["Sibling Date of Birth"],
+                                a_sibling_age=row["Sibling Age"],
+                                a_sibling_address=row["Sibling Address"],
+                                b_sibling_name=row["Sibling Name"],
+                                b_sibling_DOB=row["Sibling Date of Birth"],
+                                b_sibling_age=row["Sibling Age"],
+                                b_sibling_address=row["Sibling Address"],
+                                c_sibling_name=row["Sibling Name"],
+                                c_sibling_DOB=row["Sibling Date of Birth"],
+                                c_sibling_age=row["Sibling Age"],
+                                c_sibling_address=row["Sibling Address"],
+                                d_sibling_name=row["Sibling Name"],
+                                d_sibling_DOB=row["Sibling Date of Birth"],
+                                d_sibling_age=row["Sibling Age"],
+                                d_sibling_address=row["Sibling Address"],
+                                e_sibling_name=row["Sibling Name"],
+                                e_sibling_DOB=row["Sibling Date of Birth"],
+                                e_sibling_age=row["Sibling Age"],
+                                e_sibling_address=row["Sibling Address"],
+                            )
+                        applicant.save()
+                        applicant_count += 1
+                    except IntegrityError:
+                        messages.warning(
+                            request,
+                            f'Duplicate entry found for {row["Control Number"]}. Skipped.',
                         )
-                    applicant.save()
-                    applicant_count += 1
-                except IntegrityError:
-                    messages.warning(
-                        request,
-                        f'Duplicate entry found for {row["Control Number"]}. Skipped.',
-                    )
 
-            if "Desired Course" not in df.columns:
-                return redirect("fa_applicant_list")
+                if "Desired Course" not in df.columns:
+                    return redirect("fa_applicant_list")
 
-            return redirect("inb_applicant_list")
+                return redirect("inb_applicant_list")
+
+            except Exception as e:
+                messages.error(request, f"An error occurred during the import process. Please check your data and try again. Error: {str(e)}")
 
     else:
         form = ApplicantUploadForm()
     return render(request, "INB/import.html", {"form": form})
+
 
 
 # ---------------------------------------------------------------------------------------------------------------------------------------
@@ -1783,8 +1795,10 @@ def create_school(request):
         form = INBSchoolForm(request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, "School Successfully Added")
-            return redirect("sc_list")
+            return JsonResponse({'success': True})
+        else:
+            error_message = form.errors['school'][0]
+            return JsonResponse({'success': False, 'error_message': error_message})
     else:
         form = INBSchoolForm()
 

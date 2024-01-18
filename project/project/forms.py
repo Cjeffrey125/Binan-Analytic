@@ -32,10 +32,23 @@ class UpdateUserForm(forms.ModelForm):
 
 
 class INBSchoolForm(forms.ModelForm):
+    def clean_school(self):
+        school = self.cleaned_data.get("school")
+        if INBSchool.objects.filter(
+            school=school
+        ).exists():
+            raise forms.ValidationError("School Already Exist.")
+        return school
+    
     school = forms.CharField(
         required=True,
         widget=forms.TextInput(
-            attrs={"placeholder": "Add New Requirements", "class": "form-control"}
+            attrs={
+                "placeholder": "Add School",
+                "class": "school-input",
+                "required": "Please enter the school name.",
+                "unique": "This name is already existing.",
+            }
         ),
         label="",
     )
@@ -251,7 +264,7 @@ class AddINBForm(forms.ModelForm):
                 "placeholder": "Control Number",
                 "class": "control-number-input",
                 "required": "Please enter your control number.",
-                "unique": "This control number is already in use. Please enter a different control number.",
+                "unique": "This control number is already taken.",
             }
         ),
         label="",

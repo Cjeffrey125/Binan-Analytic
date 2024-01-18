@@ -32,8 +32,6 @@ urlpatterns = [
 
     path("End-Semester/", views.new_sem, name="end_sem"),
     
-    
-    
 
 
 
@@ -132,4 +130,4 @@ urlpatterns = [
 
 
     path("Page_not_found",views.page_not_found,name="page_not_found"),
-]
+]   
