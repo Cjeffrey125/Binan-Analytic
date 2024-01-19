@@ -6,25 +6,29 @@
 {% tailwind_css %}
 
 {% block content %}
-
-<div class="flex justify-start items-start px-10 mx-40">
-    <div class="py-3 mb-3 mr-10">
+<div class="px-10 mx-5">
+    <div class="flex my-1 relative justify-between">
+        <div class="py-3">
         <h1 class="text-4xl">Pending</h1>
         <h3 class="text-cyan-400">PENDING ISKOLAR STUDENT APPLICANT DETAILS</h3>
     </div>
+    
     <div class="flex space-x-4 mt-1 ml-auto">
         <a href="{% url 'inb_pending_applicant' %}"
-            class="text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800">Back</a>
+            class="text-white h-10 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800">Back</a>
 
-        <button onclick="window.location=''" style="cursor: pointer;"
-            class="text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">View
+        <button onclick="window.location='/inb/passed/applicant_info/{{ passed_applicant.control_number }}'"
+            style="cursor: pointer;"
+            class="text-white h-10 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 me-2 mb-2 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-800 dark:border-blue-800">View
             Details</button>
+        
+        </div>
     </div>
 </div>
 
-<div class="container mt-4 mx-auto max-w-5xl">
-
-    <div class="flex justify-between">
+<div class="container mt-4 mx-auto max-w-7xl flex justify-between">
+    <div class="border w-[550px] border-gray-500 p-4 m-4">
+        <div class="flex justify-between">
         <div>
             <div class="mb-5 border-b border-gray-300 max-w-lg mx-auto">
 
@@ -58,35 +62,38 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
 
 
         <form method="post" class="space-y-4">
             {% csrf_token %}
-            <div class="relative bottom-10">
-                <div class="relative right-36">
-            <div class="flex flex-col">
-                <label for="{{ form.status.id_for_label }}"  class="text-gray-500 sm:text-m">Status</label>
-                <div class="relative flex justify-between items-center">{{ form.status |add_class:"block w-full px-4 py-2 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1 mb-5" }}
+            <div class="relative bottom-5">
+                <div class="relative right-32">
+                    <div class="flex flex-col">
+                        <label for="{{ form.status.id_for_label }}" class="text-gray-500 sm:text-m">Status</label>
+                        <div class="relative flex justify-between items-center">
+                            {{ form.status |add_class:"block w-full sm:w-[500px] px-4 py-2 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1 mb-5" }}
+                        </div>
+                    </div>
+                    <div class="flex flex-col">
+                        <label for="{{ form.remarks.id_for_label }}" class="text-gray-500 sm:text-m">Remarks</label>
+                        <div class="relative">
+                            {{ form.remarks |add_class:"block w-full sm:w-[500px] px-4 py-2 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
+                        </div>
+                    </div>
+                    <br>
+                    <button type="submit"
+                        class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 bg-purple-700 text-white hover:bg-purple-400 shadow-gray-700 ">Update</button>
                 </div>
             </div>
-            <div class="flex flex-col">
-                <label for="{{ form.remarks.id_for_label }}"  class="text-gray-500 sm:text-m">Remarks</label>
-                <div class="relative">{{ form.remarks |add_class:"block w-full px-4 py-2 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1" }}
-                </div>
-            </div>
-            <br>
-            <button type="submit"
-                class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 bg-purple-700 text-white   hover:bg-purple-400 shadow-gray-700 ">Update</button>
-                </div>
-                </div>
         </form>
-            
     </div>
 
 
     <button onclick="location.href='{% url 'delete_applicant' pending_applicant.control_number 'inb_pending' %}';"
-        class="flex items-center text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium text-sm px-6 py-1 me-2 mb-2 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600 dark:border-red-600 rounded-lg mt-3">
+        class="ml-20 flex items-center text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium text-sm px-6 py-1 me-2 mb-2 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600 dark:border-red-600 rounded-lg mt-3">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="w-6 h-6 mr-2">
             <path stroke-linecap="round" stroke-linejoin="round"

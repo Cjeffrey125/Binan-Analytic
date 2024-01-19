@@ -2,25 +2,28 @@
 
 {% block content %}
 
-<div class="flex justify-start items-start px-10 mx-40">
-    <div class="py-3 mb-3 mr-10">
+<div class="px-10 mx-5">
+    <div class="flex my-1 relative justify-between">
+        <div class="py-3">
         <h1 class="text-4xl">Failed</h1>
         <h3 class="text-cyan-400">FAILED APPLICANT DETAILS</h3>
     </div>
+
     <div class="flex space-x-4 mt-1 ml-auto">
         <a href="{% url 'inb_failed_applicant' %}"
-            class="text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800">Back</a>
+            class="text-white h-10 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800">Back</a>
 
         <button onclick="window.location=''" style="cursor: pointer;"
-            class="text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">View
+            class="text-white h-10 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 me-2 mb-2 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-800 dark:border-blue-800">View
             Details</button>
+        </div>
     </div>
 </div>
 
-<div class="container mt-4 mx-auto max-w-5xl">
-
-    <div class="flex justify-between">
-        <div class="">
+<div class="container mt-4 mx-auto max-w-7xl flex justify-between">
+    <div class="border w-[550px] border-gray-500 p-4 m-4">
+        <div class="flex justify-between">
+            <div>
             <div class="mb-5 border-b border-gray-300 max-w-lg mx-auto">
 
                 <div class="flex">
@@ -53,12 +56,14 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="relative bottom-6">
-            <div class="relative right-0 flex flex-col">
+        <div class="relative top-3">
+            <div class="relative right-32 flex flex-col">
                 <label class="text-gray-500 sm:text-base mr-5">Remarks: </label>
                 <textarea
-                    class="block w-full px-4 py-2 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1"
+                    class="block w-full sm:w-[500px] sm:h-[200px] px-4 py-2 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1"
                     rows="8" cols="50" readonly>{{ failed_applicant.remarks }}</textarea>
             </div>
         </div>
@@ -68,7 +73,7 @@
 
 
     <button onclick="location.href='{% url 'delete_applicant' failed_applicant.control_number 'inb_failed' %}';"
-        class="flex items-center text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium text-sm px-6 py-1 me-2 mb-2 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600 dark:border-red-600 rounded-lg mt-3">
+        class="flex ml-20 items-center text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium text-sm px-6 py-1 me-2 mb-2 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600 dark:border-red-600 rounded-lg mt-3">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round"
