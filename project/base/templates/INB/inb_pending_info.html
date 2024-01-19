@@ -6,9 +6,9 @@
 {% tailwind_css %}
 
 {% block content %}
-
-<div class="flex justify-start items-start px-10 mx-40">
-    <div class="py-3 mb-3 mr-10">
+<div class="px-10 mx-5">
+    <div class="flex my-1 relative justify-between">
+        <div class="py-3">
         <h1 class="text-4xl">Pending</h1>
         <h3 class="text-cyan-400">PENDING ISKOLAR STUDENT APPLICANT DETAILS</h3>
     </div>
@@ -16,15 +16,18 @@
         <a href="{% url 'inb_pending_applicant' %}"
             class="text-white bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800">Back</a>
 
-        <button onclick="window.location=''" style="cursor: pointer;"
-            class="text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">View
+        <button onclick="window.location='/inb/passed/applicant_info/{{ passed_applicant.control_number }}'"
+            style="cursor: pointer;"
+            class="text-white h-10 bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-8 py-2.5 me-2 mb-2 dark:bg-blue-700 dark:hover:bg-blue-800 dark:focus:ring-blue-800 dark:border-blue-800">View
             Details</button>
+        
+        </div>
     </div>
 </div>
 
-<div class="container mt-4 mx-auto max-w-5xl">
-
-    <div class="flex justify-between">
+<div class="container mt-4 mx-auto max-w-7xl flex justify-between">
+    <div class="border w-[550px] border-gray-500 p-4 m-4">
+        <div class="flex justify-between">
         <div>
             <div class="mb-5 border-b border-gray-300 max-w-lg mx-auto">
 
@@ -58,6 +61,8 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
 
 
