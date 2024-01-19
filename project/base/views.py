@@ -47,13 +47,15 @@ import csv
 import pandas as pd
 from import_export import resources
 from django.db.models import Q
-import datetime
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db import transaction
 from django.db import IntegrityError
 from django.contrib import messages
 from django.http import JsonResponse
+from .filter import (
+    CollegeStudentApplicationFilter
+)
 
 
 def logger(request):
@@ -1267,7 +1269,6 @@ def iskolar_ng_bayan_list(request):
             control_number__in=list(accepted_applicants) + list(rejected_applicants)
         )
 
-        # Search functionality
         query = request.GET.get("q")
         if query:
             filtered_applicants = filtered_applicants.filter(
@@ -1301,8 +1302,7 @@ def iskolar_ng_bayan_list(request):
                     applicant.requirement = "Complete"
                     applicant.save()
 
-        # Paginator object
-        paginator = Paginator(records, 20)  # Show 20 records per page
+        paginator = Paginator(records, 20)
         page_number = request.GET.get("page")
         page = paginator.get_page(page_number)
 
@@ -1323,6 +1323,20 @@ def iskolar_ng_bayan_list(request):
                 "filtered_applicants": filtered_applicants,
             },
         )
+
+def filter(request):
+    queryset = CollegeStudentApplication.objects.all()
+
+    filter = CollegeStudentApplicationFilter(request.GET, queryset=queryset)
+    filtered_queryset = filter.qs
+
+    context = {
+        'filter': filter,
+        'filtered_queryset': filtered_queryset,
+    }
+
+
+    return render(request, 'INB/applicant_list.html', context)
 
 
 def financial_assistance_list(request):
@@ -2031,34 +2045,6 @@ def delete_item(request, item_type, item_id):
         return redirect("sc_list")
 
     return redirect("sc_list")
-
-
-def filter(request):
-    schools = INBSchool.objects.all()
-    courses = INBCourse.objects.values("acronym").distinct()
-
-    school_list = CollegeStudentApplication.objects.values("school")
-    course_list = CollegeStudentApplication.objects.values("course")
-
-    filtered_applicants = CollegeStudentApplication.objects.all()
-
-    if school_list:
-        filtered_applicants = filtered_applicants.filter(school__in=school_list)
-
-    if course_list:
-        filtered_applicants = filtered_applicants.filter(course__in=course_list)
-
-    return render(
-        request,
-        "INB/applicant_list.html",
-        {
-            "schools": schools,
-            "courses": courses,
-            "filtered_applicants": filtered_applicants,
-            "selected_schools": school_list,
-            "selected_courses": course_list,
-        },
-    )
 
 
 def update_requirement(request):

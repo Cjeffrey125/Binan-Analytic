@@ -1223,6 +1223,10 @@ select {
   margin-right: 1.5rem;
 }
 
+.mr-auto {
+  margin-right: auto;
+}
+
 .ms-0 {
   margin-inline-start: 0px;
 }
@@ -1285,10 +1289,6 @@ select {
 
 .mt-8 {
   margin-top: 2rem;
-}
-
-.mr-auto {
-  margin-right: auto;
 }
 
 .block {
