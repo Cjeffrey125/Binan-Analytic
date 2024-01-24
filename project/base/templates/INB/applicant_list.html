@@ -218,9 +218,11 @@
         {% endfor %}
       </tbody>
     </table>
+
+    
     <div class="flex justify-between mt-3 mr-16 px-5 py-5">
       <div class="text-sm leading-5 ml-10">
-        Showing {{ records.start_index }} to {{ records.end_index }} of {{ records.paginator.count }} results
+        Showing {{ records.start_index }} to {{ records.end_index }} for {{ records.paginator.count }} results
       </div>
       <nav aria-label="Page navigation">
         <ul class="flex items-center -space-x-px h-8 text-sm">

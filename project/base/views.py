@@ -17,6 +17,7 @@ from project.forms import (
     UpdateUserForm,
     ProfileImageForm,
     FAPendingApplicants,
+  
 )
 from .models import (
     CollegeStudentApplication,
@@ -54,7 +55,8 @@ from django.db import IntegrityError
 from django.contrib import messages
 from django.http import JsonResponse
 from .filter import (
-    CollegeStudentApplicationFilter
+    TableFilter,
+
 )
 
 
@@ -1248,11 +1250,11 @@ def fa_filter_assessment(request):
 
 # CRUD
 
-
 def iskolar_ng_bayan_list(request):
     if request.user.is_authenticated:
         schools = INBSchool.objects.all()
         courses = INBCourse.objects.values("acronym").distinct()
+
         form = AddINBForm()
         import_form = ApplicantUploadForm(request.POST, request.FILES)
         export_form = ExportForm(request.POST)
@@ -1265,11 +1267,11 @@ def iskolar_ng_bayan_list(request):
             "control_number", flat=True
         )
 
+        
+        query = request.GET.get("q")
         filtered_applicants = all_applicants.exclude(
             control_number__in=list(accepted_applicants) + list(rejected_applicants)
         )
-
-        query = request.GET.get("q")
         if query:
             filtered_applicants = filtered_applicants.filter(
                 Q(control_number__icontains=query)
@@ -1279,6 +1281,21 @@ def iskolar_ng_bayan_list(request):
                 | Q(course__icontains=query)
                 | Q(school__icontains=query)
             )
+
+        # Filter Query
+        selected_schools = request.GET.getlist("schools")
+        selected_courses = set(request.GET.getlist("courses"))
+        selected_gender = request.GET.getlist("gender")
+        selected_requirement = request.GET.getlist("requirement")
+
+        if selected_schools:
+            filtered_applicants = filtered_applicants.filter(school__in=selected_schools)
+        if selected_courses:
+            filtered_applicants = filtered_applicants.filter(course__in=selected_courses)
+        if selected_gender:
+            filtered_applicants = filtered_applicants.filter(gender__in=selected_gender)
+        if selected_requirement: 
+            filtered_applicants = filtered_applicants.filter(requirement__in=selected_requirement)
 
         records = []
 
@@ -1310,33 +1327,18 @@ def iskolar_ng_bayan_list(request):
             messages.success(request, "You have logged in successfully!")
             request.session["login_message_displayed"] = True
 
-        return render(
-            request,
-            "INB/applicant_list.html",
-            {
-                "records": page,
-                "form": form,
-                "import_form": import_form,
-                "export_form": export_form,
-                "schools": schools,
-                "courses": courses,
-                "filtered_applicants": filtered_applicants,
-            },
-        )
+        context = {
+            "records": page,
+            "form": form,
+            "import_form": import_form,
+            "export_form": export_form,
+            "schools": schools,
+            "courses": courses,
+            "filtered_applicants": filtered_applicants,
+        }
 
-def filter(request):
-    queryset = CollegeStudentApplication.objects.all()
+        return render(request, "INB/applicant_list.html", context)
 
-    filter = CollegeStudentApplicationFilter(request.GET, queryset=queryset)
-    filtered_queryset = filter.qs
-
-    context = {
-        'filter': filter,
-        'filtered_queryset': filtered_queryset,
-    }
-
-
-    return render(request, 'INB/applicant_list.html', context)
 
 
 def financial_assistance_list(request):
@@ -1356,7 +1358,6 @@ def financial_assistance_list(request):
             control_number__in=list(accepted_applicants) + list(rejected_applicants)
         )
 
-        # Search functionality
         query = request.GET.get("q")
         if query:
             filtered_applicants = filtered_applicants.filter(
@@ -2265,12 +2266,12 @@ def new_sem(request):
             )
         )
 
-    # Move the delete and bulk_create outside the loop
+  
     StudentGrade.objects.all().delete()
     StudentGradeRepository.objects.bulk_create(student_grades)
 
     for student in data_update:
-        sem = student.semester  # Move this line inside the loop
+        sem = student.semester  
     for student in data_update:
         if student.semester == "1st Semester":
             student.semester = "2nd Semester"
@@ -2300,10 +2301,9 @@ def new_sem(request):
             elif student.school_year == "5th Year":
                 student.school_year = "5th Year"
 
-        # Save the updated CollegeStudentAccepted object
+    
         student.save()
 
     messages.success(request, "Semester Successfully Ended")
     return redirect("inb_passed_applicant")
 
-    return render(request, "modal/end_sem.html")

@@ -124,7 +124,7 @@ urlpatterns = [
    path("import_applicant/", views.import_excel, name="import_applicant"),
 
  
-    path('Filter/', views.filter, name='filter'),
+
 
     
 

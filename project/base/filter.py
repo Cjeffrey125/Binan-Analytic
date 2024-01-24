@@ -1,28 +1,15 @@
 import django_filters
 from .models import CollegeStudentApplication
-from django import forms
 
-class CollegeStudentApplicationFilter(django_filters.FilterSet):
+class TableFilter(django_filters.FilterSet):
+    requirement = django_filters.CharFilter(field_name='requirement__acronym', lookup_expr='exact')
 
-    CHOICES = (
-        ('ascending', 'Ascending'),
-        ('descending', 'Descending')
-    )
+    school = django_filters.CharFilter(field_name='school__name', lookup_expr='exact')
 
-    ordering = django_filters.ChoiceFilter(
-        label='Ordering',
-        choices=CHOICES,
-        method='filter_by_order',
-        widget=forms.Select(attrs={'class': 'your-dropdown-css-class'}),
-    )
+    course = django_filters.CharFilter(field_name='course__name', lookup_expr='exact')
+
+    gender = django_filters.CharFilter(field_name='gender__name', lookup_expr='exact')
 
     class Meta:
         model = CollegeStudentApplication
-        fields = {
-            'control_number': ['icontains'],
-            'last_name': ['icontains'],
-        }
-
-    def filter_by_order(self, queryset, value):
-        expression = 'created' if value == 'ascending' else '-created'
-        return queryset.order_by(expression)
+        fields = ['school', 'course', 'gender', 'requirement']

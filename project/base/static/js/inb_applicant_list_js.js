@@ -61,9 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('cancelFilterButton').addEventListener('click', function () {
       closeModal('filterModal');
     });
-
-
-
   });
   
 
@@ -72,12 +69,10 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
      $(document).ready(function () {
-      // Function to toggle sorting direction
       function toggleSortDirection($th) {
         $th.toggleClass('asc desc');
       }
 
-      // Function to handle sorting
       function sortTable($table, columnIndex, direction) {
         const rows = $table.find('tbody tr').get();
 
@@ -97,7 +92,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
 
-      // Click event for sortable columns
       $('.sortable').click(function () {
         const $th = $(this);
         const columnIndex = $th.index();
