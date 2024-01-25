@@ -24,7 +24,7 @@ class CollegeStudentApplication(models.Model):
 
     requirement = models.CharField(max_length=50, default="Incomplete")
     school_year = models.CharField(max_length=50, default="1st Year")
-    # personal data
+   
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     middle_name = models.CharField(max_length=50, default="")

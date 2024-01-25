@@ -1267,7 +1267,6 @@ def iskolar_ng_bayan_list(request):
             "control_number", flat=True
         )
 
-        
         query = request.GET.get("q")
         filtered_applicants = all_applicants.exclude(
             control_number__in=list(accepted_applicants) + list(rejected_applicants)
@@ -1323,10 +1322,6 @@ def iskolar_ng_bayan_list(request):
         page_number = request.GET.get("page")
         page = paginator.get_page(page_number)
 
-        if not request.session.get("login_message_displayed", False):
-            messages.success(request, "You have logged in successfully!")
-            request.session["login_message_displayed"] = True
-
         context = {
             "records": page,
             "form": form,
@@ -1338,6 +1333,7 @@ def iskolar_ng_bayan_list(request):
         }
 
         return render(request, "INB/applicant_list.html", context)
+
 
 
 

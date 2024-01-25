@@ -8,8 +8,7 @@
     {% block content %}
  
 
-    <form method="POST" action="{% url 'add_inb_applicant' %}">
-        {% csrf_token %}
+  
 
         
 <div class="px-10 mx-5">
@@ -18,7 +17,10 @@
                 <h1 class="text-4xl">Iskolar Ng Biñan</h1>
                 <h3 class="text-cyan-400">ADD NEW ISKOLAR NG BINAN APPLICANTS</h3>
             </div>
-        
+
+    <form method="POST" action="{% url 'add_inb_applicant' %}">
+        {% csrf_token %}
+
             <div class="flex space-x-4 mt-1 ml-auto">
                 <a href="{% url 'inb_applicant_list' %}"
                     class="text-white h-10 bg-gray-600 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-700 dark:hover:bg-gray-800 dark:focus:ring-gray-800 dark:border-gray-800">Cancel</a> 
@@ -210,7 +212,7 @@
         $('.control-number-input').change(function () {
             var control_number = $(this).val();
             $.ajax({
-                url: '/check_control_number/',  // URL of your view that checks for uniqueness
+                url: '/check_control_number/',  
                 data: {
                     'control_number': control_number
                 },
