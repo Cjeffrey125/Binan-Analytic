@@ -1,40 +1,54 @@
 {% extends 'base.html' %}
 {% load static tailwind_tags %}
 
-{% tailwind_css %}
+    {% tailwind_css %}
 
 {% block content %}
     {% if user.is_authenticated %}
 
+<div class="px-10 mx-5">
+
+        <div class="flex justify-center">
+                <div class="bg-gray-800 mt-12 rounded flex flex-col justify-center items-center" style="width: 1750px; height: 550px">
+                    <label class="font-bold text-2xl mt-2 mb-8" style="color: #39B8FF;">Scholar Graduated Per Year </label>
+                    {% include "in-depth-charts/graduated-scholar/yearly-graduated.html" %}
+                </div>    
+        </div>  
+
+       
+          
         <div class="flex justify-between mx-4 mt-4">
-            <div class="bg-gray-800 ml-48 mt-24 rounded flex flex-col justify-center items-center" style="width: 700px; height: 320px">
-                <label class="font-bold text-2xl mt-2 mb-4" style="color: #39B8FF;">Graduates Per Year </label>
-                {% include "in-depth-charts/graduated-scholar/yearly-graduated.html" %}
+
+            <div class="ml-1 bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 850px; height: 500px; overflow-y: auto;">   
+                <label class="font-bold text-2xl" style="color: #39B8FF;"> Graduated Scholar Per School </label>
+                    <div class="flex items-start mt-3 ml-5">
+                        {% include "in-depth-charts/graduated-scholar/school-graduates.html" %}
+                    </div>
+                
             </div>
 
-           <div class="bg-gray-800 mr-48 mt-24 rounded flex flex-col justify-center items-center" style="width: 700px; height: 320px; overflow-y: auto;">
-                <div class="flex items-start mt-3 ml-5">
-                    <div class="list-disc">
-                        <label class="font-bold text-2xl mt-2 mb-4" style="color: #39B8FF;"> School Graduates Per Year </label>
-                        {% for entry in graduated_data|slice:":4" %}
-                            <div class="mb-2 relative">
-                                <div class="text-base font-medium dark:text-white">{{ entry.school }}</div>
+       
 
-                                <div class="ml-8 w-500px rounded-full h-2.5" style="width: 480px; background-color: rgba(54, 162, 235, 0.2);">
-                                    <div class="h-2 rounded-full" style="width: {{ entry.graduates_count }}%; background-color: rgb(54, 162, 235);"></div>
-                                </div>
-                                <div class="font-bold text-xs flex flex-col items-end mr-2">
-                                    {{ entry.graduates_count }}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
+            <div class="mr-1 bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 850px; height: 500px; overflow-y: auto;">
+                <label class="font-bold text-2xl" style="color: #39B8FF;"> Graduated Scholar by Gender </label>
+                <div class="flex items-start mt-3 ml-5">
+                    {% include "in-depth-charts/graduated-scholar/graduates-gender.html" %}
                 </div>
             </div>
+
+        </div>
+
+        <div class="mb-4 mt-4 flex justify-center">
+            <div class="bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 1750px; height: 550px">
+                <label class="font-bold text-2xl mt-2 mb-8" style="color: #39B8FF;">Scholar Graduates Per Course </label>
+                {% include "in-depth-charts/graduated-scholar/course-graduated.html" %}
+            </div>    
+    </div>  
             
-        </div>  
-            
+</div>
+          
       
+  
    
 
         <script>

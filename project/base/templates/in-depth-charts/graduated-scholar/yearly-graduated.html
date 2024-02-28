@@ -3,8 +3,8 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
 
-    <div class="chart-wrapper" style="width: 600px; height: 400px;">
-        <canvas id="myChart" width="600" height="250"></canvas>
+    <div class="chart-wrapper" style="width: 1650px; height: 400px;">
+        <canvas id="myChart" width="1200" height="750"></canvas>
     </div>
     
     <script>
@@ -18,23 +18,43 @@
                     label: 'Graduates Count',
                     data: [
                         {% for entry in graduated_data %}
-                            {{ entry.graduates_count }},
+                            {{ entry.graduates_scholar_count }},
                         {% endfor %}
                     ],
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
-                    tension: 0.1
+                    tension: 0
                 }]
             };
 
             var myChart = new Chart(ctx, {
-                type: 'line',
-                data: data,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
+            type: 'line',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        ticks: {
+                            stepSize: 100,
+                            color: 'white'  
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'white'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white' 
+                        }
+                    }
                 }
-            });
+            }
+        });
         });
     </script>
     

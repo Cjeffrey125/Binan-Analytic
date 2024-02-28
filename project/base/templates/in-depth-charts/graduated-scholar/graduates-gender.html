@@ -1,0 +1,82 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="chart-wrapper" style="width: 700px; height: 450px; margin: auto; display: flex; justify-content: center; align-items: center;">
+    <canvas id="pieGraph"></canvas>
+</div>
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const canvas = document.getElementById('pieGraph');
+            canvas.width = 200;
+            canvas.height = 240;
+
+            const labels = {{ labels|safe }};
+            const counts = {{ counts|safe }};
+
+            const total = counts.reduce((a, b) => a + b, 0);
+            const percentages = counts.map(count => ((count / total) * 100).toFixed(2) + '%');
+
+            const data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Gender Distribution',
+                    data: counts,
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 99, 158, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235)',
+                        'rgba(255, 99, 158)'],
+                    hoverOffset: 4,
+                    borderWidth: 1,
+                }],
+            };
+
+            const ctx = canvas.getContext('2d');
+
+            const myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                            align: 'middle',
+                            labels: {
+                                boxWidth: 15,
+                                color: 'white',
+                                generateLabels: function (chart) {
+                                    const data = chart.data;
+                                    if (data.labels.length && data.datasets.length) {
+                                        return data.labels.map(function (label, i) {
+                                            const percentage = percentages[i];
+                                            return {
+                                                text: label + ' (' + percentage + ')',
+                                                fontColor: 'white', 
+                                                fillStyle: data.datasets[0].backgroundColor[i],
+                                                hidden: isNaN(data.datasets[0].data[i]) || data.datasets[0].data[i] === 0,
+                                                index: i
+                                            };
+                                        });
+                                    }
+                                    return [];
+                                }
+                            },
+                        },
+                    },
+                    layout: {
+                        padding: {
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 16,
+                        },
+                    },
+                },
+            });
+        });
+    </script>
+

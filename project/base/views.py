@@ -16,13 +16,12 @@ from project.forms import (
     INBPendingApplicants,
     UpdateUserForm,
     ProfileImageForm,
-    FAPendingApplicants,
-  
+    FAPendingApplicants, 
 )
+
 from .models import (
     CollegeStudentApplication,
     CollegeStudentAccepted,
-    CollegeStudentAssesment,
     CollegeStudentRejected,
     ApplicantInfoRepositoryINB,
     FinancialAssistanceApplication,
@@ -106,9 +105,9 @@ def generate_permit_pdf(permits):
 
     return buf
 
-
+#changes/ no filter for passed yet
 def print_permit_view(request):
-    get_permit = CollegeStudentAccepted.objects.all()
+    get_permit = ApplicantInfoRepositoryINB.objects.all()
     pdf_buffer = generate_permit_pdf(get_permit)
 
     response = HttpResponse(content_type="application/pdf")
@@ -119,7 +118,7 @@ def print_permit_view(request):
 
 
 def print_view(request):
-    get_permit = CollegeStudentAccepted.objects.all()
+    get_permit = ApplicantInfoRepositoryINB.objects.all()
     context = {"permits": get_permit}
     return render(request, "print_permit.html", context)
 
@@ -369,8 +368,6 @@ def csv_record(request):
 
 
 # Login  --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-from django.contrib.auth.forms import PasswordChangeForm
-
 
 def user_settings(request):
     user = request.user
@@ -446,77 +443,98 @@ def register_user(request):
 
 # --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # dashboardo
-from django.db.models import Count
 from django.db import models
 
-
 def fa_data_visualization(request):
-    applicant_courses = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
-        .values("course")
-        .annotate(count=Count("course"))
-        .order_by("-count")
+    
+    return render(request, "fa-dashboard.html")
+
+def active_scholar_summary(request):
+    active_scholar = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing")
+        .values("created_at__year")
+        .annotate(active_scholar_count=Count("id"))
+        .order_by("created_at__year")  
     )
 
     school_counts = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing")
+        .exclude(status="Graduated")
         .values("school")
         .annotate(count=Count("school"))
         .order_by("-count")
     )
 
-    barangay_counts = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
-        .values("barangay")
-        .annotate(count=Count("barangay"))
+    course_counts = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing")
+        .exclude(status="Graduated")
+        .values("course")
+        .annotate(count=Count("course"))
         .order_by("-count")
     )
 
-    first_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="1st Year", status="Ongoing"
+    unique_years_list = sorted(set(entry["created_at__year"] for entry in active_scholar))
+
+    first_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        school_year="1st Year", tracker="Ongoing"
     ).count()
-    second_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="2nd Year", status="Ongoing"
+    second_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        school_year="2nd Year", tracker="Ongoing"
     ).count()
-    third_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="3rd Year", status="Ongoing"
+    third_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        school_year="3rd Year", tracker="Ongoing"
     ).count()
-    fourth_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="4th Year", status="Ongoing"
+    fourth_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        school_year="4th Year", tracker="Ongoing"
     ).count()
-    fifth_year_count = CollegeStudentAccepted.objects.filter(
-        school_year="5th Year", status="Ongoing"
+    fifth_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        school_year="5th Year", tracker="Ongoing"
     ).count()
 
-    total_scholars_count = CollegeStudentAccepted.objects.count()
-
-    graduated_scholars_count = CollegeStudentAccepted.objects.filter(
-        school_year="Graduated"
-    ).count()
-    ongoing_scholars_count = (
-        CollegeStudentAccepted.objects.filter(status="Ongoing")
-        .exclude(school_year="Graduated")
-        .count()
+    context = {
+        "active_scholar": active_scholar,
+        "unique_years_list": unique_years_list,
+        "schoolCustomLabels": [entry["school"] for entry in school_counts],
+        "schoolDataCounts": [entry["count"] for entry in school_counts],
+        "first_year_count": first_year_count,
+        "second_year_count": second_year_count,
+        "third_year_count": third_year_count,
+        "fourth_year_count": fourth_year_count, 
+        "fifth_year_count": fifth_year_count,
+        "course_counts": course_counts,
+        "courseCustomLabels" : [entry['course'] for entry in course_counts],
+        "courseDataCounts" :[entry['count'] for entry in course_counts],
+    }
+    return render(
+        request, "in-depth-charts/active-scholar/active_scholar.html", context
     )
 
-    rejected_scholars_count = CollegeStudentRejected.objects.count()
-    unsuccessful_scholar_count = CollegeStudentAccepted.objects.filter(
-        status="Failed"
-    ).count()
 
-    total_failed_applicants = rejected_scholars_count + unsuccessful_scholar_count
 
-    percentage_ongoing = (
-        (ongoing_scholars_count / total_scholars_count) * 100
-        if total_scholars_count > 0
-        else 0
+def graduate_scholar_summary(request):
+    graduated_data = (
+        ApplicantInfoRepositoryINB.objects.filter(school_year="Graduated")
+        .values("created_at__year")
+        .annotate(graduates_scholar_count=Count("id"))
+        .order_by("created_at__year")  
+    )
+
+    school_graduate_counts = (
+        ApplicantInfoRepositoryINB.objects.filter(status="Graduated")
+        .values("school")
+        .annotate(count=Count("school"))
+        .order_by("-count")
+    )
+
+    course_graduate_counts = (
+        ApplicantInfoRepositoryINB.objects.filter(status="Graduated")
+        .values("course")
+        .annotate(count=Count("course"))
+        .order_by("-count")
     )
 
     gender_data = (
-        CollegeStudentAccepted.objects.filter(status="Ongoing")
+        ApplicantInfoRepositoryINB.objects.filter(status="Graduated")
         .values("gender")
         .annotate(count=models.Count("gender"))
     )
@@ -524,30 +542,54 @@ def fa_data_visualization(request):
     labels = [entry["gender"] for entry in gender_data]
     counts = [entry["count"] for entry in gender_data]
 
+    unique_years_list = sorted(set(entry["created_at__year"] for entry in graduated_data))
+
     context = {
-        "applicant_courses": applicant_courses,
-        "customLabels": [entry["school"] for entry in school_counts],
-        "dataCounts": [entry["count"] for entry in school_counts],
-        "barangay_counts": barangay_counts,
-        "first_year_count": first_year_count,
-        "second_year_count": second_year_count,
-        "third_year_count": third_year_count,
-        "fourth_year_count": fourth_year_count,
-        "fifth_year_count": fifth_year_count,
-        "graduated_scholars_count": graduated_scholars_count,
-        "total_failed_applicants": total_failed_applicants,
-        "ongoing_scholars_count": ongoing_scholars_count,
-        "percentage_ongoing": percentage_ongoing,
+        "graduated_data": graduated_data,
+        "unique_years_list": unique_years_list,
+        "school_graduate_counts": school_graduate_counts,
+        "schoolCustomLabels": [entry["school"] for entry in school_graduate_counts],
+        "schoolDataCounts": [entry["count"] for entry in school_graduate_counts],
+        "course_graduate_counts": course_graduate_counts,
+        "courseCustomLabels" : [entry['course'] for entry in course_graduate_counts],
+        "courseDataCounts" :[entry['count'] for entry in course_graduate_counts],
+        "gender_data": gender_data,
         "labels": labels,
         "counts": counts,
+
     }
 
-    return render(request, "fa-dashboard.html", context)
+    return render(
+        request, "in-depth-charts/graduated-scholar/graduated-scholar.html", context
+    )
+
+
+def unsuccessful_scholar_summary(request):
+    failed_count = ApplicantInfoRepositoryINB.objects.filter(status="Failed").count()
+    rejected_count = ApplicantInfoRepositoryINB.objects.all().count()
+
+    context = {'failed_count' : failed_count, 
+               'rejected_count': rejected_count }
+
+    return render(
+        request, "in-depth-charts/unsuccessful-scholar/unsuccessful-scholar.html", context
+    )
+
+
+
 
 
 def inb_data_visualization(request):
+    total_scholars_count = ApplicantInfoRepositoryINB.objects.count()
+
+    ongoing_scholars_count = (ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing").count())
+
+    graduated_scholars_count = ApplicantInfoRepositoryINB.objects.filter(school_year="Graduated").count()
+
+#above goods
+        
     applicant_courses = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        ApplicantInfoRepositoryINB.objects.exclude(status="Graduated")
         .exclude(school_year="Graduated")
         .values("course")
         .annotate(count=Count("course"))
@@ -555,7 +597,7 @@ def inb_data_visualization(request):
     )
 
     school_counts = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        ApplicantInfoRepositoryINB.objects.exclude(status="Graduated")
         .exclude(school_year="Graduated")
         .values("school")
         .annotate(count=Count("school"))
@@ -563,42 +605,34 @@ def inb_data_visualization(request):
     )
 
     barangay_counts = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        ApplicantInfoRepositoryINB.objects.exclude(status="Graduated")
         .exclude(school_year="Graduated")
         .values("barangay")
         .annotate(count=Count("barangay"))
         .order_by("-count")
     )
 
-    first_year_count = CollegeStudentAccepted.objects.filter(
+    first_year_count = ApplicantInfoRepositoryINB.objects.filter(
         school_year="1st Year", status="Ongoing"
     ).count()
-    second_year_count = CollegeStudentAccepted.objects.filter(
+    second_year_count = ApplicantInfoRepositoryINB.objects.filter(
         school_year="2nd Year", status="Ongoing"
     ).count()
-    third_year_count = CollegeStudentAccepted.objects.filter(
+    third_year_count = ApplicantInfoRepositoryINB.objects.filter(
         school_year="3rd Year", status="Ongoing"
     ).count()
-    fourth_year_count = CollegeStudentAccepted.objects.filter(
+    fourth_year_count = ApplicantInfoRepositoryINB.objects.filter(
         school_year="4th Year", status="Ongoing"
     ).count()
-    fifth_year_count = CollegeStudentAccepted.objects.filter(
+    fifth_year_count = ApplicantInfoRepositoryINB.objects.filter(
         school_year="5th Year", status="Ongoing"
     ).count()
 
-    total_scholars_count = CollegeStudentAccepted.objects.count()
 
-    graduated_scholars_count = CollegeStudentAccepted.objects.filter(
-        school_year="Graduated"
+    rejected_scholars_count = ApplicantInfoRepositoryINB.objects.filter(
+        status="Rejected"
     ).count()
-    ongoing_scholars_count = (
-        CollegeStudentAccepted.objects.filter(status="Ongoing")
-        .exclude(school_year="Graduated")
-        .count()
-    )
-
-    rejected_scholars_count = CollegeStudentRejected.objects.count()
-    unsuccessful_scholar_count = CollegeStudentAccepted.objects.filter(
+    unsuccessful_scholar_count = ApplicantInfoRepositoryINB.objects.filter(
         status="Failed"
     ).count()
 
@@ -611,7 +645,7 @@ def inb_data_visualization(request):
     )
 
     gender_data = (
-        CollegeStudentAccepted.objects.filter(status="Ongoing")
+        ApplicantInfoRepositoryINB.objects.filter(status="Grantee")
         .values("gender")
         .annotate(count=models.Count("gender"))
     )
@@ -627,7 +661,7 @@ def inb_data_visualization(request):
         "first_year_count": first_year_count,
         "second_year_count": second_year_count,
         "third_year_count": third_year_count,
-        "fourth_year_count": fourth_year_count,
+        "fourth_year_count": fourth_year_count, 
         "fifth_year_count": fifth_year_count,
         "graduated_scholars_count": graduated_scholars_count,
         "total_failed_applicants": total_failed_applicants,
@@ -639,30 +673,9 @@ def inb_data_visualization(request):
 
     return render(request, "inb-dashboard.html", context)
 
-
-from django.db.models import Sum, F
-
-
-def graduate_scholar_summary(request):
-    graduated_data = (
-        CollegeStudentAccepted.objects.filter(school_year="Graduated")
-        .values("created_at__year", "school")
-        .annotate(graduates_count=Count("control_number"))
-    )
-
-    unique_years = set(entry["created_at__year"] for entry in graduated_data)
-    unique_years_list = sorted(unique_years)
-
-    context = {"graduated_data": graduated_data, "unique_years_list": unique_years_list}
-
-    return render(
-        request, "in-depth-charts/graduated-scholar/graduated-scholar.html", context
-    )
-
-
 def barangay_summary(request):
     barangay_counts = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
+        ApplicantInfoRepositoryINB.objects.exclude(status="Graduated")
         .exclude(school_year="Graduated")
         .values("barangay")
         .annotate(count=Count("barangay"))
@@ -674,24 +687,8 @@ def barangay_summary(request):
     }
     return render(request, "in-depth-charts/barangay/barangay_data.html", context)
 
-
-def unsuccessful_scholar_summary(request):
-    failed_count = CollegeStudentAccepted.objects.filter(status="Failed").count()
-    rejected_count = CollegeStudentRejected.objects.all().count()
-
-    context = {'failed_count' : failed_count, 
-               'rejected_count': rejected_count }
-
-    return render(
-        request, "in-depth-charts/unsuccessful-scholar/unsuccessful-scholar.html", context
-    )
-
-
 def tracker_scholar_summary(request):
     return render(request, "in-depth-charts/tracker-count/tracket-count.html")
-
-
-from django.db.models import Count
 
 
 def school_scholar_summary(request):
@@ -825,30 +822,6 @@ def yearlevel_scholar_summary(request):
     }
 
     return render(request, "in-depth-charts/year-tracker/year-tracker.html", context)
-
-
-def active_scholar_summary(request):
-    graduated_data = (
-        CollegeStudentAccepted.objects.filter(school_year="Graduated")
-        .values("created_at__year", "school")
-        .annotate(graduates_count=Count("control_number"))
-    )
-
-    unique_years = set(entry["created_at__year"] for entry in graduated_data)
-    unique_years_list = sorted(unique_years)
-
-    unique_schools = set(entry["school"] for entry in graduated_data)
-    unique_schools_list = sorted(unique_schools)
-
-    context = {
-        "graduated_data": graduated_data,
-        "unique_years_list": unique_years_list,
-        "unique_schools_list": unique_schools_list,
-    }
-
-    return render(
-        request, "in-depth-charts/active-scholar/active_scholar.html", context
-    )
 
 
 def gender_summary(request):
@@ -1038,7 +1011,7 @@ def fa_filter_applicants(request):
 
     return redirect("fa_applicant_list")
 
-
+#done
 def inb_filter_applicants(request):
     if CollegeStudentApplication.objects.exists():
         applicants_to_transfer = CollegeStudentApplication.objects.all()
@@ -1095,35 +1068,20 @@ def inb_filter_applicants(request):
 
                     if all(is_met_list):
                         applicant.requirement = "Complete"
-
                         ApplicantInfoRepositoryINB.objects.filter(
                             control_number=applicant.control_number
-                        ).update(status="Accepted")
-                        CollegeStudentAccepted.objects.create(
-                            created_at=applicant.created_at,
-                            control_number=applicant.control_number,
-                            fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                            school=applicant.school,
-                            course=applicant.course,
-                            gender=applicant.gender,
-                            school_year=applicant.school_year,
-                            barangay=applicant.barangay,
-                        )
+                        ).update(status="Grantee", tracker = "Ongoing")    
+
                         CollegeStudentApplication.objects.filter(
                             control_number=applicant.control_number
                         ).delete()
+
                     else:
                         applicant.requirement = "Incomplete"
-
                         ApplicantInfoRepositoryINB.objects.filter(
                             control_number=applicant.control_number
-                        ).update(status="Incomplete")
-                        CollegeStudentAssesment.objects.create(
-                            control_number=applicant.control_number,
-                            fullname=f"{applicant.last_name}, {applicant.first_name} {applicant.middle_name}",
-                            school=applicant.school,
-                            course=applicant.course,
-                        )
+                        ).update(status="Assessment", tracker="Assessment")
+                    
                         CollegeStudentApplication.objects.filter(
                             control_number=applicant.control_number
                         ).delete()
@@ -1140,44 +1098,28 @@ def inb_filter_applicants(request):
 
 
 def inb_filter_assessment(request):
-    applicants_to_transfer = CollegeStudentAssesment.objects.filter(
-        status__in=["Accepted", "Rejected"]
+    applicants_to_transfer = ApplicantInfoRepositoryINB.objects.filter(
+        tracker__in=["Accepted", "Failed"]
     )
 
     if applicants_to_transfer.exists():
         for applicant in applicants_to_transfer:
             try:
-                (
-                    applicant_info,
-                    created,
-                ) = ApplicantInfoRepositoryINB.objects.get_or_create(
-                    control_number=applicant.control_number
-                )
+                (applicant_info, created,) = ApplicantInfoRepositoryINB.objects.get_or_create(control_number=applicant.control_number)
 
                 if created:
-                    if applicant.status == "Accepted":
-                        applicant_info.status = "Accepted"
-                    elif applicant.status == "Rejected":
-                        applicant_info.status = "Rejected"
+                    if applicant.tracker == "Accepted":
+                        applicant_info.tracker = "Accepted"
+                    elif applicant.tracker == "Failed":
+                        applicant_info.tracker = "Failed"
                     applicant_info.save()
 
-                if applicant.status == "Accepted":
-                    CollegeStudentAccepted.objects.create(
-                        control_number=applicant.control_number,
-                        fullname=applicant.fullname,
-                        school=applicant.school,
-                        course=applicant.course,
-                    )
-                elif applicant.status == "Rejected":
-                    CollegeStudentRejected.objects.create(
-                        control_number=applicant.control_number,
-                        fullname=applicant.fullname,
-                        school=applicant.school,
-                        course=applicant.course,
-                        remarks=applicant.remarks,
-                    )
+                if applicant.tracker == "Accepted":
+                    ApplicantInfoRepositoryINB.objects.filter(control_number=applicant.control_number).update(status="Grantee", tracker="Grantee")
+                elif applicant.tracker == "Failed":
+                    ApplicantInfoRepositoryINB.objects.filter(control_number=applicant.control_number).update(status="Rejected", tracker="Rejected")
 
-                applicant.delete()
+            
 
                 messages.success(request, "Applicants have been successfully filtered.")
             except Exception as e:
@@ -1242,7 +1184,7 @@ def fa_filter_assessment(request):
     return redirect("fa_pending_applicant")
 
 
-# ---------------------------------------------
+# ------------------------------------------------------------------------------------------------------------------------
 
 
 # ------------------------------------------------------------------------------------------------------------------------
@@ -1260,16 +1202,14 @@ def iskolar_ng_bayan_list(request):
         export_form = ExportForm(request.POST)
         all_applicants = CollegeStudentApplication.objects.all()
 
-        accepted_applicants = CollegeStudentAccepted.objects.values_list(
+        accepted_applicants = ApplicantInfoRepositoryINB.objects.values_list(
             "control_number", flat=True
         )
-        rejected_applicants = CollegeStudentAssesment.objects.values_list(
-            "control_number", flat=True
-        )
+        
 
         query = request.GET.get("q")
         filtered_applicants = all_applicants.exclude(
-            control_number__in=list(accepted_applicants) + list(rejected_applicants)
+            control_number__in=list(accepted_applicants) 
         )
         if query:
             filtered_applicants = filtered_applicants.filter(
@@ -1385,8 +1325,8 @@ def financial_assistance_list(request):
                     applicant.requirement = "Complete"
                     applicant.save()
 
-        # Paginator object
-        paginator = Paginator(records, 20)  # Show 20 records per page
+
+        paginator = Paginator(records, 20) 
         page_number = request.GET.get("page")
         page = paginator.get_page(page_number)
 
@@ -1408,113 +1348,110 @@ def financial_assistance_list(request):
 # ------------------------------------------------------------------------------------------------------------------------
 # done refactoring
 
-
+#changes
 def inb_applicant_info(request, status, control_number):
     if request.user.is_authenticated:
-        if status == "passed":
-            model_class = CollegeStudentAccepted
+        if status == "Grantee":
+            model_class = ApplicantInfoRepositoryINB.objects.filter(status="Grantee")
             grade_class = StudentGrade
             template = "INB/passed_info.html"
-        elif status == "pending":
-            model_class = CollegeStudentAssesment
+        elif status == "Assessment":
+            model_class = ApplicantInfoRepositoryINB.objects.filter(status="Assessment")
             template = "INB/inb_pending_info.html"
             form_class = INBPendingApplicants
-        elif status == "failed":
-            model_class = CollegeStudentRejected
+        elif status == "Rejected":
+            model_class = ApplicantInfoRepositoryINB.objects.filter(status="Rejected")
             template = "INB/failed_info.html"
         else:
             messages.error(request, "Invalid status parameter.")
             return redirect("home")
 
-        try:
-            if request.method == "GET":
-                if status == "passed":
-                    passed_applicant = get_object_or_404(
-                        model_class, control_number=control_number
-                    )
-                    student_grades = grade_class.objects.filter(
-                        control_number=control_number
-                    )
+        if request.method == "POST" and status == "Assessment":
+            form = form_class(request.POST)
+            if form.is_valid():
+                pending_applicant = get_object_or_404(
+                    model_class, control_number=control_number
+                )
+                pending_applicant.tracker = form.cleaned_data["tracker"]
+                pending_applicant.remarks = form.cleaned_data["remarks"]
+                pending_applicant.save()
 
-                    return render(
-                        request,
-                        template,
-                        {
-                            "passed_applicant": passed_applicant,
-                            "status": status,
-                            "student_grades": student_grades,
-                        },
-                    )
+                messages.success(
+                    request,
+                    f"{status.capitalize()} applicant information updated successfully.",
+                )
+                return redirect("inb_pending_applicant")
 
-                elif status == "pending":
-                    pending_applicant = get_object_or_404(
-                        model_class, control_number=control_number
-                    )
-                    form = form_class()
-                    return render(
-                        request,
-                        template,
-                        {
-                            "pending_applicant": pending_applicant,
-                            "status": status,
-                            "form": form,
-                            "control_number": control_number,
-                        },
-                    )
-                elif status == "failed":
-                    failed_applicant = get_object_or_404(
-                        model_class, control_number=control_number
-                    )
-                    return render(
-                        request,
-                        template,
-                        {"failed_applicant": failed_applicant, "status": status},
-                    )
+        elif request.method == "GET":
+            if status == "Grantee":
+                passed_applicant = get_object_or_404(
+                    model_class, control_number=control_number
+                )
+                student_grades = grade_class.objects.filter(
+                    control_number=control_number
+                )
 
-            elif request.method == "POST":
-                form = form_class(request.POST)
-                if form.is_valid():
-                    if status == "pending":
-                        pending_applicant = get_object_or_404(
-                            model_class, control_number=control_number
-                        )
-                        pending_applicant.status = form.cleaned_data["status"]
-                        pending_applicant.remarks = form.cleaned_data["remarks"]
-                        pending_applicant.save()
+                return render(
+                    request,
+                    template,
+                    {
+                        "passed_applicant": passed_applicant,
+                        "status": status,
+                        "student_grades": student_grades,
+                    },
+                )
 
-                    messages.success(
-                        request,
-                        f"{status.capitalize()} applicant information updated successfully.",
-                    )
-                    return redirect("inb_pending_applicant")
+            elif status == "Assessment":
+                pending_applicant = get_object_or_404(
+                    model_class, control_number=control_number
+                )
+                form = form_class()
+                return render(
+                    request,
+                    template,
+                    {
+                        "pending_applicant": pending_applicant,
+                        "status": status,
+                        "form": form,
+                        "control_number": control_number,
+                    },
+                )
 
-        except model_class.DoesNotExist:
-            messages.error(request, f"{status.capitalize()} applicant not found.")
-            return redirect(f"inb_{status}_applicant")
+            elif status == "Rejected":
+                failed_applicant = get_object_or_404(
+                    model_class, control_number=control_number
+                )
+                return render(
+                    request,
+                    template,
+                    {"failed_applicant": failed_applicant, "status": status},
+                )
 
     else:
         messages.error(request, "You don't have permission.")
         return redirect("home")
 
 
+#changes
 def inb_applicant_list(request, status):
     if request.user.is_authenticated:
-        if status == "passed":
-            model_class = CollegeStudentAccepted
+        if status == "Grantee":
+            model_class = ApplicantInfoRepositoryINB.objects.filter(status="Grantee")
             template = "INB/accepted_applicants.html"
-        elif status == "pending":
-            model_class = CollegeStudentAssesment
+
+        elif status == "Assessment":
+            model_class = ApplicantInfoRepositoryINB.objects.filter(status="Assessment")
             template = "INB/inb_pending_list.html"
-        elif status == "failed":
-            model_class = CollegeStudentRejected
+
+        elif status == "Rejected":
+            model_class = ApplicantInfoRepositoryINB.objects.filter(status="Rejected")
             template = "INB/rejected_applicants.html"
         else:
             messages.error(request, "Invalid status parameter.")
             return redirect("home")
 
-        applicants_list = model_class.objects.all()
+        applicants_list = model_class 
 
-        # the search functionality
         query = request.GET.get("q")
         if query:
             applicants_list = applicants_list.filter(
@@ -1734,24 +1671,16 @@ def fa_applicant_information(request, pk):
         messages.success(request, "You need to be logged in to see this data!")
         return redirect("home")
 
-
-def delete_by_id(request, pk, model_name):
-    return delete_record(request, pk, model_name, use_id=True)
-
-
-def delete_by_control_number(request, control_number, model_name):
-    return delete_record(request, control_number, model_name, use_id=False)
-
-
-def delete_record(request, identifier, model_name, use_id=True):
+#changes
+def delete_record(request, control_number, model_name):
     if request.user.is_authenticated:
         list_view = "home"
 
         model_map = {
             "application": (CollegeStudentApplication, "inb_applicant_list"),
-            "inb_passed": (CollegeStudentAccepted, "inb_passed_applicant"),
-            "inb_pending": (CollegeStudentAssesment, "inb_pending_applicant"),
-            "inb_failed": (CollegeStudentRejected, "inb_failed_applicant"),
+            "inb_passed": (ApplicantInfoRepositoryINB, "inb_passed_applicant"),
+            "inb_pending": (ApplicantInfoRepositoryINB, "inb_pending_applicant"),
+            "inb_failed": (ApplicantInfoRepositoryINB, "inb_failed_applicant"),
             "fa_application": (FinancialAssistanceApplication, "fa_applicant_list"),
             "fa_passed": (FinancialAssistanceAccepted, "fa_passed_applicant"),
             "fa_pending": (FinancialAssistanceAssesment, "fa_pending_applicant"),
@@ -1765,11 +1694,7 @@ def delete_record(request, identifier, model_name, use_id=True):
             return redirect("home")
 
         try:
-            if use_id:
-                record = get_object_or_404(model, id=identifier)
-            else:
-                record = get_object_or_404(model, control_number=identifier)
-
+            record = get_object_or_404(model, control_number=control_number)
             record.delete()
             messages.success(
                 request, f"Record for {model_name.capitalize()} has been deleted"

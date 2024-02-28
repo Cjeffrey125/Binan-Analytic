@@ -119,16 +119,6 @@ class CollegeStudentAccepted(models.Model):
     remarks = models.CharField(max_length=500, default="")
     semester = models.CharField(max_length=500, default="1st Semester")
 
-
-class CollegeStudentAssesment(models.Model):
-    control_number = models.CharField(primary_key=True, max_length=50)
-    fullname = models.CharField(max_length=50)
-    course = models.CharField(max_length=100, default="")
-    school = models.CharField(max_length=200, default="")
-    remarks = models.CharField(max_length=200, default="")
-    status = models.CharField(max_length=200, default="Pending")
-
-
 class CollegeStudentRejected(models.Model):
     control_number = models.CharField(primary_key=True, max_length=50)
     fullname = models.CharField(max_length=50)
@@ -138,11 +128,17 @@ class CollegeStudentRejected(models.Model):
 
 
 class ApplicantInfoRepositoryINB(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+
     control_number = models.CharField(unique=True, max_length=50)
+    tracker = models.CharField(max_length=250, default="")
     status = models.CharField(max_length=20, default="")
     fullname = models.CharField(max_length=250, default="")
 
     school_year = models.CharField(max_length=50, default="1st Year")
+    semester = models.CharField(max_length=50, default="1st Semester")
+    grant = models.CharField(max_length=50, default="100%") 
+    remarks = models.CharField(max_length=1000, default="") 
 
     blkstr = models.CharField(max_length=100, default="")
     barangay = models.CharField(max_length=100, default="Unknown")

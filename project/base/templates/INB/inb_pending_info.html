@@ -74,7 +74,7 @@
                     <div class="flex flex-col">
                         <label for="{{ form.status.id_for_label }}" class="text-gray-500 sm:text-m">Status</label>
                         <div class="relative flex justify-between items-center">
-                            {{ form.status |add_class:"block w-full sm:w-[500px] px-4 py-2 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1 mb-5" }}
+                            {{ form.tracker |add_class:"block w-full sm:w-[500px] px-4 py-2 text-gray-900 border border-gray-300 bg-white sm:text-xs border-b-2 focus:ring-white focus:border-white focus:border-1 dark:bg-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-white dark:focus:border-white dark:focus:border-1 mb-5" }}
                         </div>
                     </div>
                     <div class="flex flex-col">
@@ -92,7 +92,7 @@
     </div>
 
 
-    <button onclick="location.href='{% url 'delete_applicant' pending_applicant.control_number 'inb_pending' %}';"
+    <button onclick="location.href='{% url 'delete_record' pending_applicant.control_number 'inb_pending' %}';"
         class="ml-20 flex items-center text-white bg-red-500 hover:bg-red-600 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium text-sm px-6 py-1 me-2 mb-2 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-600 dark:border-red-600 rounded-lg mt-3">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
             class="w-6 h-6 mr-2">

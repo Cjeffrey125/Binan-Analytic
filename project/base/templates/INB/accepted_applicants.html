@@ -77,9 +77,9 @@
   </div>
 
 {% if applicants %}
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead class="text-xs text-gray-700 uppercase dark:bg-violet-950 dark:text-white">
+  <div class="mt-4 relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right">
+      <thead class="text-xs uppercase bg-violet-950 text-white">
         <tr>
           <th scope="col" class="px-6 py-3">Control Number</th>
           <th scope="col" class="px-6 py-3">Name</th>
@@ -94,15 +94,15 @@
       <tbody>
         <div class="scrollable-container">
           {% for applicant in applicants %}
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" onclick="window.location='{% url 'inb_passed_applicant_info' applicant.control_number %}';"
+          <tr class="border-b bg-gray-800  hover:bg-gray-600" onclick="window.location='{% url 'inb_passed_applicant_info' applicant.control_number %}';"
             style="cursor: pointer;">
-            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.control_number }}</td>
-            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.fullname }}</td>
-            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.school }}</td>
-            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.course }}</td>
-            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.school_year }}</td>
-            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.semester }}</td>
-            <td scope="row" class="px-6 py-4 font-normal text-gray-900 whitespace-nowrap dark:text-white">{{ applicant.grant }}</td>
+            <td scope="row" class="px-6 py-4 font-normal dark:text-white">{{ applicant.control_number }}</td>
+            <td scope="row" class="px-6 py-4 font-normal dark:text-white">{{ applicant.fullname }}</td>
+            <td scope="row" class="px-6 py-4 font-normal dark:text-white">{{ applicant.school }}</td>
+            <td scope="row" class="px-6 py-4 font-normal dark:text-white">{{ applicant.course }}</td>
+            <td scope="row" class="px-6 py-4 font-normal dark:text-white">{{ applicant.school_year }}</td>
+            <td scope="row" class="px-6 py-4 font-normal dark:text-white">{{ applicant.semester }}</td>
+            <td scope="row" class="px-6 py-4 font-normal dark:text-white">{{ applicant.grant }}</td>
           </tr>
           {% endfor %}
         </div>

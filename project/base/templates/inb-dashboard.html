@@ -15,7 +15,8 @@
             <a href="{% url 'inb-active-scholar-summary' %}">
                 <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
                     style="width: 430px; height: 200px">
-                    <div class = "mt-32">
+
+                    <div>
                     {% include "Graphs/applicant_tracker.html" %}
                     </div>
                 </div>
@@ -24,7 +25,7 @@
             <a href="{% url 'inb-graduated-scholar-summary' %}">
                 <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
                     style="width: 430px; height: 200px">
-                    <div class = "mt-32">
+                    <div>
                     {% include "Graphs/graduated_tracker.html" %}
                     </div>
                 </div>
@@ -33,7 +34,7 @@
             <a href="{% url 'inb-unsuccessful-scholar-summary' %}">
                 <div class="bg-gray-800 rounded flex flex-col justify-center items-center group transition-transform transform hover:scale-105 cursor-pointer"
                     style="width: 430px; height: 200px">
-                    <div class = "mt-32">
+                    <div>
                     {% include "Graphs/unsuccessful_tracker.html" %}
                     </div>
                 </div>

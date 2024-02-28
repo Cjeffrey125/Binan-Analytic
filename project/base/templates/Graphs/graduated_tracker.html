@@ -1,97 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Graduated Scholars</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
 
-<body>
-
-<div class="text-center mt-12">
+<div class="text-center">
     <label class="text-white text-4xl">{{ graduated_scholars_count }}</label>
     
-    <br>
-    <div class="mt-5">
+    <div class="mt-4">
         <label class=" font-bold text-4xl" style="color: #39B8FF;">Scholars Graduated</label>
     </div>
 </div>
-
-<div style="width: 100px; height: 120px; margin: 20px auto; position: relative; top: -150px; left:100px;">
-    <canvas id="doughnutChart"></canvas>
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const canvas = document.getElementById('doughnutChart');
-
-        canvas.width = 200;
-        canvas.height = 240;
-
-        const percentageOngoing = {{ percentage_ongoing }};
-        const totalValue = 100;
-
-        const data = {
-            datasets: [{
-                data: [percentageOngoing, totalValue - percentageOngoing],
-                backgroundColor: [
-                    'rgb(255, 99, 132)',
-                    'rgba(255, 255, 255, 0)',  
-                ],
-                hoverOffset: 4,
-                borderWidth: 0,  
-                borderRadius: 50,
-            }],
-        };
-
-        const ctx = canvas.getContext('2d');
-
-        const myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: data,
-            options: {
-                cutout: '70%',
-                plugins: {
-                    legend: {
-                        display: false,
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (tooltipItem, data) {
-                                var dataset = data.datasets[tooltipItem.datasetIndex];
-                                var value = dataset.data[tooltipItem.index];
-                                return dataset.label + ": " + value + "%";
-                            },
-                        },
-                    },
-                },
-                layout: {
-                    padding: {
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        bottom: 16,
-                    },
-                },
-                animation: {
-                    onComplete: function (animation) {
-                        const xCoor = myChart.width / 2;
-                        const yCoor = myChart.height / 2.5;
-                        ctx.font = 'bold 12px sans-serif';
-                        ctx.fillStyle = 'rgba(255, 255, 255, 1)';
-                        ctx.textAlign = 'center';
-                        ctx.textBaseline = 'middle';
-                        const formattedPercentage = Math.round(percentageOngoing / 100);
-                        ctx.fillText(`${formattedPercentage}%`, xCoor, yCoor);
-                    }
-                },
-            },
-        });
-    });
-</script>
-
-</body>
-
-</html>

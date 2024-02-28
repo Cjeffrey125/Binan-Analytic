@@ -5,6 +5,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django import forms
 from base.models import (
     CollegeStudentApplication,
+    ApplicantInfoRepositoryINB,
     FinancialAssistanceApplication,
     INBRequirementRepository,
     FARequirementRepository,
@@ -12,7 +13,6 @@ from base.models import (
     INBCourse,
     INBApplicationRequirements,
     FAApplicationRequirements,
-    CollegeStudentAssesment,
     FinancialAssistanceAssesment,
     ProfileImage,
 )
@@ -1117,10 +1117,10 @@ class AddFinancialAssistanceForm(forms.ModelForm):
 class INBPendingApplicants(forms.ModelForm):
     APPLICANT_STATUS = [
         ("Accepted", "Accepted"),
-        ("Rejected", "Rejected"),
+        ("Failed", "Failed"),
     ]
 
-    status = forms.ChoiceField(
+    tracker = forms.ChoiceField(
         required=True,
         choices=APPLICANT_STATUS,
         widget=forms.Select(attrs={}),
@@ -1134,14 +1134,14 @@ class INBPendingApplicants(forms.ModelForm):
     )
 
     class Meta:
-        model = CollegeStudentAssesment
-        fields = ["status", "remarks"]
+        model = ApplicantInfoRepositoryINB
+        fields = ["tracker", "remarks"]
 
 
 class FAPendingApplicants(forms.ModelForm):
     APPLICANT_STATUS = [
         ("Accepted", "Accepted"),
-        ("Rejected", "Rejected"),
+        ("Failed", "Failed"),
     ]
 
     status = forms.ChoiceField(

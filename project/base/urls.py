@@ -41,8 +41,8 @@ urlpatterns = [
     
 
     
-    path('delete_applicant_id/<int:pk>/<str:model_name>/', views.delete_by_id, name='delete_applicant_id'),
-    path('delete_applicant/<str:control_number>/<str:model_name>/', views.delete_by_control_number, name='delete_applicant'),
+    path('delete_by_control_number/<str:control_number>/<str:model_name>/', views.delete_record, name='delete_record'),
+
 
     
     path("Applicant_List/", views.iskolar_ng_bayan_list, name="inb_applicant_list"),
@@ -60,18 +60,20 @@ urlpatterns = [
     path("inb_requirements_list/<str:control_number>",views.inb_requirements_list,name="inb_requirements_list",),
     path("inb_filter_applicants/",views.inb_filter_applicants,name="inb_filter_applicants",),
 
-    path("inb/pending/applicant/",views.inb_applicant_list,{"status": "pending"},name="inb_pending_applicant",),
-
-    path("inb_filter_assessment",views.inb_filter_assessment,name="inb_filter_assessment",),
    
 
-    path("update_assessment/<str:control_number>/", views.inb_applicant_info, {"status": "pending"}, name="update_assessment"),
-    path("inb/pending/applicant/<str:control_number>/", views.inb_applicant_info, {"status": "pending"}, name="inb_pending_applicant_info"),
+    path("inb_filter_assessment",views.inb_filter_assessment,name="inb_filter_assessment",),
 
-    path("inb/passed/applicant/",views.inb_applicant_list,{"status": "passed"},name="inb_passed_applicant",),
-    path("inb/passed/applicant_info/<str:control_number>/",views.inb_applicant_info,{"status": "passed"},name="inb_passed_applicant_info",),
-    path("inb/failed/applicant/",views.inb_applicant_list,{"status": "failed"},name="inb_failed_applicant",),
-    path("inb/failed/applicant_info/<str:control_number>/",views.inb_applicant_info,{"status": "failed"},name="inb_failed_applicant_info",),
+   
+    path("inb/pending/applicant/",views.inb_applicant_list,{"status": "Assessment"},name="inb_pending_applicant",),
+    path("update_assessment/<str:control_number>/", views.inb_applicant_info, {"status": "Assessment"}, name="update_assessment"),
+    path("inb/pending/applicant/<str:control_number>/", views.inb_applicant_info, {"status": "Assessment"}, name="inb_pending_applicant_info"),
+
+    path("inb/passed/applicant/",views.inb_applicant_list,{"status": "Grantee"},name="inb_passed_applicant",),
+    path("inb/passed/applicant_info/<str:control_number>/",views.inb_applicant_info,{"status": "Grantee"},name="inb_passed_applicant_info",),
+
+    path("inb/failed/applicant/",views.inb_applicant_list,{"status": "Rejected"},name="inb_failed_applicant",),
+    path("inb/failed/applicant_info/<str:control_number>/",views.inb_applicant_info,{"status": "Rejected"},name="inb_failed_applicant_info",),
 
 
     # -------------------------------------------------------------------------------------------------------------------------------
