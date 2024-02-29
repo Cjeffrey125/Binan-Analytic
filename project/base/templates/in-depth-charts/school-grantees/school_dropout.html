@@ -1,0 +1,89 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="items-center" style="width: 750px; height: 250px; margin: auto;">
+    <canvas id="dropStackHorizontalChart"></canvas>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('dropStackHorizontalChart').getContext('2d');
+
+        const dropCustomLabels = {{ dropCustomLabels|safe }};
+        const dropDataCounts = {{ dropDataCounts|safe }};
+
+        const DATA_COUNT = dropCustomLabels.length;
+
+        const backgroundColors = [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(128, 0, 0, 0.2)',
+            'rgba(0, 128, 0, 0.2)',
+            'rgba(0, 0, 128, 0.2)',
+            'rgba(255, 0, 255, 0.2)', 
+            'rgba(0, 255, 255, 0.2)', 
+            'rgba(255, 255, 0, 0.2)', 
+            'rgba(128, 128, 128, 0.2)', 
+            'rgba(255, 165, 0, 0.2)', 
+        ];
+
+        const borderColor = [
+            'rgba(255, 99, 132)',
+            'rgba(255, 159, 64)',
+            'rgba(255, 205, 86)',
+            'rgba(75, 192, 192)',
+            'rgba(54, 162, 235)',
+            'rgba(128, 0, 0)',
+            'rgba(0, 128, 0)',
+            'rgba(0, 0, 128)',
+            'rgba(255, 0, 255)', 
+            'rgba(0, 255, 255)', 
+            'rgba(255, 255, 0)', 
+            'rgba(128, 128, 128)', 
+            'rgba(255, 165, 0)', 
+        ];
+
+        const data = {
+            labels: dropCustomLabels,
+            datasets: [
+                {
+                    label: 'Dropout Count',
+                    data: dropDataCounts,
+                    borderColor: borderColor,
+                    backgroundColor: backgroundColors.slice(0, DATA_COUNT),
+                    borderWidth: 1
+                },
+            ]
+        };
+
+        var stackHorizontalChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        stacked: true,
+                        align: 'start',
+                    },
+                    y: {
+                        stacked: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false 
+                    }
+                }
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            stackHorizontalChart.resize();
+        });
+    });
+</script>

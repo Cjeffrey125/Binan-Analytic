@@ -1,15 +1,18 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<label class="text-white font-bold text-2xl mb-2" style="color: #39B8FF; position: absolute; top: 10px; left: 10%;">Accepted Vs Applied</label>
-
-<div class="chart-wrapper mt-6 ml-6" style="width: 800px; height: 240px;">
-    <canvas id="myChart" width="600" height="400"></canvas>
+<div class="chart-wrapper mb-4" style="width: 1700px; height: 500px;">
+    <canvas id="myChart" width="600" height="450"></canvas>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var ctx = document.getElementById('myChart').getContext('2d');
 
-        const labels = {{ accepted_unique_years_list|safe }};
+        const acceptedLabels = {{ accepted_unique_years_list|safe }};
+        const appliedLabels = {{ applied_unique_years_list|safe }};
+
+        // Combine accepted and applied labels
+        const labels = [...new Set([...acceptedLabels, ...appliedLabels])];
+
         const acceptedData = [
             {% for entry in accepted_scholar %}
                 {{ entry.accepted_scholar_count }},
@@ -62,7 +65,10 @@
                 },
                 plugins: {
                     legend: {
-                        display: false 
+                        display: true,
+                        labels: {
+                            color: 'white' 
+                        }
                     }
                 }
             }

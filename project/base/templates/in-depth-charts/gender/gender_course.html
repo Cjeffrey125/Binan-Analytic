@@ -1,66 +1,89 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="items-center" style="width: 480px; height: 450px">
-    <canvas id="schoolStackHorizontalChart"></canvas>
+<div class="flex justify-between mx-4 mt-4">
+    <div class="chart-wrapper" style="width: 750px; height: 250px; margin: 12;">
+        <canvas id="frstColumnCourseStackHorizontalChart"></canvas>
+    </div>
+
+    <div class="chart-wrapper ml-5" style="width: 750px; height: 250px; margin: 12;">
+        <canvas id="scndColumnCourseStackHorizontalChart"></canvas>
+    </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var ctx = document.getElementById('schoolStackHorizontalChart').getContext('2d');
+        var ctx1 = document.getElementById('frstColumnCourseStackHorizontalChart').getContext('2d');
+        var ctx2 = document.getElementById('scndColumnCourseStackHorizontalChart').getContext('2d');
 
-        const maleCustomLabels = {{ maleCustomLabels|safe }};
-        const maleDataCounts = {{ maleDataCounts|safe }};
+        const maleCourseCustomLabels = {{ maleCourseCustomLabels|safe }};
+        const maleCourseDataCounts = {{ maleCourseDataCounts|safe }};
+        const femaleCourseCustomLabels = {{ femaleCourseCustomLabels|safe }};
+        const femaleCourseDataCounts = {{ femaleCourseDataCounts|safe }};
 
-        const DATA_COUNT = maleCustomLabels.length;
+        const DATA_COUNT = maleCourseCustomLabels.length;
 
         const backgroundColors = [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-            'rgba(255, 205, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(128, 0, 0, 0.2)',
-            'rgba(0, 128, 0, 0.2)',
-            'rgba(0, 0, 128, 0.2)',
-            'rgba(255, 0, 255, 0.2)', 
-            'rgba(0, 255, 255, 0.2)', 
-            'rgba(255, 255, 0, 0.2)', 
-            'rgba(128, 128, 128, 0.2)', 
-            'rgba(255, 165, 0, 0.2)', 
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 99, 132, 0.5)',
         ];
 
         const borderColor = [
-            'rgba(255, 99, 132)',
-            'rgba(255, 159, 64)',
-            'rgba(255, 205, 86)',
-            'rgba(75, 192, 192)',
-            'rgba(54, 162, 235)',
-            'rgba(128, 0, 0)',
-            'rgba(0, 128, 0)',
-            'rgba(0, 0, 128)',
-            'rgba(255, 0, 255)', 
-            'rgba(0, 255, 255)', 
-            'rgba(255, 255, 0)', 
-            'rgba(128, 128, 128)', 
-            'rgba(255, 165, 0)', 
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 99, 132, 1)',
         ];
 
-        const data = {
-            labels: maleCustomLabels,
+        const firstColumnLabels = maleCourseCustomLabels.slice(0, Math.ceil(DATA_COUNT / 2));
+        const secondColumnLabels = maleCourseCustomLabels.slice(Math.ceil(DATA_COUNT / 2));
+
+        const firstColumnMaleData = maleCourseDataCounts.slice(0, Math.ceil(DATA_COUNT / 2));
+        const firstColumnFemaleData = femaleCourseDataCounts.slice(0, Math.ceil(DATA_COUNT / 2));
+
+        const secondColumnMaleData = maleCourseDataCounts.slice(Math.ceil(DATA_COUNT / 2));
+        const secondColumnFemaleData = femaleCourseDataCounts.slice(Math.ceil(DATA_COUNT / 2));
+
+        const data1 = {
+            labels: firstColumnLabels,
             datasets: [
                 {
                     label: 'Male Count',
-                    data: maleDataCounts,
-                    borderColor: borderColor,
-                    backgroundColor: backgroundColors.slice(0, DATA_COUNT),
+                    data: firstColumnMaleData,
+                    backgroundColor: backgroundColors[0],
+                    borderColor: borderColor[0],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Female Count',
+                    data: firstColumnFemaleData,
+                    backgroundColor: backgroundColors[1],
+                    borderColor: borderColor[1],
                     borderWidth: 1
                 },
             ]
         };
 
-        var stackHorizontalChart = new Chart(ctx, {
+        const data2 = {
+            labels: secondColumnLabels,
+            datasets: [
+                {
+                    label: 'Male Count',
+                    data: secondColumnMaleData,
+                    backgroundColor: backgroundColors[0],
+                    borderColor: borderColor[0],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Female Count',
+                    data: secondColumnFemaleData,
+                    backgroundColor: backgroundColors[1],
+                    borderColor: borderColor[1],
+                    borderWidth: 1
+                },
+            ]
+        };
+
+        var stackHorizontalChart1 = new Chart(ctx1, {
             type: 'bar',
-            data: data,
+            data: data1,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -68,22 +91,77 @@
                 scales: {
                     x: {
                         stacked: true,
-                        align: 'start',
+                        display: false,
+                        ticks: {
+                            color: 'white'
+                        }
                     },
                     y: {
-                        stacked: true
+                        stacked: true,
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            color: 'white'
+                        }
                     }
                 },
                 plugins: {
                     legend: {
-                        display: false 
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: 'white'
+                        }
                     }
                 }
+
+            }
+        });
+
+        var stackHorizontalChart2 = new Chart(ctx2, {
+            type: 'bar',
+            data: data2,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        stacked: true,
+                        display: false,
+                        ticks: {
+                            color: 'white'
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            color: 'white'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                }
+
             }
         });
 
         window.addEventListener('resize', function () {
-            stackHorizontalChart.resize();
+            stackHorizontalChart1.resize();
+            stackHorizontalChart2.resize();
         });
     });
 </script>

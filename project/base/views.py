@@ -513,7 +513,7 @@ def active_scholar_summary(request):
 
 def graduate_scholar_summary(request):
     graduated_data = (
-        ApplicantInfoRepositoryINB.objects.filter(school_year="Graduated")
+        ApplicantInfoRepositoryINB.objects.filter(status="Graduated")
         .values("created_at__year")
         .annotate(graduates_scholar_count=Count("id"))
         .order_by("created_at__year")  
@@ -693,19 +693,79 @@ def gender_summary(request):
         .order_by('-female_count')  
     )
 
-    male_course = (ApplicantInfoRepositoryINB.objects.filter(gender="Male", tracker="Ongoing")
-    .values('course')
-    .annotate(male_count=Count('id'))
-    .order_by('-male_count')  
+    male_first_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        gender="Male",
+        school_year="1st Year",
+        tracker="Ongoing"
+    ).count()
+
+    female_first_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        gender="Female",
+        school_year="1st Year",
+        tracker="Ongoing"
+    ).count()
+
+    male_second_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        gender="Male",
+        school_year="2nd Year",
+        tracker="Ongoing"
+    ).count()
+
+    female_second_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        gender="Female",
+        school_year="2nd Year",
+        tracker="Ongoing"
+    ).count()
+
+    male_third_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        gender="Male",
+        school_year="3rd Year",
+        tracker="Ongoing"
+    ).count()
+
+    female_third_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        gender="Female",
+        school_year="3rd Year",
+        tracker="Ongoing"
+    ).count()
+
+    male_fourth_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        gender="Male",
+        school_year="4th Year",
+        tracker="Ongoing"
+    ).count()
+
+    female_fourth_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        gender="Female",
+        school_year="4th Year",
+        tracker="Ongoing"
+    ).count()
+
+    male_fifth_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        gender="Male",
+        school_year="5th Year",
+        tracker="Ongoing"
+    ).count()
+
+    female_fifth_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        gender="Female",
+        school_year="5th Year",
+        tracker="Ongoing"
+    ).count()
+
+    male_course = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing", gender="Male")
+        .values('course')
+        .annotate(male_course_count=Count('course'))
+        .order_by('-male_course_count')  
     )
 
-    female_course = (ApplicantInfoRepositoryINB.objects.filter(gender="Female", tracker="Ongoing")
-    .values('course')
-    .annotate(male_count=Count('id'))
-    .order_by('-male_count')  
+    female_course = (
+       ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing", gender="Female")
+        .values('course')
+        .annotate(female_course_count=Count('course'))
+        .order_by('-female_course_count')  
     )
-
-   
 
     context = {
         'male_scholar': male_scholar,
@@ -721,85 +781,131 @@ def gender_summary(request):
         'femaleSchoolCustomLabels': [entry["school"] for entry in female_schools],
         'femaleSchoolDataCounts': [entry["female_count"] for entry in female_schools],
 
+        'male_first_year_count': male_first_year_count,
+        'female_first_year_count': female_first_year_count,
+        'male_second_year_count': male_second_year_count,
+        'female_second_year_count': female_second_year_count,
+        'male_third_year_count': male_third_year_count,
+        'female_third_year_count': female_third_year_count,
+        'male_fourth_year_count': male_fourth_year_count,
+        'female_fourth_year_count': female_fourth_year_count,
+        'male_fifth_year_count': male_fifth_year_count,
+        'female_fifth_year_count': female_fifth_year_count,
+
+
         'male_course':male_course,
-        'maleCourseCustomLabels': [entry["school"] for entry in male_schools],
-        'maleSchoolDataCounts': [entry["male_count"] for entry in male_schools],
+        'maleCourseCustomLabels': [entry["course"] for entry in male_course],
+        'maleCourseDataCounts': [entry["male_course_count"] for entry in male_course],
 
-  
-
+        'female_course':female_course,
+        'femaleCourseCustomLabels': [entry["course"] for entry in female_course],
+        'femaleCourseDataCounts': [entry["female_course_count"] for entry in female_course],
 
     }
 
     return render(request, "in-depth-charts/gender/gender_data.html", context)
 
+def tracker_scholar_summary(request):
+    current_year = timezone.now().year
+    accepted_scholar = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing")
+        .values("created_at__year")
+        .annotate(accepted_scholar_count=Count("id"))
+        .order_by("created_at__year")  
+    ) 
 
-
-
-def inb_data_visualization(request):
-
-    total_scholars_count = ApplicantInfoRepositoryINB.objects.count()
-
-    ongoing_scholars_count = (ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing").count())
-
-    graduated_scholars_count = ApplicantInfoRepositoryINB.objects.filter(school_year="Graduated").count()
-
-#above goods
-        
-    applicant_courses = (
-        ApplicantInfoRepositoryINB.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
-        .values("course")
-        .annotate(count=Count("course"))
-        .order_by("-count")
+    applied_scholar = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Rejected")
+        .values("created_at__year")
+        .annotate(applied_scholar_count=Count("id"))
+        .order_by("created_at__year")  
     )
 
+    accepted_unique_years_list = sorted(set(entry["created_at__year"] for entry in accepted_scholar))
+    applied_unique_years_list = sorted(set(entry["created_at__year"] for entry in applied_scholar))
+
+    current_accepted_count = ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing", created_at__year=current_year).count()
+    current_applied_count = ApplicantInfoRepositoryINB.objects.filter(tracker="Rejected", created_at__year=current_year).count()
+    
+    schools = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing", created_at__year=current_year)
+        .values('school')
+        .annotate(count=Count('id'))
+        .order_by('-count')  
+    )
+    
+
+    context = {
+        'accepted_scholar':accepted_scholar,
+        'accepted_unique_years_list':accepted_unique_years_list,
+        'applied_scholar':applied_scholar,
+        'applied_unique_years_list':applied_unique_years_list,
+        'current_accepted_count':current_accepted_count,
+        'current_applied_count':current_applied_count,
+        'schools':schools,
+        'schoolCustomLabels': [entry["school"] for entry in schools],
+        'schoolDataCounts': [entry["count"] for entry in schools],
+    }
+
+    return render(request, "in-depth-charts/tracker-count/tracker-count.html",context)
+
+def school_scholar_summary(request):
+    scholar_school = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker__in=["Ongoing", "Grantee"])
+        .values("created_at__year", "school") 
+        .annotate(school_count=Count("id"))
+        .order_by("created_at__year", "school")  
+    )
+
+    school_data = {}
+    for entry in scholar_school:
+        school = entry["school"]
+        year = entry["created_at__year"]
+        count = entry["school_count"]
+        if school not in school_data:
+            school_data[school] = {"labels": [], "data": []}
+        school_data[school]["labels"].append(year)
+        school_data[school]["data"].append(count)
+
     school_counts = (
-        ApplicantInfoRepositoryINB.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing")
         .values("school")
         .annotate(count=Count("school"))
         .order_by("-count")
     )
 
-    barangay_counts = (
-        ApplicantInfoRepositoryINB.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
-        .values("barangay")
-        .annotate(count=Count("barangay"))
-        .order_by("-count")
+    school_dropout = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Failed")
+        .values("school")
+        .annotate(drop_count=Count("school"))
+        .order_by("-drop_count")
     )
 
-    first_year_count = ApplicantInfoRepositoryINB.objects.filter(
-        school_year="1st Year", status="Ongoing"
-    ).count()
-    second_year_count = ApplicantInfoRepositoryINB.objects.filter(
-        school_year="2nd Year", status="Ongoing"
-    ).count()
-    third_year_count = ApplicantInfoRepositoryINB.objects.filter(
-        school_year="3rd Year", status="Ongoing"
-    ).count()
-    fourth_year_count = ApplicantInfoRepositoryINB.objects.filter(
-        school_year="4th Year", status="Ongoing"
-    ).count()
-    fifth_year_count = ApplicantInfoRepositoryINB.objects.filter(
-        school_year="5th Year", status="Ongoing"
-    ).count()
+
+    context ={
+        'schoolData': school_data,
+        'customLabels': [entry["school"] for entry in school_counts],
+        'dataCounts': [entry["count"] for entry in school_counts],
+
+        'dropCustomLabels': [entry["school"] for entry in school_dropout],
+        'dropDataCounts': [entry["drop_count"] for entry in school_dropout],
+    }
+    return render(request, "in-depth-charts/school-grantees/school-grantees.html", context)
 
 
-    rejected_scholars_count = ApplicantInfoRepositoryINB.objects.filter(
-        status="Rejected"
-    ).count()
-    unsuccessful_scholar_count = ApplicantInfoRepositoryINB.objects.filter(
-        status="Failed"
-    ).count()
 
+def inb_data_visualization(request):
+
+    ongoing_scholars_count = (ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing").count())
+
+    graduated_scholars_count = ApplicantInfoRepositoryINB.objects.filter(status="Graduated").count()
+    print(graduated_scholars_count)
+
+    unsuccessful_scholar_count = ApplicantInfoRepositoryINB.objects.filter(status="Failed").count()
+
+    rejected_scholars_count = ApplicantInfoRepositoryINB.objects.filter(status="Rejected").count()
+   
     total_failed_applicants = rejected_scholars_count + unsuccessful_scholar_count
-
-    percentage_ongoing = (
-        (ongoing_scholars_count / total_scholars_count) * 100
-        if total_scholars_count > 0
-        else 0
-    )
 
     gender_data = (
         ApplicantInfoRepositoryINB.objects.filter(status="Grantee")
@@ -810,25 +916,108 @@ def inb_data_visualization(request):
     labels = [entry["gender"] for entry in gender_data]
     counts = [entry["count"] for entry in gender_data]
 
+    accepted_scholar = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing")
+        .values("created_at__year")
+        .annotate(accepted_scholar_count=Count("id"))
+        .order_by("created_at__year")  
+    )
+   
+
+    applied_scholar = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Rejected")
+        .values("created_at__year")
+        .annotate(applied_scholar_count=Count("id"))
+        .order_by("created_at__year")  
+    )
+
+    accepted_unique_years_list = sorted(set(entry["created_at__year"] for entry in accepted_scholar))
+    applied_unique_years_list = sorted(set(entry["created_at__year"] for entry in applied_scholar))
+
+    school_counts = (
+        ApplicantInfoRepositoryINB.objects.filter(tracker="Ongoing")
+        .values("school")
+        .annotate(count=Count("school"))
+        .order_by("-count")
+    )
+
+    first_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        school_year="1st Year",
+        tracker="Ongoing"
+    ).count()
+
+    second_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        school_year="2nd Year",
+        tracker="Ongoing"
+    ).count()
+
+
+    third_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        school_year="3rd Year",
+        tracker="Ongoing"
+    ).count()
+
+
+    fourth_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        school_year="4th Year",
+        tracker="Ongoing"
+    ).count()
+
+
+    fifth_year_count = ApplicantInfoRepositoryINB.objects.filter(
+        school_year="5th Year",
+        tracker="Ongoing"
+    ).count()
+
+
+
+
+#above goods
+
+    applicant_courses = (
+        ApplicantInfoRepositoryINB.objects.exclude(status="Graduated")
+        .values("course")
+        .annotate(count=Count("course"))
+        .order_by("-count")
+    )
+
+
+    barangay_counts = (
+        ApplicantInfoRepositoryINB.objects.exclude(status="Graduated")
+        .values("barangay")
+        .annotate(count=Count("barangay"))
+        .order_by("-count")
+    )
+
+
     context = {
+       
+        "barangay_counts": barangay_counts, 
         "applicant_courses": applicant_courses,
-        "customLabels": [entry["school"] for entry in school_counts],
-        "dataCounts": [entry["count"] for entry in school_counts],
-        "barangay_counts": barangay_counts,
-        "first_year_count": first_year_count,
-        "second_year_count": second_year_count,
-        "third_year_count": third_year_count,
-        "fourth_year_count": fourth_year_count, 
-        "fifth_year_count": fifth_year_count,
-        "graduated_scholars_count": graduated_scholars_count,
-        "total_failed_applicants": total_failed_applicants,
-        "ongoing_scholars_count": ongoing_scholars_count,
-        "percentage_ongoing": percentage_ongoing,
-        "labels": labels,
-        "counts": counts,
+    
+
+        'ongoing_scholars_count': ongoing_scholars_count,
+        'graduated_scholars_count': graduated_scholars_count,
+        'total_failed_applicants': total_failed_applicants,
+        'gender_date':gender_data,
+        'labels': labels,
+        'counts': counts,
+        'accepted_scholar':accepted_scholar,
+        'accepted_unique_years_list':accepted_unique_years_list,
+        'applied_scholar':applied_scholar,
+        'applied_unique_years_list':applied_unique_years_list,
+        'customLabels': [entry["school"] for entry in school_counts],
+        'dataCounts': [entry["count"] for entry in school_counts],
+
+        'first_year_count':first_year_count,
+        'second_year_count':second_year_count,
+        'third_year_count':third_year_count,
+        'fourth_year_count':fourth_year_count,
+        'fifth_year_count':fifth_year_count,
     }
 
     return render(request, "inb-dashboard.html", context)
+
 
 def barangay_summary(request):
     barangay_counts = (
@@ -844,75 +1033,8 @@ def barangay_summary(request):
     }
     return render(request, "in-depth-charts/barangay/barangay_data.html", context)
 
-def tracker_scholar_summary(request):
-    return render(request, "in-depth-charts/tracker-count/tracket-count.html")
 
 
-def school_scholar_summary(request):
-    courses = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
-        .values("course")
-        .annotate(count=Count("course"))
-        .order_by("-count")
-    )
-
-    schools = (
-        CollegeStudentAccepted.objects.exclude(status="Graduated")
-        .exclude(school_year="Graduated")
-        .values("school")
-        .annotate(count=Count("school"))
-        .order_by("-count")
-    )
-
-    unique_schools_data = CollegeStudentAccepted.objects.values("school").distinct()
-
-    schools_with_courses = []
-
-    for school_data in unique_schools_data:
-        school_courses_data = (
-            CollegeStudentAccepted.objects.filter(school=school_data["school"])
-            .exclude(school_year="Graduated")
-            .values("course")
-            .annotate(student_count=Count("control_number"))
-        )
-
-        if school_courses_data:
-            course_info = {
-                "school": school_data["school"],
-                "courses": list(school_courses_data),
-            }
-
-            schools_with_courses.append(course_info)
-
-    custom_labels = [
-        course["course"]
-        for school_info in schools_with_courses
-        for course in school_info["courses"]
-    ]
-
-    data_counts = []
-
-    for school_info in schools_with_courses:
-        counts_per_school = [0] * len(custom_labels)
-
-        for course_data in school_info["courses"]:
-            course_index = custom_labels.index(course_data["course"])
-            counts_per_school[course_index] = course_data["student_count"]
-
-        data_counts.append(counts_per_school)
-
-    return render(
-        request,
-        "in-depth-charts/school-grantees/school-grantees.html",
-        {
-            "schools_with_courses": schools_with_courses,
-            "custom_labels": custom_labels,
-            "data_counts": data_counts,
-            "customLabel": [entry["school"] for entry in schools],
-            "dataCounts": [entry["count"] for entry in courses],
-        },
-    )
 
 
 def course_scholar_summary(request):

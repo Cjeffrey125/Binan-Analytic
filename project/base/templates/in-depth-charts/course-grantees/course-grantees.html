@@ -4,16 +4,67 @@
 {% tailwind_css %}
 
 {% block content %}
-{% if user.is_authenticated %}
+    {% if user.is_authenticated %}
 
-<div class="flex justify-center ">
-<div class="bg-gray-800 mt-24 rounded flex flex-col justify-center items-center" style="width: 800px; height: 620px">
-    {% include "in-depth-charts/course-grantees/stack.html" %}
+<div class="px-10 mx-5">
+
+        <div class="flex justify-center">
+                <div class="bg-gray-800 mt-12 rounded flex flex-col justify-center items-center" style="width: 1750px; height: 550px">
+                    <label class="font-bold text-2xl mt-2 mb-8" style="color: #39B8FF;">Active Scholar Per Year </label>
+                    {% include "in-depth-charts/active-scholar/active_linechart.html" %}
+                </div>    
+        </div>  
+
+       
+          
+        <div class="flex justify-between mx-4 mt-4">
+
+            <div class="ml-1 bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 850px; height: 500px; overflow-y: auto;">   
+                <label class="font-bold text-2xl" style="color: #39B8FF;"> Active Scholar Per School </label>
+                    <div class="flex items-start mt-3 ml-5">
+                        {% include "in-depth-charts/active-scholar/school_bargraph.html" %}
+                    </div>
+                
+            </div>
+
+    
+            <div class="mr-1 bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 850px; height: 500px; overflow-y: auto;">
+                <label class="font-bold text-2xl" style="color: #39B8FF;"> Active Scholar Per Year Level </label>
+                <div class="flex items-start mt-3 ml-5">
+                    {% include "in-depth-charts/active-scholar/year_bargraph.html" %}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mb-4 mt-4 flex justify-center">
+            <div class="bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 1750px; height: 550px">
+                <label class="font-bold text-2xl mt-2 mb-8" style="color: #39B8FF;">Active Scholar Per Course </label>
+                {% include "in-depth-charts/active-scholar/course-table.html" %}
+            </div>    
+    </div>  
+            
 </div>
+          
+      
+  
+   
 
+        <script>
+            function filterByYear() {
+                var selectedYear = document.getElementById("selectYear").value;
+                var tableRows = document.querySelectorAll("#courseDataTable tbody tr");
+        
+                tableRows.forEach(function(row) {
+                    var yearCell = row.querySelector("td:nth-child(3)");
+                    if (selectedYear === "" || yearCell.textContent === selectedYear) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            }
+        </script>
 
-
-</div>
-
-{% endif %}
+    {% endif %}
 {% endblock %}

@@ -9,36 +9,21 @@
     document.addEventListener('DOMContentLoaded', function () {
         var ctx = document.getElementById('myChart').getContext('2d');
 
-        const labels = {{ failed_unique_years_list|safe }};
-        const failedData = [
-            {% for entry in failed_scholar %}
-                {{ entry.failed_scholar_count }},
-            {% endfor %}
-        ];
-        const rejectedData = [
-            {% for entry in rejected_scholar %}
-                {{ entry.rejected_scholar_count }},
-            {% endfor %}
-        ];
+        const schoolData = {{ schoolData|safe }};
+
+        const datasets = Object.keys(schoolData).map(school => {
+            return {
+                label: school,
+                data: schoolData[school]["data"],
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0
+            };
+        });
 
         const data = {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Rejected Scholars',
-                    data: failedData,
-                    fill: false,
-                    borderColor: 'rgb(75, 192, 192)',
-                    tension: 0
-                },
-                {
-                    label: 'Failed Scholars',
-                    data: rejectedData,
-                    fill: false,
-                    borderColor: 'rgb(255, 99, 132)',
-                    tension: 0
-                }
-            ]
+            labels: schoolData[Object.keys(schoolData)[0]]["labels"],  
+            datasets: datasets,
         };
 
         var myChart = new Chart(ctx, {
@@ -50,7 +35,7 @@
                 scales: {
                     y: {
                         ticks: {
-                            stepSize: 100,
+                            stepSize: 1,  
                             color: 'white'  
                         }
                     },

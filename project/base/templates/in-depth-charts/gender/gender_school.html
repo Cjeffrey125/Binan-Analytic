@@ -1,6 +1,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<div class="items-center" style="width: 480px; height: 450px">
+<div class="items-center" style="width: 750px; height: 450px">
     <canvas id="schoolStackHorizontalChart"></canvas>
 </div>
 
@@ -56,17 +56,28 @@
                     x: {
                         stacked: true,
                         align: 'start',
+                        ticks: {
+                            color: 'white' 
+                        }
                     },
                     y: {
-                        stacked: true
+                        stacked: true,
+                        ticks: {
+                            color: 'white' 
+                        }
+                        
                     }
                 },
                 plugins: {
                     legend: {
                         display: true,
                         position: 'bottom',
+                        labels: {
+                            color: 'white' 
+                        }
                     }
                 }
+               
             }
         });
 
