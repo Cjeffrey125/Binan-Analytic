@@ -1,0 +1,77 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="items-center" style="width: 480px; height: 450px">
+    <canvas id="schoolStackHorizontalChart"></canvas>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('schoolStackHorizontalChart').getContext('2d');
+
+        const maleSchoolCustomLabels = {{ maleSchoolCustomLabels|safe }};
+        const maleSchoolDataCounts = {{ maleSchoolDataCounts|safe }};
+        const femaleSchoolCustomLabels = {{ femaleSchoolCustomLabels|safe }};
+        const femaleSchoolDataCounts = {{ femaleSchoolDataCounts|safe }};
+
+        const DATA_COUNT = maleSchoolCustomLabels.length;
+
+        const backgroundColors = [
+            'rgba(54, 162, 235, 0.5)',
+            'rgba(255, 99, 132, 0.5)',
+        ];
+
+        const borderColor = [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 99, 132, 1)',
+        ];
+
+        const data = {
+            labels: maleSchoolCustomLabels,
+            datasets: [
+                {
+                    label: 'Male Count',
+                    data: maleSchoolDataCounts,
+                    backgroundColor: backgroundColors[0],
+                    borderColor: borderColor[0],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Female Count',
+                    data: femaleSchoolDataCounts,
+                    backgroundColor: backgroundColors[1],
+                    borderColor: borderColor[1],
+                    borderWidth: 1
+                },
+            ]
+        };
+
+        var stackHorizontalChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        stacked: true,
+                        align: 'start',
+                    },
+                    y: {
+                        stacked: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                    }
+                }
+            }
+        });
+
+        window.addEventListener('resize', function () {
+            stackHorizontalChart.resize();
+        });
+    });
+</script>

@@ -1,0 +1,59 @@
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<div class="ml-96 chart-wrapper" style="width: 565px; height: 200px "> 
+    <canvas id="rejectedPieGraph"></canvas>
+    <h1>Genders for Rejected Scholar</h1>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const canvas = document.getElementById('rejectedPieGraph');
+        const labels = {{ rejected_gender_labels|safe }};
+        const counts = {{ rejected_gender_counts|safe }};
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Gender Distribution',
+                data: counts,
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 99, 132, 0.2)', 
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235)',
+                    'rgba(255, 99, 132)', 
+                ],
+                hoverOffset: 4,
+                borderWidth: 1,
+            }],
+        };
+
+        const ctx = canvas.getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: {
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        align: 'middle',
+                        labels: {
+                            boxWidth: 15,
+                            color: 'white',
+                        },
+                    },
+                },
+                layout: {
+                    padding: {
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 16,
+                    },
+                },
+            },
+        });
+    });
+</script>

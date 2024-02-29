@@ -1,0 +1,41 @@
+
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right bg-gray-700 dark:text-black">
+        <thead class="text-xs uppercase bg-gray-500 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Reason
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Counts
+                </th>
+           
+               
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in failed_scholar_remarks %}
+            <tr class=" dark:bg-gray-800 dark:border-gray-700">
+                <th>
+                    
+                </th>
+                <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap dark:text-white">
+                    {{ item.remarks }}
+                </th>
+                <td class="px-6 py-4">
+                    {{ item.failed_count }}
+                </td>
+              
+              
+            </tr>
+            {% endfor %}
+         
+        </tbody>
+    </table>
+</div>
+
+    

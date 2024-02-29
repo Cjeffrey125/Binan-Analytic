@@ -4,22 +4,85 @@
 {% tailwind_css %}
 
 {% block content %}
-{% if user.is_authenticated %}
+    {% if user.is_authenticated %}
 
-<label class="font-bold text-5xl ml-12 mt-4 " style="color: #39B8FF;">Failed Applicants</label>
-<div class="flex justify-between mx-4 mt-4">
-    <div class="bg-gray-800 ml-48 mt-24 rounded flex flex-col justify-center items-center"
-        style="width: 630px; height: 320px">
-        <label class="font-bold text-4xl mb-4" style="color: white;">{{ rejected_count }}</label>
-        <label class="font-bold text-5xl mb-4" style="color: #39B8FF;">Rejected</label>
-    </div>
+<div class="px-10 mx-5">
 
-    <div class="bg-gray-800 mr-48 mt-24 rounded flex flex-col justify-center items-center"
-        style="width: 630px; height: 320px">
-        <label class="font-bold text-4xl mb-4" style="color: white;">{{ failed_count }} </label>
-        <label class="font-bold text-5xl mb-4" style="color: #39B8FF;">Failed</label>
-    </div>
+        <div class="flex justify-center">
+                <div class="bg-gray-800 mt-12 rounded flex flex-col justify-center items-center" style="width: 1750px; height: 550px">
+                    <label class="font-bold text-2xl mt-2 mb-8" style="color: #39B8FF;">Unsuccessful Scholar Per Year </label>
+                    {% include "in-depth-charts/unsuccessful-scholar/failed_rejected_linegraph.html" %}
+                </div>    
+        </div>  
+
+       
+          
+        <div class="flex justify-between mx-4 mt-4">
+            <div class="ml-1 bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 850px; height: 500px; overflow-y: auto;">   
+                <label class="font-bold text-2xl" style="color: #39B8FF;"> Reasons Scholars Get Rejected </label>
+                    <div class="flex items-start mt-3 ml-5">
+                        {% include "in-depth-charts/unsuccessful-scholar/rejected_scholar_reason.html" %}
+                    </div> 
+            </div>
+
+    
+            <div class="mr-1 bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 850px; height: 500px; overflow-y: auto;">
+                <label class="font-bold text-2xl" style="color: #39B8FF;"> Reasons Scholars Fail </label>
+                    <div class="flex items-start mt-3 ml-5">
+                        {% include "in-depth-charts/unsuccessful-scholar/failed_scholar_reason.html" %}   
+                    
+                    </div>
+            </div>
+        </div>
+
+        <div class="ml-5 mb-4 mt-4 grid grid-cols-3 gap-1 justify-center">
+
+            <div class="bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 565px; height: 500px">
+              <label class="font-bold text-2xl" style="color: #39B8FF;"> Failed Scholar School </label>
+
+              {% include "in-depth-charts/unsuccessful-scholar/failed_school.html" %} 
+            </div>
+
+
+            <div class="bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 565px; height: 500px">
+                <label class="font-bold text-2xl" style="color: #39B8FF;"> Gender </label>
+            
+                <div class="ml-72 items-end">
+                    {% include "in-depth-charts/unsuccessful-scholar/rejected_gender.html" %} 
+                </div>
+                
+                <div class="ml-24 items-start">
+                    {% include "in-depth-charts/unsuccessful-scholar/failed_gender.html" %} 
+                </div> 
+            </div>
+
+            <div class="bg-gray-800 rounded flex flex-col justify-center items-center" style="width: 565px; height: 500px">
+                <label class="font-bold text-2xl" style="color: #39B8FF;"> Failed Scholar Course </label>
+                {% include "in-depth-charts/unsuccessful-scholar/failed_course.html" %} 
+            </div>
+        </div>
+        
 </div>
+          
+      
+  
+   
 
-{% endif %}
+        <script>
+            function filterByYear() {
+                var selectedYear = document.getElementById("selectYear").value;
+                var tableRows = document.querySelectorAll("#courseDataTable tbody tr");
+        
+                tableRows.forEach(function(row) {
+                    var yearCell = row.querySelector("td:nth-child(3)");
+                    if (selectedYear === "" || yearCell.textContent === selectedYear) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+            }
+        </script>
+
+    {% endif %}
 {% endblock %}

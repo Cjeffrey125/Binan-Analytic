@@ -9,15 +9,15 @@
     document.addEventListener('DOMContentLoaded', function () {
         var ctx = document.getElementById('myChart').getContext('2d');
 
-        const labels = {{ male_unique_years_list|safe }};
-        const maleData = [
-            {% for entry in male_scholar %}
-                {{ entry.male_scholar_count }},
+        const labels = {{ failed_unique_years_list|safe }};
+        const failedData = [
+            {% for entry in failed_scholar %}
+                {{ entry.failed_scholar_count }},
             {% endfor %}
         ];
-        const femaleData = [
-            {% for entry in female_scholar %}
-                {{ entry.female_scholar_count }},
+        const rejectedData = [
+            {% for entry in rejected_scholar %}
+                {{ entry.rejected_scholar_count }},
             {% endfor %}
         ];
 
@@ -25,15 +25,15 @@
             labels: labels,
             datasets: [
                 {
-                    label: 'Male',
-                    data: maleData,
+                    label: 'Failed Scholars',
+                    data: failedData,
                     fill: false,
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0
                 },
                 {
-                    label: 'Female',
-                    data: femaleData,
+                    label: 'Rejected Scholars',
+                    data: rejectedData,
                     fill: false,
                     borderColor: 'rgb(255, 99, 132)',
                     tension: 0
