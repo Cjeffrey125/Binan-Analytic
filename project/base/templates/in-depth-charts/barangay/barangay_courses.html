@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pie Graph Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <select id="barangaySelect">
+        <option value="" disabled selected>Select Barangay</option>
+        {% for barangay_item in barangay %}
+            <option value="{{ barangay_item }}">{{ barangay_item }}</option>
+        {% endfor %}
+    </select>
+
+    <div class="chart-wrapper" style="width: 245px; height:250px">
+        <canvas id="pieGraph"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const barangaySelect = document.getElementById('barangaySelect');
+            const ctx = document.getElementById('pieGraph').getContext('2d');
+            let myChart;
+
+            function updatePieChart(selectedBarangay) {
+                // Fetch data from Django view based on selected barangay
+                fetch(`/get_gender_distribution/?barangay=${selectedBarangay}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const labels = data.map(entry => entry.gender);
+                        const counts = data.map(entry => entry.gender_count);
+
+                        if (myChart) {
+                            myChart.destroy(); // Destroy the previous chart instance
+                        }
+
+                        myChart = new Chart(ctx, {
+                            type: 'doughnut',
+                            data: {
+                                labels: labels,
+                                datasets: [{
+                                    label: 'Gender Distribution',
+                                    data: counts,
+                                    backgroundColor: [
+                                        'rgba(54, 162, 235, 0.2)',
+                                        'rgba(255, 99, 158, 0.2)'
+                                    ],
+                                    borderColor: [
+                                        'rgba(54, 162, 235)',
+                                        'rgba(255, 99, 158)',
+                                    ],
+                                    hoverOffset: 4,
+                                    borderWidth: 1,
+                                }],
+                            },
+                            options: {
+                                cutout: '70%',
+                                plugins: {
+                                    legend: {
+                                        position: 'right',
+                                        align: 'middle'
+                                    },
+                                },
+                                layout: {
+                                    padding: {
+                                        left: 0,
+                                        right: 0,
+                                        top: 0,
+                                        bottom: 16,
+                                    },
+                                },
+                            },
+                        });
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            barangaySelect.addEventListener('change', function () {
+                const selectedBarangay = barangaySelect.value;
+                updatePieChart(selectedBarangay);
+            });
+        });
+    </script>
+</body>
+</html>

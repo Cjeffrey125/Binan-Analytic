@@ -14,19 +14,16 @@
                 <div class="mb-2 relative">
                     <div class="text-base font-medium dark:text-white">{{ course.course }}</div>
                     <div class="ml-8">
-                        {{ course.count }} Applicant as of {% now "Y" %}
+                        {{ course.course_count }} Applicant as of {% now "Y" %}
                     </div>
 
                     <div class="ml-8 w-500px rounded-full h-2.5" style="width: 480px; background-color: rgba(54, 162, 235, 0.2);">
-                        <div class="h-2 rounded-full" style="width: {{ course.count }}%; background-color: rgb(54, 162, 235);"></div>
+                        <div class="h-2 rounded-full" style="width: {{ course.course_count }}%; background-color: rgb(54, 162, 235);"></div>
                     </div>
                 </div>
             {% endfor %}
         </div>
     </div>  
-    
 
   {% endif %}
 {% endblock %}
-
-

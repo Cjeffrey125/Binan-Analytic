@@ -1,21 +1,23 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<label class="font-bold text-2xl" style="color: #39B8FF;">Summary of Courses</label>
+<div class="flex justify-between mx-4 mt-4">
+    <div class="chart-wrapper" style="width: 750px; height: 250px; margin: 12;">
+        <canvas id="frstColumnCourseStackHorizontalChart"></canvas>
+    </div>
 
-<div class="bg-gray-800 mt-24 rounded flex flex-col justify-center items-center" style="width: 800px; height: 620px; overflow: auto;">
-    <div class="items-center" style="width: 100%; height: 1000%;">
-        <canvas id="stackHorizontalChart"></canvas>
+    <div class="chart-wrapper ml-5" style="width: 750px; height: 250px; margin: 12;">
+        <canvas id="scndColumnCourseStackHorizontalChart"></canvas>
     </div>
 </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var ctx = document.getElementById('stackHorizontalChart').getContext('2d');
+        var ctx1 = document.getElementById('frstColumnCourseStackHorizontalChart').getContext('2d');
+        var ctx2 = document.getElementById('scndColumnCourseStackHorizontalChart').getContext('2d');
 
-        const customLabels = {{ customLabels|safe }};
-        const dataCounts = {{ dataCounts|safe }};
-
-        const DATA_COUNT = customLabels.length;
+        const CourseCustomLabels = {{ CourseCustomLabels|safe }};
+        const CourseDataCounts = {{ CourseDataCounts|safe }};
+        const DATA_COUNT = CourseCustomLabels.length;
 
         const backgroundColors = [
             'rgba(255, 99, 132, 0.2)',
@@ -49,22 +51,41 @@
             'rgba(255, 165, 0)', 
         ];
 
-        const data = {
-            labels: customLabels,
+        const firstColumnLabels = CourseCustomLabels.slice(0, Math.ceil(DATA_COUNT / 2));
+        const secondColumnLabels = CourseCustomLabels.slice(Math.ceil(DATA_COUNT / 2));
+
+        const firstColumnData = CourseDataCounts.slice(0, Math.ceil(DATA_COUNT / 2));
+        const secondColumnData = CourseDataCounts.slice(Math.ceil(DATA_COUNT / 2));
+
+        const data1 = {
+            labels: firstColumnLabels,
             datasets: [
                 {
-                    label: 'Dataset 1',
-                    data: dataCounts,
+                    label: 'Course Counts',
+                    data: firstColumnData,
                     borderColor: borderColor,
-                    backgroundColor: backgroundColors.slice(0, DATA_COUNT),
+                    backgroundColor: backgroundColors.slice(0, Math.ceil(DATA_COUNT / 2)),
                     borderWidth: 1
                 },
             ]
         };
 
-        var stackHorizontalChart = new Chart(ctx, {
+        const data2 = {
+            labels: secondColumnLabels,
+            datasets: [
+                {
+                    label: 'Course Counts',
+                    data: secondColumnData,
+                    borderColor: borderColor,
+                    backgroundColor: backgroundColors.slice(Math.ceil(DATA_COUNT / 2)),
+                    borderWidth: 1
+                },
+            ]
+        };
+
+        var stackHorizontalChart1 = new Chart(ctx1, {
             type: 'bar',
-            data: data,
+            data: data1,
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -72,22 +93,73 @@
                 scales: {
                     x: {
                         stacked: true,
-                        align: 'start',
+                        display: false,
+                        ticks: {
+                            color: 'white' 
+                        }
                     },
                     y: {
-                        stacked: true
+                        stacked: true,
+                        grid: {
+                            display: false 
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            color: 'white' 
+                        }
                     }
                 },
                 plugins: {
                     legend: {
                         display: false 
+                    },
+                    labels: {
+                        color: 'white' 
+                    }
+                }
+            }
+        });
+
+        var stackHorizontalChart2 = new Chart(ctx2, {
+            type: 'bar',
+            data: data2,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        stacked: true,
+                        display: false,
+                        ticks: {
+                            color: 'white' 
+                        }
+                    },
+                    y: {
+                        stacked: true,
+                        grid: {
+                            display: false 
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            color: 'white' 
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false 
+                    },
+                    labels: {
+                        color: 'white' 
                     }
                 }
             }
         });
 
         window.addEventListener('resize', function () {
-            stackHorizontalChart.resize();
+            stackHorizontalChart1.resize();
+            stackHorizontalChart2.resize();
         });
     });
 </script>

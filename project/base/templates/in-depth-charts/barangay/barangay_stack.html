@@ -1,0 +1,33 @@
+{% load static tailwind_tags %}
+
+{% tailwind_css %}
+
+{% block content %}
+  {% if user.is_authenticated %}
+
+  <div class="flex justify-between">
+  
+    <div class="w-48 h-96 mr-16 bg-center bg-cover rounded" style="background-image: url('{% static 'images/map.png' %}')"></div>
+
+    <div class="flex flex-col space-y-4">
+      <div class="flex items-start mt-3 ml-44"> 
+        <div class="list-disc">
+          {% for entry in barangay_counts %}
+            <div class="mb-2 relative">
+              <div class="text-base font-medium dark:text-white">{{ entry.barangay }}</div>
+              <div class="ml-8">
+                {{ entry.course_count }} Applicant as of {% now "Y" %}
+              </div>
+              <div class="ml-8 w-500px rounded-full h-2.5" style="width: 250px; background-color: rgba(54, 162, 235, 0.2);">
+                <div class="h-2 rounded-full" style="width: {{ entry.course_count }}%; background-color: rgb(54, 162, 235);"></div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>  
+    </div>
+  
+  </div>
+
+  {% endif %}
+{% endblock %}
